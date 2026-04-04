@@ -189,6 +189,7 @@ Production'da API anahtarını korumak için **Vercel Edge Function** kullanılm
 | @zxing/library | 0.21 | Barkod okuma |
 | react-webcam | 7 | Kamera |
 | recharts | 2 | Grafik |
-| vite-plugin-pwa | 0.19 | PWA/Service Worker |
+|vite-plugin-pwa | 0.19 | PWA/Service Worker |
 | Claude API | claude-opus-4-5 | AI analiz |
 | Open Food Facts | — | Barkod DB (ücretsiz) |
+# v6.2 - force cache clear
