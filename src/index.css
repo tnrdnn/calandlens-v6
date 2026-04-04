@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { -webkit-tap-highlight-color: transparent; }
+  body { font-family: 'Inter', system-ui, sans-serif; overscroll-behavior: none; }
+  input[type=range] { -webkit-appearance: none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; }
+}
+
+@layer utilities {
+  /* Safe area */
+  .pt-safe-top    { padding-top:    env(safe-area-inset-top,    16px); }
+  .pb-safe-bottom { padding-bottom: env(safe-area-inset-bottom, 16px); }
+
+  /* Animations */
+  .animate-slide-up {
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* Borders */
+  .border-3 { border-width: 3px; }
+
+  /* Glassmorphism card */
+  .glass {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.45);
+  }
+
+  /* Soft neumorphism shadow */
+  .shadow-neuro {
+    box-shadow:
+      6px 6px 14px rgba(0,0,0,0.06),
+      -4px -4px 10px rgba(255,255,255,0.85);
+  }
+  .shadow-neuro-sm {
+    box-shadow:
+      3px 3px 8px rgba(0,0,0,0.07),
+      -2px -2px 6px rgba(255,255,255,0.80);
+  }
+
+  /* Emerald glow for camera button */
+  .glow-emerald {
+    box-shadow: 0 0 20px rgba(16,185,129,0.45), 0 4px 16px rgba(16,185,129,0.25);
+  }
+
+  /* Ring progress pulse */
+  @keyframes ringPulse {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(16,185,129,0.3)); }
+    50%       { filter: drop-shadow(0 0 18px rgba(16,185,129,0.55)); }
+  }
+  .ring-pulse { animation: ringPulse 3s ease-in-out infinite; }
+}
