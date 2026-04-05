@@ -388,13 +388,6 @@ function Inner() {
           </div>
           <div className="flex items-center gap-2">
             <button
-              onClick={() => setWizard(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-semibold transition-all"
-            >
-              <span>🎯</span>
-              <span className="hidden sm:inline">{t('wizard.title')}</span>
-            </button>
-            <button
               onClick={() => setSettings(true)}
               className="p-2.5 rounded-xl bg-white/15 hover:bg-white/30 text-white transition-all hover:scale-110 active:scale-95"
               title={t('settings.title')}
