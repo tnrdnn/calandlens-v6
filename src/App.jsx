@@ -392,9 +392,34 @@ function Inner() {
       {/* ── HEADER ── */}
       <header className="bg-gradient-to-r from-emerald-500 to-teal-500 px-4 pt-safe-top pb-4 sticky top-0 z-30 shadow-lg shadow-emerald-200/40">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-black text-white tracking-tight">CalAndLens</h1>
-            <p className="text-xs text-emerald-100">{t('app.subtitle')}</p>
+          <div className="flex items-center gap-2.5">
+            {/* Logo */}
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* Outer lens ring */}
+              <circle cx="18" cy="18" r="16" stroke="white" strokeWidth="2" strokeOpacity="0.9"/>
+              {/* Inner lens ring */}
+              <circle cx="18" cy="18" r="10" stroke="white" strokeWidth="1.5" strokeOpacity="0.6"/>
+              {/* Aperture blades — 6 adet */}
+              <line x1="18" y1="2" x2="18" y2="8"  stroke="white" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85"/>
+              <line x1="18" y1="28" x2="18" y2="34" stroke="white" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85"/>
+              <line x1="2"  y1="18" x2="8"  y2="18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85"/>
+              <line x1="28" y1="18" x2="34" y2="18" stroke="white" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85"/>
+              <line x1="5.5" y1="5.5"  x2="9.7" y2="9.7"  stroke="white" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85"/>
+              <line x1="26.3" y1="26.3" x2="30.5" y2="30.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85"/>
+              <line x1="30.5" y1="5.5"  x2="26.3" y2="9.7"  stroke="white" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85"/>
+              <line x1="9.7"  y1="26.3" x2="5.5"  y2="30.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.85"/>
+              {/* Center dot */}
+              <circle cx="18" cy="18" r="3" fill="white" fillOpacity="0.95"/>
+            </svg>
+            {/* Brand text */}
+            <div>
+              <h1 className="text-xl font-black tracking-tight leading-none">
+                <span className="text-white">Cal</span>
+                <span className="text-teal-200">&amp;</span>
+                <span className="text-white">Lens</span>
+              </h1>
+              <p className="text-xs text-emerald-100 mt-0.5">{t('app.subtitle')}</p>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <button
