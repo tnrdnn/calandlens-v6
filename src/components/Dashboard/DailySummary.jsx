@@ -108,6 +108,24 @@ function MacroCard({ icon, label, value, unit = 'g', pct, gradFrom, gradTo, text
   );
 }
 
+/* ── Meal category helpers ───────────────────────────────────────────────────── */
+function getMealCategory(timestamp) {
+  const h = new Date(timestamp).getHours();
+  if (h >= 5  && h < 11) return 'breakfast';
+  if (h >= 11 && h < 15) return 'lunch';
+  if (h >= 15 && h < 21) return 'dinner';
+  return 'snack';
+}
+
+const CATEGORY_META = {
+  breakfast: { icon: '🌅', color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
+  lunch:     { icon: '☀️', color: '#059669', bg: '#d1fae5', border: '#6ee7b7' },
+  dinner:    { icon: '🌙', color: '#4f46e5', bg: '#e0e7ff', border: '#a5b4fc' },
+  snack:     { icon: '🍎', color: '#db2777', bg: '#fce7f3', border: '#f9a8d4' },
+};
+
+const CATEGORY_ORDER = ['breakfast', 'lunch', 'dinner', 'snack'];
+
 /* ── Trend Arrow ─────────────────────────────────────────────────────────────── */
 const BAR_COLORS = ['#93c5fd','#6ee7b7','#fcd34d','#f9a8d4','#a5b4fc','#fb923c','#34d399'];
 
@@ -309,60 +327,96 @@ export default function DailySummary({ onDeleteMeal }) {
         </div>
       </div>
 
-      {/* ── 5. TODAY'S MEALS ────────────────────────────────────────────── */}
-      {meals.length > 0 && (
-        <div className="bg-white rounded-3xl shadow-md border border-gray-100 overflow-hidden">
-          <div className="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
-            <h3 className="font-black text-emerald-700 text-base leading-tight bg-emerald-50 px-2.5 py-0.5 rounded-xl inline-block">{t('dashboard.todays_meals')}</h3>
-            <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
-              {meals.length} {t('history.meals_count')}
-            </span>
-          </div>
-          <div className="divide-y divide-gray-50">
-            {meals.map(meal => (
-              <div key={meal.id} className="flex items-center gap-3 px-4 py-3.5">
-                <MealPhotoThumb mealId={meal.id} photo={meal.photo} size="md" editable={true}/>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-800 text-sm truncate">
-                    {meal.icon || '🍽️'} {meal.name}
-                  </p>
-                  <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
-                    <span className="text-xs text-gray-400">
-                      {new Date(meal.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                    {meal.portionGrams && (
-                      <span className="text-xs text-gray-400">· {meal.portionGrams}{t('common.g')}</span>
-                    )}
-                    {meal.source === 'barcode' && (
-                      <span className="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full">🏷️ barkod</span>
-                    )}
-                    {detectAllergens(meal.name, lang, userAllergens).map(a => (
-                      <span key={a.id}
-                        title={t(`allergen.${a.id}`)}
-                        className="text-xs px-1.5 py-0.5 rounded-full font-bold"
-                        style={{ backgroundColor: a.color + '22', color: a.color }}>
-                        {a.emoji} {t(`allergen.${a.id}`)}
+      {/* ── 5. TODAY'S MEALS (grouped by category) ──────────────────────── */}
+      {meals.length > 0 && (() => {
+        const grouped = {};
+        for (const cat of CATEGORY_ORDER) {
+          grouped[cat] = meals.filter(m => getMealCategory(m.timestamp) === cat);
+        }
+        return (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between px-1">
+              <h3 className="font-black text-emerald-700 text-base leading-tight bg-emerald-50 px-2.5 py-0.5 rounded-xl inline-block">
+                {t('dashboard.todays_meals')}
+              </h3>
+              <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
+                {meals.length} {t('history.meals_count')}
+              </span>
+            </div>
+
+            {CATEGORY_ORDER.map(cat => {
+              const catMeals = grouped[cat];
+              if (!catMeals.length) return null;
+              const meta = CATEGORY_META[cat];
+              const catCal = catMeals.reduce((s, m) => s + (m.calories || 0), 0);
+              return (
+                <div key={cat} className="bg-white rounded-3xl shadow-md border overflow-hidden"
+                  style={{ borderColor: meta.border }}>
+                  {/* Category header */}
+                  <div className="flex items-center justify-between px-4 py-2.5"
+                    style={{ backgroundColor: meta.bg }}>
+                    <div className="flex items-center gap-2">
+                      <span className="text-base">{meta.icon}</span>
+                      <span className="font-black text-sm" style={{ color: meta.color }}>
+                        {t(`meal.${cat}`)}
                       </span>
+                    </div>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                      style={{ backgroundColor: meta.color + '22', color: meta.color }}>
+                      {Math.round(catCal)} kcal
+                    </span>
+                  </div>
+
+                  {/* Meals in this category */}
+                  <div className="divide-y divide-gray-50">
+                    {catMeals.map(meal => (
+                      <div key={meal.id} className="flex items-center gap-3 px-4 py-3.5">
+                        <MealPhotoThumb mealId={meal.id} photo={meal.photo} size="md" editable={true}/>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-gray-800 text-sm truncate">
+                            {meal.icon || '🍽️'} {meal.name}
+                          </p>
+                          <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                            <span className="text-xs text-gray-400">
+                              {new Date(meal.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                            {meal.portionGrams && (
+                              <span className="text-xs text-gray-400">· {meal.portionGrams}{t('common.g')}</span>
+                            )}
+                            {meal.source === 'barcode' && (
+                              <span className="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full">🏷️ barkod</span>
+                            )}
+                            {detectAllergens(meal.name, lang, userAllergens).map(a => (
+                              <span key={a.id}
+                                title={t(`allergen.${a.id}`)}
+                                className="text-xs px-1.5 py-0.5 rounded-full font-bold"
+                                style={{ backgroundColor: a.color + '22', color: a.color }}>
+                                {a.emoji} {t(`allergen.${a.id}`)}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <span className="text-sm font-bold text-gray-700">{Math.round(meal.calories)} {t('common.kcal')}</span>
+                          <button
+                            onClick={() => setDel(meal.id)}
+                            className="p-1.5 rounded-xl text-gray-300 hover:text-red-400 hover:bg-red-50 transition-colors"
+                          >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <span className="text-sm font-bold text-gray-700">{Math.round(meal.calories)} {t('common.kcal')}</span>
-                  <button
-                    onClick={() => setDel(meal.id)}
-                    className="p-1.5 rounded-xl text-gray-300 hover:text-red-400 hover:bg-red-50 transition-colors"
-                  >
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* ── Delete confirm ───────────────────────────────────────────────── */}
       {deleteId && (
