@@ -173,7 +173,7 @@ export default function DailySummary({ onDeleteMeal }) {
       {/* ── 1. CALORIE RING ──────────────────────────────────────────────── */}
       <div className="bg-white rounded-3xl shadow-md border border-gray-100 px-5 pt-5 pb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-black text-gray-800 text-lg tracking-tight">{t('dashboard.title')}</h2>
+          <h2 className="font-black text-emerald-700 text-base leading-tight bg-emerald-50 px-2.5 py-0.5 rounded-xl inline-block">{t('dashboard.title')}</h2>
           <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${
             over ? 'bg-orange-100 text-orange-600' : 'bg-emerald-100 text-emerald-700'
           }`}>
