@@ -39,20 +39,25 @@ export default function BarcodeScanner({ onResult, onClose }) {
         const reader = await getReader();
         readerRef.current = reader;
         if (!active || !videoRef.current) return;
-        await reader.decodeFromVideoDevice(undefined, videoRef.current, async (result, err) => {
-          if (!result || !active) return;
-          reader.reset();
-          setPhase(PHASE.SEARCHING);
-          const found = await fetchByBarcode(result.getText());
-          if (!active) return;
-          if (found) {
-            setProduct(found);
-            setPortionGrams(parseInt(found.servingSize) || 100);
-            setPhase(PHASE.FOUND);
-          } else {
-            setPhase(PHASE.NOT_FOUND);
+        // FIX: arka kamera açıkça belirtiliyor
+        await reader.decodeFromConstraints(
+          { audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } } },
+          videoRef.current,
+          async (result, err) => {
+            if (!result || !active) return;
+            reader.reset();
+            setPhase(PHASE.SEARCHING);
+            const found = await fetchByBarcode(result.getText());
+            if (!active) return;
+            if (found) {
+              setProduct(found);
+              setPortionGrams(parseInt(found.servingSize) || 100);
+              setPhase(PHASE.FOUND);
+            } else {
+              setPhase(PHASE.NOT_FOUND);
+            }
           }
-        });
+        );
       } catch (e) {
         if (active) setLoadErr(e.message);
       }
@@ -114,7 +119,7 @@ export default function BarcodeScanner({ onResult, onClose }) {
             </div>
           ) : (
             <>
-              <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover" />
+              <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover" playsInline muted />
               {/* Viewfinder */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative w-64 h-44">
@@ -208,7 +213,7 @@ export default function BarcodeScanner({ onResult, onClose }) {
             {/* Portion slider */}
             <div className="bg-gray-50 rounded-2xl p-4 mb-4">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-semibold text-gray-700">Porsiyon</span>
+                <span className="text-sm font-semibold text-gray-700">{t('barcode.portion')}</span>
                 <span className="text-xl font-black text-emerald-600">{portionGrams}g</span>
               </div>
               <input type="range" min="10" max="500" step="5"
@@ -257,7 +262,7 @@ export default function BarcodeScanner({ onResult, onClose }) {
 
             <button onClick={handleConfirm}
               className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl text-lg transition-colors">
-              Ekle — {Math.round(product.calories * portionGrams / 100)} kcal
+              {t('barcode.add_button')} — {Math.round(product.calories * portionGrams / 100)} kcal
             </button>
           </div>
         </div>
@@ -271,7 +276,7 @@ export default function BarcodeScanner({ onResult, onClose }) {
           <p className="text-sm text-gray-400 text-center">{t('barcode.not_found_detail')}</p>
           <div className="flex gap-3 w-full">
             <button onClick={() => setPhase(PHASE.SCAN)} className="flex-1 py-3 border-2 border-white/30 rounded-2xl font-semibold text-sm">
-              Tekrar Tara
+              {t('barcode.scan_again')}
             </button>
             <button onClick={() => setPhase(PHASE.MANUAL)} className="flex-1 py-3 bg-emerald-500 rounded-2xl font-semibold text-sm">
               {t('barcode.manual_search')}

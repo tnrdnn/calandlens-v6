@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { LanguageProvider, useLanguage } from './hooks/useLanguage';
+import { ThemeProvider, useTheme } from './hooks/useTheme';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import LanguageSelector from './components/Settings/LanguageSelector';
 import CameraView from './components/Camera/CameraView';
@@ -7,6 +8,7 @@ import DailySummary from './components/Dashboard/DailySummary';
 import GoalWizard from './components/Dashboard/GoalWizard';
 import EatingSpeedCoach from './components/Dashboard/EatingSpeedCoach';
 import WeeklyReport from './components/Dashboard/WeeklyReport';
+import WaterTracker from './components/Dashboard/WaterTracker';
 import HistoryPage from './components/History/HistoryPage';
 
 /* ─────────────────────────────────────────────────────────────
@@ -14,9 +16,28 @@ import HistoryPage from './components/History/HistoryPage';
 ───────────────────────────────────────────────────────────── */
 function SettingsPage({ onClose }) {
   const { t, lang, setLang, LANGUAGE_OPTIONS } = useLanguage();
-  const { getGoal, setGoal, clearAllData } = useLocalStorage();
-  const [goalInput, setGoalInput]       = useState(String(getGoal()));
-  const [confirmClear, setConfirmClear] = useState(false);
+  const { getGoal, setGoal, getWaterGoal, setWaterGoal, clearAllData } = useLocalStorage();
+  const { isDark, toggleTheme } = useTheme();
+  const [goalInput, setGoalInput]         = useState(String(getGoal()));
+  const [waterGoalInput, setWaterGoalInput] = useState(String(getWaterGoal()));
+  const [confirmClear, setConfirmClear]   = useState(false);
+  const [notifStatus, setNotifStatus]     = useState(
+    'Notification' in window ? Notification.permission : 'unsupported'
+  );
+
+  const handleSaveWaterGoal = () => {
+    const n = parseInt(waterGoalInput, 10);
+    if (!isNaN(n) && n >= 500 && n <= 5000) setWaterGoal(n);
+  };
+
+  const handleRequestNotif = async () => {
+    if (!('Notification' in window)) return;
+    const perm = await Notification.requestPermission();
+    setNotifStatus(perm);
+    if (perm === 'granted') {
+      new Notification('CalAndLens 🎉', { body: t('notifications.enabled'), icon: '/pwa-192x192.png' });
+    }
+  };
 
   const handleSaveGoal = () => {
     const n = parseInt(goalInput, 10);
@@ -102,7 +123,57 @@ function SettingsPage({ onClose }) {
           )}
         </div>
 
-        <div className="text-center text-xs text-gray-300 py-2">CalAndLens v5.0</div>
+        {/* Karanlık mod */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-bold text-gray-700">{t('theme.toggle')}</p>
+            <button
+              onClick={toggleTheme}
+              className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${isDark ? 'bg-emerald-500' : 'bg-gray-200'}`}
+            >
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 flex items-center justify-center text-xs ${isDark ? 'translate-x-6' : ''}`}>
+                {isDark ? '🌙' : '☀️'}
+              </span>
+            </button>
+          </div>
+          <p className="text-xs text-gray-400 mt-1">{isDark ? t('theme.dark') : t('theme.light')}</p>
+        </div>
+
+        {/* Günlük su hedefi */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <p className="text-sm font-bold text-gray-700 mb-3">💧 {t('water.title')}</p>
+          <div className="flex gap-3">
+            <input
+              type="number" value={waterGoalInput} min="500" max="5000" step="100"
+              onChange={e => setWaterGoalInput(e.target.value)}
+              className="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-400 outline-none text-lg font-bold"
+            />
+            <span className="flex items-center text-gray-500 font-medium">ml</span>
+            <button onClick={handleSaveWaterGoal}
+              className="px-5 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-colors">
+              {t('common.save')}
+            </button>
+          </div>
+        </div>
+
+        {/* Push bildirimler */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <p className="text-sm font-bold text-gray-700 mb-3">🔔 {t('notifications.title')}</p>
+          {notifStatus === 'granted' ? (
+            <p className="text-sm text-emerald-600 font-semibold">{t('notifications.enabled')}</p>
+          ) : notifStatus === 'denied' ? (
+            <p className="text-sm text-red-500">{t('notifications.denied')}</p>
+          ) : notifStatus === 'unsupported' ? (
+            <p className="text-sm text-gray-400">Bu tarayıcıda bildirim desteklenmiyor.</p>
+          ) : (
+            <button onClick={handleRequestNotif}
+              className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-colors">
+              🔔 {t('notifications.enable')}
+            </button>
+          )}
+        </div>
+
+        <div className="text-center text-xs text-gray-300 py-2">CalAndLens v6.0</div>
       </div>
     </div>
   );
@@ -235,6 +306,7 @@ function Inner() {
             </div>
 
             <DailySummary key={refresh} onDeleteMeal={() => setRefresh(r => r + 1)} />
+            <WaterTracker key={refresh} />
             <EatingSpeedCoach />
             <WeeklyReport />
           </div>
@@ -331,8 +403,10 @@ function Inner() {
 ───────────────────────────────────────────────────────────── */
 export default function App() {
   return (
-    <LanguageProvider>
-      <Inner />
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <Inner />
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }

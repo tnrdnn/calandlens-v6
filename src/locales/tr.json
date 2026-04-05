@@ -92,7 +92,29 @@
     "search_button": "Ara",
     "manual_search": "Manuel Ara",
     "source": "Kaynak: Open Food Facts",
-    "per_100g": "100g başına"
+    "per_100g": "100g başına",
+    "portion": "Porsiyon",
+    "add_button": "Ekle",
+    "scan_again": "Tekrar Tara"
+  },
+  "water": {
+    "title": "Su Takibi",
+    "subtitle": "Günlük su tüketimini takip et",
+    "goal_label": "Hedef",
+    "glasses": "bardak",
+    "reset": "Sıfırla",
+    "congrats": "Günlük hedefinize ulaştınız! 🎉"
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "enable": "Bildirimleri Etkinleştir",
+    "enabled": "Bildirimler açık ✓",
+    "denied": "İzin reddedildi. Tarayıcı ayarlarından izin verin."
+  },
+  "theme": {
+    "dark": "Karanlık Mod",
+    "light": "Aydınlık Mod",
+    "toggle": "Tema Değiştir"
   },
   "history": {
     "title": "Geçmiş Günler",

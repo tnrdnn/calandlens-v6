@@ -1,10 +1,12 @@
 import { useState, useCallback } from 'react';
 
 const KEYS = {
-  MEALS: 'calandlens_meals',       // { [dateKey]: Meal[] }
-  GOAL: 'calandlens_goal',          // number
-  PROFILE: 'calandlens_profile',    // { weight, height, age, gender, activity, goalType }
-  SETTINGS: 'calandlens_settings',  // { lang, ... }
+  MEALS:      'calandlens_meals',
+  GOAL:       'calandlens_goal',
+  PROFILE:    'calandlens_profile',
+  SETTINGS:   'calandlens_settings',
+  WATER:      'calandlens_water',       // { [dateKey]: number (ml) }
+  WATER_GOAL: 'calandlens_water_goal',  // number (ml)
 };
 
 function todayKey() {
@@ -160,6 +162,36 @@ export function useLocalStorage() {
     refresh();
   }, []);
 
+  // ── Water tracking ───────────────────────────────────────────────────────
+  const getWaterToday = useCallback(() => {
+    const all = readJSON(KEYS.WATER, {});
+    return all[todayKey()] || 0;
+  }, []);
+
+  const addWater = useCallback((ml) => {
+    const all = readJSON(KEYS.WATER, {});
+    const key = todayKey();
+    all[key] = (all[key] || 0) + ml;
+    writeJSON(KEYS.WATER, all);
+    refresh();
+  }, []);
+
+  const resetWaterToday = useCallback(() => {
+    const all = readJSON(KEYS.WATER, {});
+    all[todayKey()] = 0;
+    writeJSON(KEYS.WATER, all);
+    refresh();
+  }, []);
+
+  const getWaterGoal = useCallback(() => {
+    return parseInt(localStorage.getItem(KEYS.WATER_GOAL) || '2000');
+  }, []);
+
+  const setWaterGoal = useCallback((ml) => {
+    localStorage.setItem(KEYS.WATER_GOAL, String(ml));
+    refresh();
+  }, []);
+
   // ── Clear ────────────────────────────────────────────────────────────────
   const clearAllData = useCallback(() => {
     Object.values(KEYS).forEach(k => localStorage.removeItem(k));
@@ -189,6 +221,12 @@ export function useLocalStorage() {
     // profile
     getProfile,
     setProfile,
+    // water
+    getWaterToday,
+    addWater,
+    resetWaterToday,
+    getWaterGoal,
+    setWaterGoal,
     // utils
     clearAllData,
     todayKey,
