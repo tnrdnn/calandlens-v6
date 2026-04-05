@@ -317,8 +317,6 @@ function Inner() {
   const [activeChip,     setActiveChip] = useState('sec-summary');
   const chipStripRef = useRef(null);
   const chipButtonRefs = useRef({});
-  const stripScrollingByCode = useRef(false); // döngü önleyici flag
-  const activeChipRef = useRef('sec-summary'); // strip scroll handler'da güncel değer
 
   const handleMealAdded = useCallback((meal) => {
     addMeal(meal);
@@ -364,43 +362,11 @@ function Inner() {
 
   /* activeChip değişince chip strip'i de kaydır */
   useEffect(() => {
-    activeChipRef.current = activeChip;
     const btnEl   = chipButtonRefs.current[activeChip];
     const stripEl = chipStripRef.current;
     if (!btnEl || !stripEl) return;
-    stripScrollingByCode.current = true;
     stripEl.scrollTo({ left: btnEl.offsetLeft - 8, behavior: 'smooth' });
-    setTimeout(() => { stripScrollingByCode.current = false; }, 600);
   }, [activeChip]);
-
-  /* Chip strip manuel kaydırılınca → sayfa o bölüme gitsin */
-  useEffect(() => {
-    const stripEl = chipStripRef.current;
-    if (!stripEl) return;
-    let timer;
-    const onStripScroll = () => {
-      if (stripScrollingByCode.current) return; // kodun tetiklediği scroll → yoksay
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        // strip'in görünür alanının solundan en yakın chip'i bul
-        const center = stripEl.scrollLeft + stripEl.offsetWidth * 0.35;
-        let closest = null, minDist = Infinity;
-        CHIPS.forEach(c => {
-          const btn = chipButtonRefs.current[c.id];
-          if (!btn) return;
-          const dist = Math.abs((btn.offsetLeft + btn.offsetWidth / 2) - center);
-          if (dist < minDist) { minDist = dist; closest = c.id; }
-        });
-        if (closest && closest !== activeChipRef.current) {
-          const pageEl = document.getElementById(closest);
-          if (pageEl) pageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          setActiveChip(closest);
-        }
-      }, 180);
-    };
-    stripEl.addEventListener('scroll', onStripScroll, { passive: true });
-    return () => { stripEl.removeEventListener('scroll', onStripScroll); clearTimeout(timer); };
-  }, []);
 
   /* Hardware / browser back-button handler */
   useEffect(() => {
