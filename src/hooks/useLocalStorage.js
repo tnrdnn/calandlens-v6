@@ -194,6 +194,24 @@ export function useLocalStorage() {
     refresh();
   }, []);
 
+  // ── Streak ───────────────────────────────────────────────────────────────
+  const getStreak = useCallback(() => {
+    const all = readJSON(KEYS.MEALS, {});
+    const todayHasData = (all[todayKey()] || []).length > 0;
+    const startOffset = todayHasData ? 0 : 1;
+    let streak = 0;
+    for (let i = startOffset; i < 365; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const key = dateKey(d);
+      if ((all[key] || []).length > 0) { streak++; } else { break; }
+    }
+    const stored = parseInt(localStorage.getItem('calandlens_best_streak') || '0');
+    const best = Math.max(streak, stored);
+    if (best > stored) localStorage.setItem('calandlens_best_streak', String(best));
+    return { current: streak, best };
+  }, []);
+
   // ── Step tracking ────────────────────────────────────────────────────────
   const getStepsToday = useCallback(() => {
     const all = readJSON(KEYS.STEPS, {});
@@ -275,6 +293,8 @@ export function useLocalStorage() {
     resetWaterToday,
     getWaterGoal,
     setWaterGoal,
+    // streak
+    getStreak,
     // steps
     getStepsToday,
     setStepsToday,

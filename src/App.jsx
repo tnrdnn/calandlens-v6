@@ -10,7 +10,10 @@ import EatingSpeedCoach from './components/Dashboard/EatingSpeedCoach';
 import WeeklyReport from './components/Dashboard/WeeklyReport';
 import WaterTracker from './components/Dashboard/WaterTracker';
 import StepTracker from './components/Dashboard/StepTracker';
+import StreakCard from './components/Dashboard/StreakCard';
+import MacroPie from './components/Dashboard/MacroPie';
 import HistoryPage from './components/History/HistoryPage';
+import { useMealReminders, getRemindersEnabled, setRemindersEnabled } from './hooks/useMealReminders';
 import { getOrCreateUser, pushToCloud, pullFromCloud, isConfigured as firebaseConfigured } from './services/firebase';
 
 /* ─────────────────────────────────────────────────────────────
@@ -20,10 +23,12 @@ function SettingsPage({ onClose }) {
   const { t, lang, setLang, LANGUAGE_OPTIONS } = useLanguage();
   const { getGoal, setGoal, getWaterGoal, setWaterGoal, clearAllData } = useLocalStorage();
   const { isDark, toggleTheme } = useTheme();
-  const [goalInput, setGoalInput]         = useState(String(getGoal()));
+  const { enable: enableReminders, disable: disableReminders } = useMealReminders(t);
+  const [goalInput, setGoalInput]           = useState(String(getGoal()));
   const [waterGoalInput, setWaterGoalInput] = useState(String(getWaterGoal()));
-  const [confirmClear, setConfirmClear]   = useState(false);
-  const [notifStatus, setNotifStatus]     = useState(
+  const [confirmClear, setConfirmClear]     = useState(false);
+  const [remindersOn, setRemindersOn]       = useState(getRemindersEnabled());
+  const [notifStatus, setNotifStatus]       = useState(
     'Notification' in window ? Notification.permission : 'unsupported'
   );
 
@@ -175,6 +180,28 @@ function SettingsPage({ onClose }) {
           )}
         </div>
 
+        {/* Öğün hatırlatıcısı */}
+        {notifStatus === 'granted' && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-bold text-gray-700">🍽️ {t('reminders.title')}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{t('reminders.subtitle')}</p>
+              </div>
+              <button
+                onClick={async () => {
+                  if (remindersOn) { disableReminders(); setRemindersOn(false); }
+                  else { const p = await enableReminders(); if (p === 'granted') setRemindersOn(true); }
+                }}
+                className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${remindersOn ? 'bg-emerald-500' : 'bg-gray-200'}`}
+              >
+                <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${remindersOn ? 'translate-x-6' : ''}`}/>
+              </button>
+            </div>
+            {remindersOn && <p className="text-xs text-emerald-600 font-semibold mt-2">{t('reminders.enabled')}</p>}
+          </div>
+        )}
+
         {/* Bulut Senkronizasyon */}
         {firebaseConfigured && <CloudSyncPanel />}
 
@@ -287,6 +314,7 @@ function GearIcon({ className = 'w-5 h-5' }) {
 function Inner() {
   const { t } = useLanguage();
   const { addMeal } = useLocalStorage();
+  useMealReminders(t);
 
   const [tab,            setTab]        = useState('home');
   const [showWizard,     setWizard]     = useState(false);
@@ -351,6 +379,8 @@ function Inner() {
       <main className="px-4 pt-4 pb-32">
         {tab === 'home' && (
           <div className="space-y-4">
+            <StreakCard key={refresh} />
+            <MacroPie key={refresh} />
             <DailySummary key={refresh} onDeleteMeal={() => setRefresh(r => r + 1)} />
             <WaterTracker key={refresh} />
             <StepTracker />

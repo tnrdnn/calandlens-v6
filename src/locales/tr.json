@@ -219,6 +219,30 @@
     "result_fast": "Yavaşlamayı deneyin. Yavaş yemek daha az kalori almanıza yardımcı olur.",
     "result_good": "Mükemmel tempo! Yavaş yemek sindirimi iyileştirir."
   },
+  "streak": {
+    "title": "Seri Takibi",
+    "subtitle": "Kaç gün üst üste kayıt yaptın?",
+    "current": "Mevcut Seri",
+    "best": "En İyi Seri",
+    "days": "gün",
+    "days_left": "gün kaldı",
+    "next_milestone": "Sonraki hedef",
+    "start_msg": "Bugün bir öğün ekle ve serine başla! 🔥",
+    "achievement": "Başarı Rozeti"
+  },
+  "macro": {
+    "title": "Makro Dağılımı",
+    "subtitle": "Bugünkü protein, karbonhidrat ve yağ",
+    "no_data": "Henüz öğün eklenmedi"
+  },
+  "reminders": {
+    "title": "Öğün Hatırlatıcısı",
+    "subtitle": "Kahvaltı 08:00 · Öğle 12:00 · Akşam 19:00",
+    "enable": "Hatırlatıcıları Aç",
+    "disable": "Hatırlatıcıları Kapat",
+    "enabled": "Hatırlatıcılar açık ✓",
+    "time": "vakti geldi"
+  },
   "steps": {
     "title": "Adım Sayacı",
     "subtitle": "Günlük adımlarını takip et",

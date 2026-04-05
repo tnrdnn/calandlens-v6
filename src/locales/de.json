@@ -115,6 +115,30 @@
     "light": "Heller Modus",
     "toggle": "Thema wechseln"
   },
+  "streak": {
+    "title": "Strähne",
+    "subtitle": "Wie viele Tage hintereinander?",
+    "current": "Aktuelle Strähne",
+    "best": "Beste Strähne",
+    "days": "Tage",
+    "days_left": "Tage übrig",
+    "next_milestone": "Nächstes Ziel",
+    "start_msg": "Füge heute eine Mahlzeit hinzu! 🔥",
+    "achievement": "Abzeichen"
+  },
+  "macro": {
+    "title": "Makro-Verteilung",
+    "subtitle": "Heutige Proteine, Kohlenhydrate und Fette",
+    "no_data": "Noch keine Mahlzeiten"
+  },
+  "reminders": {
+    "title": "Mahlzeiterinnerungen",
+    "subtitle": "Frühstück 08:00 · Mittagessen 12:00 · Abendessen 19:00",
+    "enable": "Erinnerungen aktivieren",
+    "disable": "Deaktivieren",
+    "enabled": "Erinnerungen aktiv ✓",
+    "time": "ist Zeit für"
+  },
   "steps": {
     "title": "Schrittzähler",
     "subtitle": "Verfolge deine täglichen Schritte",

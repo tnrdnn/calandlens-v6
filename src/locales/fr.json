@@ -115,6 +115,30 @@
     "light": "Mode Clair",
     "toggle": "Changer de thème"
   },
+  "streak": {
+    "title": "Série",
+    "subtitle": "Combien de jours d'affilée ?",
+    "current": "Série actuelle",
+    "best": "Meilleure série",
+    "days": "jours",
+    "days_left": "jours restants",
+    "next_milestone": "Prochain jalon",
+    "start_msg": "Ajoutez un repas aujourd'hui pour commencer ! 🔥",
+    "achievement": "Badge"
+  },
+  "macro": {
+    "title": "Répartition des macros",
+    "subtitle": "Protéines, glucides et lipides du jour",
+    "no_data": "Aucun repas encore"
+  },
+  "reminders": {
+    "title": "Rappels de repas",
+    "subtitle": "Petit-déj 08:00 · Déjeuner 12:00 · Dîner 19:00",
+    "enable": "Activer les rappels",
+    "disable": "Désactiver",
+    "enabled": "Rappels activés ✓",
+    "time": "c'est l'heure de"
+  },
   "steps": {
     "title": "Podomètre",
     "subtitle": "Suivez vos pas quotidiens",

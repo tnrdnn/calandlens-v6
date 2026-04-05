@@ -115,6 +115,30 @@
     "light": "Modo Claro",
     "toggle": "Cambiar Tema"
   },
+  "streak": {
+    "title": "Racha",
+    "subtitle": "¿Cuántos días seguidos?",
+    "current": "Racha actual",
+    "best": "Mejor racha",
+    "days": "días",
+    "days_left": "días restantes",
+    "next_milestone": "Siguiente hito",
+    "start_msg": "¡Añade una comida hoy para empezar tu racha! 🔥",
+    "achievement": "Insignia"
+  },
+  "macro": {
+    "title": "Distribución de macros",
+    "subtitle": "Proteínas, carbos y grasas de hoy",
+    "no_data": "Sin comidas aún"
+  },
+  "reminders": {
+    "title": "Recordatorios",
+    "subtitle": "Desayuno 08:00 · Almuerzo 12:00 · Cena 19:00",
+    "enable": "Activar recordatorios",
+    "disable": "Desactivar",
+    "enabled": "Recordatorios activos ✓",
+    "time": "es hora de"
+  },
   "steps": {
     "title": "Podómetro",
     "subtitle": "Rastrea tus pasos diarios",

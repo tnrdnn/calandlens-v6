@@ -115,6 +115,30 @@
     "light": "Light Mode",
     "toggle": "Toggle Theme"
   },
+  "streak": {
+    "title": "Streak Tracker",
+    "subtitle": "How many days in a row?",
+    "current": "Current Streak",
+    "best": "Best Streak",
+    "days": "days",
+    "days_left": "days left",
+    "next_milestone": "Next milestone",
+    "start_msg": "Add a meal today to start your streak! 🔥",
+    "achievement": "Achievement Badge"
+  },
+  "macro": {
+    "title": "Macro Breakdown",
+    "subtitle": "Today's protein, carbs and fat",
+    "no_data": "No meals added yet"
+  },
+  "reminders": {
+    "title": "Meal Reminders",
+    "subtitle": "Breakfast 08:00 · Lunch 12:00 · Dinner 19:00",
+    "enable": "Enable Reminders",
+    "disable": "Disable Reminders",
+    "enabled": "Reminders on ✓",
+    "time": "time"
+  },
   "steps": {
     "title": "Step Counter",
     "subtitle": "Track your daily steps",
