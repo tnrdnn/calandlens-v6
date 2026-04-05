@@ -409,5 +409,15 @@
     "no_history": "Keine Mahlzeiten im Verlauf gefunden",
     "hint": "Wähle zwei Mahlzeiten für den Vergleich",
     "higher": "höher"
+  },
+  "goal_notif": {
+    "title": "Ziel-Benachrichtigungen",
+    "subtitle": "Benachrichtigung bei Annäherung an Kalorienziel",
+    "enable": "Benachrichtigungen aktivieren",
+    "enabled": "Aktiviert ✓",
+    "near_80": "Du hast 80% deines Tagesziels erreicht!",
+    "reached": "🎯 Du hast dein Kalorienziel erreicht!",
+    "over_120": "⚠️ Du hast dein Kalorienziel um 20% überschritten!",
+    "evening_low": "🌙 Du hast heute weniger als die Hälfte deines Ziels geloggt."
   }
 }

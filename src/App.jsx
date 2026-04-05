@@ -20,6 +20,7 @@ import BodyMeasurements from './components/Dashboard/BodyMeasurements';
 import FoodComparison from './components/Dashboard/FoodComparison';
 import HistoryPage from './components/History/HistoryPage';
 import { useMealReminders, getRemindersEnabled, setRemindersEnabled } from './hooks/useMealReminders';
+import { useGoalNotifications, getGoalNotifsEnabled, setGoalNotifsEnabled } from './hooks/useGoalNotifications';
 import { getOrCreateUser, pushToCloud, pullFromCloud, isConfigured as firebaseConfigured } from './services/firebase';
 
 /* ─────────────────────────────────────────────────────────────
@@ -35,6 +36,7 @@ function SettingsPage({ onClose }) {
   const [waterGoalInput, setWaterGoalInput] = useState(String(getWaterGoal()));
   const [confirmClear, setConfirmClear]     = useState(false);
   const [remindersOn, setRemindersOn]       = useState(getRemindersEnabled());
+  const [goalNotifsOn, setGoalNotifsOn]     = useState(getGoalNotifsEnabled());
   const [notifStatus, setNotifStatus]       = useState(
     'Notification' in window ? Notification.permission : 'unsupported'
   );
@@ -183,6 +185,29 @@ function SettingsPage({ onClose }) {
               </button>
             </div>
             {remindersOn && <p className="text-xs text-emerald-600 font-semibold mt-2">{t('reminders.enabled')}</p>}
+          </div>
+        )}
+
+        {/* Hedef ilerleme bildirimi */}
+        {notifStatus === 'granted' && (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-bold text-gray-700">🎯 {t('goal_notif.title')}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{t('goal_notif.subtitle')}</p>
+              </div>
+              <button
+                onClick={() => {
+                  const next = !goalNotifsOn;
+                  setGoalNotifsEnabled(next);
+                  setGoalNotifsOn(next);
+                }}
+                className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${goalNotifsOn ? 'bg-emerald-500' : 'bg-gray-200'}`}
+              >
+                <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${goalNotifsOn ? 'translate-x-6' : ''}`}/>
+              </button>
+            </div>
+            {goalNotifsOn && <p className="text-xs text-emerald-600 font-semibold mt-2">{t('goal_notif.enabled')}</p>}
           </div>
         )}
 
@@ -347,8 +372,10 @@ const CHIPS = [
 
 function Inner() {
   const { t } = useLanguage();
-  const { addMeal } = useLocalStorage();
+  const { addMeal, getDailyTotals, getGoal } = useLocalStorage();
   useMealReminders(t);
+  const _totals = getDailyTotals(new Date());
+  useGoalNotifications(_totals.calories, getGoal(), t);
 
   const [tab,            setTab]        = useState('home');
   const [showWizard,     setWizard]     = useState(false);

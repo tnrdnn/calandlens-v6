@@ -409,5 +409,15 @@
     "no_history": "Aucun repas trouvé dans l'historique",
     "hint": "Sélectionnez deux repas pour voir la comparaison",
     "higher": "plus élevé"
+  },
+  "goal_notif": {
+    "title": "Notifications d'Objectif",
+    "subtitle": "Soyez alerté en approchant votre objectif calorique",
+    "enable": "Activer les Notifications",
+    "enabled": "Activé ✓",
+    "near_80": "Vous avez atteint 80% de votre objectif quotidien !",
+    "reached": "🎯 Vous avez atteint votre objectif calorique !",
+    "over_120": "⚠️ Vous avez dépassé votre objectif de 20% !",
+    "evening_low": "🌙 Vous n'avez enregistré que la moitié de votre objectif aujourd'hui."
   }
 }

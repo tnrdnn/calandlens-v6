@@ -409,5 +409,15 @@
     "no_history": "No hay comidas en el historial",
     "hint": "Selecciona dos comidas para ver la comparación",
     "higher": "más alto"
+  },
+  "goal_notif": {
+    "title": "Notificaciones de Meta",
+    "subtitle": "Recibe alertas al acercarte a tu meta calórica",
+    "enable": "Activar Notificaciones",
+    "enabled": "Activado ✓",
+    "near_80": "¡Alcanzaste el 80% de tu meta diaria! Ve más despacio.",
+    "reached": "🎯 ¡Alcanzaste tu meta calórica!",
+    "over_120": "⚠️ ¡Superaste tu meta calórica en un 20%!",
+    "evening_low": "🌙 Hoy registraste menos de la mitad de tu meta."
   }
 }

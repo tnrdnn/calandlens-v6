@@ -412,5 +412,15 @@
     "no_history": "Geçmişte kayıtlı öğün bulunamadı",
     "hint": "İki öğün seçince karşılaştırma görünür",
     "higher": "daha yüksek"
+  },
+  "goal_notif": {
+    "title": "Hedef Bildirimleri",
+    "subtitle": "Kalori hedefine yaklaşınca bildir",
+    "enable": "Bildirimleri Etkinleştir",
+    "enabled": "Etkin ✓",
+    "near_80": "Günlük hedefinizin %80'ine ulaştınız! Yavaşlayın.",
+    "reached": "🎯 Kalori hedefinize ulaştınız!",
+    "over_120": "⚠️ Kalori hedefinizi %20 aştınız!",
+    "evening_low": "🌙 Bugün henüz hedefinizin yarısını doldurmadınız."
   }
 }

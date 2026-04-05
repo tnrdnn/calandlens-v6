@@ -409,5 +409,15 @@
     "no_history": "No meals found in history",
     "hint": "Select two meals to see the comparison",
     "higher": "higher"
+  },
+  "goal_notif": {
+    "title": "Goal Notifications",
+    "subtitle": "Get notified as you approach your calorie goal",
+    "enable": "Enable Notifications",
+    "enabled": "Enabled ✓",
+    "near_80": "You've reached 80% of your daily goal! Slow down.",
+    "reached": "🎯 You've hit your calorie goal!",
+    "over_120": "⚠️ You've exceeded your calorie goal by 20%!",
+    "evening_low": "🌙 You've logged less than half your goal today."
   }
 }
