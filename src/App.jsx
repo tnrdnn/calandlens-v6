@@ -23,7 +23,7 @@ import { getOrCreateUser, pushToCloud, pullFromCloud, isConfigured as firebaseCo
    SETTINGS PAGE
 ───────────────────────────────────────────────────────────── */
 function SettingsPage({ onClose }) {
-  const { t, lang, setLang, LANGUAGE_OPTIONS } = useLanguage();
+  const { t } = useLanguage();
   const { getGoal, setGoal, getWaterGoal, setWaterGoal, clearAllData } = useLocalStorage();
   const { isDark, toggleTheme } = useTheme();
   const { enable: enableReminders, disable: disableReminders } = useMealReminders(t);
@@ -68,29 +68,6 @@ function SettingsPage({ onClose }) {
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4">
-        {/* Dil seçimi */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <p className="text-sm font-bold text-gray-700 mb-3">{t('settings.language')}</p>
-          <div className="grid grid-cols-1 gap-2">
-            {LANGUAGE_OPTIONS.map(opt => (
-              <button
-                key={opt.code}
-                onClick={() => setLang(opt.code)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors
-                  ${lang === opt.code ? 'bg-emerald-500 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}`}
-              >
-                <span className="text-xl">{opt.flag}</span>
-                <span className="flex-1 text-left">{opt.label}</span>
-                {lang === opt.code && (
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                  </svg>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Günlük kalori hedefi */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
           <p className="text-sm font-bold text-gray-700 mb-3">{t('settings.daily_goal')}</p>
