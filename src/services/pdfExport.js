@@ -1,10 +1,9 @@
-import jsPDF from 'jspdf';
-
 /**
  * Generates a weekly nutrition report PDF
  * @param {object} params
  */
-export async function exportWeeklyPDF({ weeklyData, goal, allMeals, waterData, waterGoal, lang = 'tr' }) {
+export async function exportWeeklyPDF({ weeklyData, goal, allMeals, waterData, waterGoal, stepsData, streak, lang = 'tr' }) {
+  const { default: jsPDF } = await import('jspdf');
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const W = 210;
   const margin = 16;
@@ -186,6 +185,37 @@ export async function exportWeeklyPDF({ weeklyData, goal, allMeals, waterData, w
     y += 22;
   }
 
+  // ── Steps & Streak ────────────────────────────────────────────────────────
+  if (stepsData || streak) {
+    sectionTitle(`👟 ${labels[lang].stepsStreak}`);
+    const extraBoxes = [];
+    if (streak) {
+      extraBoxes.push({ label: labels[lang].streakCurrent, value: `${streak.current} ${labels[lang].days}` });
+      extraBoxes.push({ label: labels[lang].streakBest,    value: `${streak.best} ${labels[lang].days}` });
+    }
+    if (stepsData) {
+      const totalSteps = Object.values(stepsData).reduce((s, v) => s + v, 0);
+      const avgSteps   = weeklyData.length ? Math.round(totalSteps / weeklyData.length) : 0;
+      extraBoxes.push({ label: labels[lang].stepsTotal, value: totalSteps.toLocaleString() });
+      extraBoxes.push({ label: labels[lang].stepsAvg,   value: avgSteps.toLocaleString() });
+    }
+    const eBoxW = (W - margin * 2 - (extraBoxes.length - 1) * 3) / extraBoxes.length;
+    extraBoxes.forEach((s, i) => {
+      const x = margin + i * (eBoxW + 3);
+      setFill('#faf5ff');
+      doc.roundedRect(x, y, eBoxW, 16, 2, 2, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      setColor('#6d28d9');
+      doc.text(s.value, x + eBoxW / 2, y + 8, { align: 'center' });
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5);
+      setColor('#6b7280');
+      doc.text(s.label, x + eBoxW / 2, y + 14, { align: 'center' });
+    });
+    y += 22;
+  }
+
   // ── Footer ────────────────────────────────────────────────────────────────
   setFill('#f9fafb');
   doc.rect(0, 285, W, 12, 'F');
@@ -222,6 +252,11 @@ const labels = {
     avgWater: 'Günlük Ort.',
     waterGoal: 'Günlük Hedef',
     generated: 'Oluşturulma',
+    stepsStreak: 'Adım & Seri',
+    streakCurrent: 'Güncel Seri',
+    streakBest: 'En İyi Seri',
+    stepsTotal: 'Toplam Adım',
+    stepsAvg: 'Günlük Ort. Adım',
   },
   en: {
     subtitle: 'AI Nutrition Tracker',
@@ -243,6 +278,11 @@ const labels = {
     avgWater: 'Daily Avg.',
     waterGoal: 'Daily Goal',
     generated: 'Generated',
+    stepsStreak: 'Steps & Streak',
+    streakCurrent: 'Current Streak',
+    streakBest: 'Best Streak',
+    stepsTotal: 'Total Steps',
+    stepsAvg: 'Daily Avg. Steps',
   },
   es: {
     subtitle: 'Seguimiento nutricional con IA',
@@ -264,6 +304,11 @@ const labels = {
     avgWater: 'Prom. diario',
     waterGoal: 'Meta diaria',
     generated: 'Generado',
+    stepsStreak: 'Pasos y Racha',
+    streakCurrent: 'Racha actual',
+    streakBest: 'Mejor racha',
+    stepsTotal: 'Total pasos',
+    stepsAvg: 'Prom. diario pasos',
   },
   fr: {
     subtitle: 'Suivi nutritionnel par IA',
@@ -285,6 +330,11 @@ const labels = {
     avgWater: 'Moy. journalière',
     waterGoal: 'Objectif jour',
     generated: 'Généré le',
+    stepsStreak: 'Pas & Série',
+    streakCurrent: 'Série actuelle',
+    streakBest: 'Meilleure série',
+    stepsTotal: 'Total pas',
+    stepsAvg: 'Moy. quotidienne pas',
   },
   de: {
     subtitle: 'KI-Ernährungstracker',
@@ -306,6 +356,11 @@ const labels = {
     avgWater: 'Tages-Ø',
     waterGoal: 'Tagesziel',
     generated: 'Erstellt am',
+    stepsStreak: 'Schritte & Serie',
+    streakCurrent: 'Aktuelle Serie',
+    streakBest: 'Beste Serie',
+    stepsTotal: 'Schritte gesamt',
+    stepsAvg: 'Tages-Ø Schritte',
   },
   ar: {
     subtitle: 'تتبع التغذية بالذكاء الاصطناعي',
@@ -327,6 +382,11 @@ const labels = {
     avgWater: 'متوسط يومي',
     waterGoal: 'هدف يومي',
     generated: 'تم الإنشاء',
+    stepsStreak: 'الخطوات والسلسلة',
+    streakCurrent: 'السلسلة الحالية',
+    streakBest: 'أفضل سلسلة',
+    stepsTotal: 'إجمالي الخطوات',
+    stepsAvg: 'متوسط الخطوات اليومية',
   },
   ru: {
     subtitle: 'ИИ трекер питания',
@@ -348,5 +408,10 @@ const labels = {
     avgWater: 'Ср. в день',
     waterGoal: 'Дневная цель',
     generated: 'Создано',
+    stepsStreak: 'Шаги и серия',
+    streakCurrent: 'Текущая серия',
+    streakBest: 'Лучшая серия',
+    stepsTotal: 'Всего шагов',
+    stepsAvg: 'Среднее шагов в день',
   },
 };

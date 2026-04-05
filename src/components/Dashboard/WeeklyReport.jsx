@@ -5,7 +5,7 @@ import { exportWeeklyPDF } from '../../services/pdfExport';
 
 export default function WeeklyReport() {
   const { t, tArr, lang } = useLanguage();
-  const { getWeeklyData, getGoal, getAllMeals, getWaterGoal } = useLocalStorage();
+  const { getWeeklyData, getGoal, getAllMeals, getWaterGoal, getStreak } = useLocalStorage();
   const [exporting, setExporting] = useState(false);
 
   const data   = getWeeklyData();
@@ -24,7 +24,10 @@ export default function WeeklyReport() {
       const waterGoal = getWaterGoal();
       const waterRaw  = localStorage.getItem('calandlens_water');
       const waterData = waterRaw ? JSON.parse(waterRaw) : {};
-      await exportWeeklyPDF({ weeklyData: data, goal, allMeals, waterData, waterGoal, lang });
+      const stepsRaw  = localStorage.getItem('calandlens_steps');
+      const stepsData = stepsRaw ? JSON.parse(stepsRaw) : {};
+      const streak    = getStreak();
+      await exportWeeklyPDF({ weeklyData: data, goal, allMeals, waterData, waterGoal, stepsData, streak, lang });
     } catch (e) {
       console.error('PDF export failed:', e);
     } finally {
