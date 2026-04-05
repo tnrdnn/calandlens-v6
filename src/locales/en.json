@@ -122,7 +122,10 @@
     "water": "Water",
     "steps": "Steps",
     "speed": "Speed",
-    "report": "Report"
+    "report": "Report",
+    "trend": "Trend",
+    "score": "Score",
+    "body": "Body"
   },
   "streak": {
     "title": "Streak Tracker",
@@ -336,5 +339,36 @@
     "de": "Deutsch",
     "ar": "العربية",
     "ru": "Русский"
+  },
+  "trend": {
+    "title": "Calorie Trend",
+    "subtitle": "Last 30 days",
+    "avg": "Average",
+    "goal": "Goal",
+    "goal_line": "Goal line",
+    "calories": "Calories",
+    "on_target": "On target",
+    "no_data": "Not enough data yet"
+  },
+  "score": {
+    "title": "Daily Score",
+    "subtitle": "Your health score today",
+    "cal": "Calorie balance",
+    "protein": "Protein ratio",
+    "water": "Water intake",
+    "steps": "Step count",
+    "great": "Great day! 🌟",
+    "good": "Going well 👍",
+    "improve": "Could be better 💪"
+  },
+  "body": {
+    "title": "Body Measurements",
+    "subtitle": "Weight, waist and hip",
+    "add": "Add Measurement",
+    "weight": "Weight",
+    "waist": "Waist",
+    "hip": "Hip",
+    "history": "Measurement history",
+    "no_data": "No measurements added yet"
   }
 }

@@ -226,7 +226,10 @@
     "water": "Su",
     "steps": "Adım",
     "speed": "Hız",
-    "report": "Rapor"
+    "report": "Rapor",
+    "trend": "Trend",
+    "score": "Skor",
+    "body": "Ölçüm"
   },
   "streak": {
     "title": "Seri Takibi",
@@ -339,5 +342,36 @@
     "de": "Deutsch",
     "ar": "العربية",
     "ru": "Русский"
+  },
+  "trend": {
+    "title": "Kalori Trendi",
+    "subtitle": "Son 30 gün",
+    "avg": "Ortalama",
+    "goal": "Hedef",
+    "goal_line": "Hedef çizgisi",
+    "calories": "Kalori",
+    "on_target": "Hedefe ulaşıldı",
+    "no_data": "Henüz yeterli veri yok"
+  },
+  "score": {
+    "title": "Günlük Skor",
+    "subtitle": "Bugünkü sağlık puanın",
+    "cal": "Kalori dengesi",
+    "protein": "Protein oranı",
+    "water": "Su tüketimi",
+    "steps": "Adım sayısı",
+    "great": "Harika gün! 🌟",
+    "good": "İyi gidiyorsun 👍",
+    "improve": "Daha iyi olabilir 💪"
+  },
+  "body": {
+    "title": "Vücut Ölçüleri",
+    "subtitle": "Kilo, bel ve kalça",
+    "add": "Ölçüm Ekle",
+    "weight": "Kilo",
+    "waist": "Bel",
+    "hip": "Kalça",
+    "history": "Geçmiş ölçümler",
+    "no_data": "Henüz ölçüm eklenmedi"
   }
 }

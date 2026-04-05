@@ -122,7 +122,10 @@
     "water": "Eau",
     "steps": "Pas",
     "speed": "Vitesse",
-    "report": "Rapport"
+    "report": "Rapport",
+    "trend": "Tendance",
+    "score": "Score",
+    "body": "Corps"
   },
   "streak": {
     "title": "Série",
@@ -336,5 +339,36 @@
     "de": "Deutsch",
     "ar": "العربية",
     "ru": "Русский"
+  },
+  "trend": {
+    "title": "Tendance calorique",
+    "subtitle": "30 derniers jours",
+    "avg": "Moyenne",
+    "goal": "Objectif",
+    "goal_line": "Ligne objectif",
+    "calories": "Calories",
+    "on_target": "Objectif atteint",
+    "no_data": "Pas encore assez de données"
+  },
+  "score": {
+    "title": "Score quotidien",
+    "subtitle": "Votre score santé aujourd'hui",
+    "cal": "Équilibre calorique",
+    "protein": "Ratio protéines",
+    "water": "Consommation d'eau",
+    "steps": "Nombre de pas",
+    "great": "Excellente journée ! 🌟",
+    "good": "Bien parti 👍",
+    "improve": "Peut mieux faire 💪"
+  },
+  "body": {
+    "title": "Mesures corporelles",
+    "subtitle": "Poids, taille et hanches",
+    "add": "Ajouter mesure",
+    "weight": "Poids",
+    "waist": "Tour de taille",
+    "hip": "Tour de hanches",
+    "history": "Historique des mesures",
+    "no_data": "Aucune mesure encore"
   }
 }

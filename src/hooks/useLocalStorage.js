@@ -9,6 +9,7 @@ const KEYS = {
   WATER_GOAL: 'calandlens_water_goal',  // number (ml)
   STEPS:      'calandlens_steps',       // { [dateKey]: number }
   STEP_GOAL:  'calandlens_step_goal',   // number
+  BODY:       'calandlens_body',        // [{ date, weight, waist, hip }]
 };
 
 function todayKey() {
@@ -194,6 +195,38 @@ export function useLocalStorage() {
     refresh();
   }, []);
 
+  // ── Monthly calories (30 days) ───────────────────────────────────────────
+  const getMonthlyCalories = useCallback(() => {
+    const meals = readJSON(KEYS.MEALS, {});
+    const result = [];
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const key = dateKey(d);
+      const cal = (meals[key] || []).reduce((s, m) => s + (m.calories || 0), 0);
+      result.push({ date: key, calories: Math.round(cal), day: i });
+    }
+    return result;
+  }, []);
+
+  // ── Body measurements ────────────────────────────────────────────────────
+  const getBodyMeasurements = useCallback(() => {
+    return readJSON(KEYS.BODY, []);
+  }, []);
+
+  const addBodyMeasurement = useCallback((data) => {
+    const all = readJSON(KEYS.BODY, []);
+    all.push({ date: todayKey(), ...data, id: Date.now() });
+    writeJSON(KEYS.BODY, all);
+    refresh();
+  }, []);
+
+  const deleteBodyMeasurement = useCallback((id) => {
+    const all = readJSON(KEYS.BODY, []);
+    writeJSON(KEYS.BODY, all.filter(m => m.id !== id));
+    refresh();
+  }, []);
+
   // ── Streak ───────────────────────────────────────────────────────────────
   const getStreak = useCallback(() => {
     const all = readJSON(KEYS.MEALS, {});
@@ -293,6 +326,11 @@ export function useLocalStorage() {
     resetWaterToday,
     getWaterGoal,
     setWaterGoal,
+    // monthly & body
+    getMonthlyCalories,
+    getBodyMeasurements,
+    addBodyMeasurement,
+    deleteBodyMeasurement,
     // streak
     getStreak,
     // steps

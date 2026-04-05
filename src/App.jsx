@@ -12,6 +12,9 @@ import WaterTracker from './components/Dashboard/WaterTracker';
 import StepTracker from './components/Dashboard/StepTracker';
 import StreakCard from './components/Dashboard/StreakCard';
 import MacroPie from './components/Dashboard/MacroPie';
+import CalorieTrend from './components/Dashboard/CalorieTrend';
+import NutritionScore from './components/Dashboard/NutritionScore';
+import BodyMeasurements from './components/Dashboard/BodyMeasurements';
 import HistoryPage from './components/History/HistoryPage';
 import { useMealReminders, getRemindersEnabled, setRemindersEnabled } from './hooks/useMealReminders';
 import { getOrCreateUser, pushToCloud, pullFromCloud, isConfigured as firebaseConfigured } from './services/firebase';
@@ -319,6 +322,9 @@ const CHIPS = [
   { id: 'sec-steps',   emoji: '👟', key: 'chips.steps'   },
   { id: 'sec-speed',   emoji: '🍽️', key: 'chips.speed'  },
   { id: 'sec-report',  emoji: '📈', key: 'chips.report'  },
+  { id: 'sec-trend',   emoji: '📉', key: 'chips.trend'   },
+  { id: 'sec-score',   emoji: '⭐', key: 'chips.score'   },
+  { id: 'sec-body',    emoji: '📏', key: 'chips.body'    },
 ];
 
 function Inner() {
@@ -443,6 +449,15 @@ function Inner() {
             </div>
             <div id="sec-report" className="scroll-mt-36">
               <WeeklyReport />
+            </div>
+            <div id="sec-trend" className="scroll-mt-36">
+              <CalorieTrend />
+            </div>
+            <div id="sec-score" className="scroll-mt-36">
+              <NutritionScore key={refresh} />
+            </div>
+            <div id="sec-body" className="scroll-mt-36">
+              <BodyMeasurements />
             </div>
           </div>
         )}

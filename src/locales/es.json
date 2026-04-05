@@ -122,7 +122,10 @@
     "water": "Agua",
     "steps": "Pasos",
     "speed": "Ritmo",
-    "report": "Informe"
+    "report": "Informe",
+    "trend": "Tendencia",
+    "score": "Puntuación",
+    "body": "Cuerpo"
   },
   "streak": {
     "title": "Racha",
@@ -336,5 +339,36 @@
     "de": "Deutsch",
     "ar": "العربية",
     "ru": "Русский"
+  },
+  "trend": {
+    "title": "Tendencia de calorías",
+    "subtitle": "Últimos 30 días",
+    "avg": "Promedio",
+    "goal": "Meta",
+    "goal_line": "Línea de meta",
+    "calories": "Calorías",
+    "on_target": "En meta",
+    "no_data": "Aún no hay datos suficientes"
+  },
+  "score": {
+    "title": "Puntuación diaria",
+    "subtitle": "Tu puntuación de salud hoy",
+    "cal": "Balance calórico",
+    "protein": "Proporción de proteínas",
+    "water": "Consumo de agua",
+    "steps": "Pasos",
+    "great": "¡Día excelente! 🌟",
+    "good": "¡Vas bien! 👍",
+    "improve": "Puede mejorar 💪"
+  },
+  "body": {
+    "title": "Medidas corporales",
+    "subtitle": "Peso, cintura y cadera",
+    "add": "Añadir medida",
+    "weight": "Peso",
+    "waist": "Cintura",
+    "hip": "Cadera",
+    "history": "Historial de medidas",
+    "no_data": "Aún no hay medidas"
   }
 }

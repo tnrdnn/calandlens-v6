@@ -122,7 +122,10 @@
     "water": "Wasser",
     "steps": "Schritte",
     "speed": "Tempo",
-    "report": "Bericht"
+    "report": "Bericht",
+    "trend": "Trend",
+    "score": "Score",
+    "body": "Körper"
   },
   "streak": {
     "title": "Strähne",
@@ -336,5 +339,36 @@
     "de": "Deutsch",
     "ar": "العربية",
     "ru": "Русский"
+  },
+  "trend": {
+    "title": "Kalorientrend",
+    "subtitle": "Letzte 30 Tage",
+    "avg": "Durchschnitt",
+    "goal": "Ziel",
+    "goal_line": "Ziellinie",
+    "calories": "Kalorien",
+    "on_target": "Ziel erreicht",
+    "no_data": "Noch nicht genug Daten"
+  },
+  "score": {
+    "title": "Tagespunkte",
+    "subtitle": "Dein Gesundheitsscore heute",
+    "cal": "Kalorienbilanz",
+    "protein": "Proteinanteil",
+    "water": "Wasseraufnahme",
+    "steps": "Schrittzahl",
+    "great": "Toller Tag! 🌟",
+    "good": "Läuft gut 👍",
+    "improve": "Kann besser werden 💪"
+  },
+  "body": {
+    "title": "Körpermaße",
+    "subtitle": "Gewicht, Taille und Hüfte",
+    "add": "Messung hinzufügen",
+    "weight": "Gewicht",
+    "waist": "Taille",
+    "hip": "Hüfte",
+    "history": "Messungsverlauf",
+    "no_data": "Noch keine Messungen"
   }
 }
