@@ -115,6 +115,15 @@
     "light": "Heller Modus",
     "toggle": "Thema wechseln"
   },
+  "chips": {
+    "summary": "Übersicht",
+    "streak": "Strähne",
+    "macro": "Makros",
+    "water": "Wasser",
+    "steps": "Schritte",
+    "speed": "Tempo",
+    "report": "Bericht"
+  },
   "streak": {
     "title": "Strähne",
     "subtitle": "Wie viele Tage hintereinander?",

@@ -115,6 +115,15 @@
     "light": "Mode Clair",
     "toggle": "Changer de thème"
   },
+  "chips": {
+    "summary": "Résumé",
+    "streak": "Série",
+    "macro": "Macros",
+    "water": "Eau",
+    "steps": "Pas",
+    "speed": "Vitesse",
+    "report": "Rapport"
+  },
   "streak": {
     "title": "Série",
     "subtitle": "Combien de jours d'affilée ?",

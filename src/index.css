@@ -50,6 +50,10 @@
   /* Borders */
   .border-3 { border-width: 3px; }
 
+  /* Hide scrollbar */
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
   /* Glassmorphism card */
   .glass {
     background: rgba(255,255,255,0.72);

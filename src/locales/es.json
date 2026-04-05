@@ -115,6 +115,15 @@
     "light": "Modo Claro",
     "toggle": "Cambiar Tema"
   },
+  "chips": {
+    "summary": "Resumen",
+    "streak": "Racha",
+    "macro": "Macros",
+    "water": "Agua",
+    "steps": "Pasos",
+    "speed": "Ritmo",
+    "report": "Informe"
+  },
   "streak": {
     "title": "Racha",
     "subtitle": "¿Cuántos días seguidos?",

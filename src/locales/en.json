@@ -115,6 +115,15 @@
     "light": "Light Mode",
     "toggle": "Toggle Theme"
   },
+  "chips": {
+    "summary": "Summary",
+    "streak": "Streak",
+    "macro": "Macros",
+    "water": "Water",
+    "steps": "Steps",
+    "speed": "Speed",
+    "report": "Report"
+  },
   "streak": {
     "title": "Streak Tracker",
     "subtitle": "How many days in a row?",

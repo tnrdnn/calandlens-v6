@@ -311,6 +311,16 @@ function GearIcon({ className = 'w-5 h-5' }) {
 /* ─────────────────────────────────────────────────────────────
    INNER APP  (inside LanguageProvider)
 ───────────────────────────────────────────────────────────── */
+const CHIPS = [
+  { id: 'sec-summary', emoji: '📊', key: 'chips.summary' },
+  { id: 'sec-streak',  emoji: '🔥', key: 'chips.streak'  },
+  { id: 'sec-macro',   emoji: '🥧', key: 'chips.macro'   },
+  { id: 'sec-water',   emoji: '💧', key: 'chips.water'   },
+  { id: 'sec-steps',   emoji: '👟', key: 'chips.steps'   },
+  { id: 'sec-speed',   emoji: '🍽️', key: 'chips.speed'  },
+  { id: 'sec-report',  emoji: '📈', key: 'chips.report'  },
+];
+
 function Inner() {
   const { t } = useLanguage();
   const { addMeal } = useLocalStorage();
@@ -321,11 +331,32 @@ function Inner() {
   const [showSettings,   setSettings]   = useState(false);
   const [showExitDialog, setExitDialog] = useState(false);
   const [refresh,        setRefresh]    = useState(0);
+  const [activeChip,     setActiveChip] = useState('sec-summary');
 
   const handleMealAdded = useCallback((meal) => {
     addMeal(meal);
     setRefresh(r => r + 1);
   }, [addMeal]);
+
+  /* Chip scroll */
+  const scrollToSection = useCallback((id) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setActiveChip(id);
+  }, []);
+
+  /* IntersectionObserver — aktif chip takibi */
+  useEffect(() => {
+    if (tab !== 'home') return;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(e => { if (e.isIntersecting) setActiveChip(e.target.id); });
+      },
+      { threshold: 0.4, rootMargin: '-100px 0px -40% 0px' }
+    );
+    CHIPS.forEach(c => { const el = document.getElementById(c.id); if (el) obs.observe(el); });
+    return () => obs.disconnect();
+  }, [tab, refresh]);
 
   /* Hardware / browser back-button handler */
   useEffect(() => {
@@ -373,19 +404,53 @@ function Inner() {
             <LanguageSelector compact />
           </div>
         </div>
+
+        {/* ── CHIP STRIP ── */}
+        {tab === 'home' && (
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide pt-3 pb-0.5 -mx-1 px-1">
+            {CHIPS.map(chip => (
+              <button
+                key={chip.id}
+                onClick={() => scrollToSection(chip.id)}
+                className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
+                  activeChip === chip.id
+                    ? 'bg-white text-emerald-700 shadow-sm'
+                    : 'bg-white/20 text-white hover:bg-white/35'
+                }`}
+              >
+                <span>{chip.emoji}</span>
+                <span>{t(chip.key)}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </header>
 
       {/* ── MAIN CONTENT ── */}
       <main className="px-4 pt-4 pb-32">
         {tab === 'home' && (
           <div className="space-y-4">
-            <StreakCard key={refresh} />
-            <MacroPie key={refresh} />
-            <DailySummary key={refresh} onDeleteMeal={() => setRefresh(r => r + 1)} />
-            <WaterTracker key={refresh} />
-            <StepTracker />
-            <EatingSpeedCoach />
-            <WeeklyReport />
+            <div id="sec-summary" className="scroll-mt-36">
+              <DailySummary key={refresh} onDeleteMeal={() => setRefresh(r => r + 1)} />
+            </div>
+            <div id="sec-streak" className="scroll-mt-36">
+              <StreakCard key={refresh} />
+            </div>
+            <div id="sec-macro" className="scroll-mt-36">
+              <MacroPie key={refresh} />
+            </div>
+            <div id="sec-water" className="scroll-mt-36">
+              <WaterTracker key={refresh} />
+            </div>
+            <div id="sec-steps" className="scroll-mt-36">
+              <StepTracker />
+            </div>
+            <div id="sec-speed" className="scroll-mt-36">
+              <EatingSpeedCoach />
+            </div>
+            <div id="sec-report" className="scroll-mt-36">
+              <WeeklyReport />
+            </div>
           </div>
         )}
 

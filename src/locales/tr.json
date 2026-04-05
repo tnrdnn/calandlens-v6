@@ -219,6 +219,15 @@
     "result_fast": "Yavaşlamayı deneyin. Yavaş yemek daha az kalori almanıza yardımcı olur.",
     "result_good": "Mükemmel tempo! Yavaş yemek sindirimi iyileştirir."
   },
+  "chips": {
+    "summary": "Özet",
+    "streak": "Seri",
+    "macro": "Makro",
+    "water": "Su",
+    "steps": "Adım",
+    "speed": "Hız",
+    "report": "Rapor"
+  },
   "streak": {
     "title": "Seri Takibi",
     "subtitle": "Kaç gün üst üste kayıt yaptın?",
