@@ -566,15 +566,17 @@ function Inner() {
               <path d="M 30 13 A 13 13 0 1 0 30 35"
                 stroke="white" strokeWidth="4.5" strokeLinecap="round" filter="url(#cglow)"/>
 
-              {/* Food icons inside C — minimal */}
+              {/* Food icons inside C — belirgin */}
               {/* Avocado: oval + seed */}
-              <ellipse cx="18" cy="21" rx="2.2" ry="3" stroke="white" strokeWidth="0.7" strokeOpacity="0.65"/>
-              <ellipse cx="18" cy="22" rx="0.9" ry="1.2" fill="white" fillOpacity="0.4"/>
-              {/* Apple: circle + stem */}
-              <circle cx="24" cy="27" r="2.2" stroke="white" strokeWidth="0.7" strokeOpacity="0.65"/>
-              <path d="M 24 24.8 Q 25.5 23.5 25 22.8" stroke="white" strokeWidth="0.7" strokeOpacity="0.65" strokeLinecap="round"/>
-              {/* Leaf */}
-              <path d="M 15 27 Q 17.5 23.5 20 27 Q 17.5 29 15 27Z" stroke="white" strokeWidth="0.6" strokeOpacity="0.55" fill="white" fillOpacity="0.08"/>
+              <ellipse cx="18" cy="21" rx="2.8" ry="3.8" stroke="white" strokeWidth="1.2" strokeOpacity="0.9" fill="white" fillOpacity="0.1"/>
+              <ellipse cx="18" cy="22.5" rx="1.2" ry="1.6" fill="white" fillOpacity="0.7"/>
+              {/* Apple: circle + stem + leaf */}
+              <circle cx="24" cy="27.5" r="2.8" stroke="white" strokeWidth="1.2" strokeOpacity="0.9" fill="white" fillOpacity="0.1"/>
+              <path d="M 24 24.7 Q 26 23 25.5 22" stroke="white" strokeWidth="1" strokeOpacity="0.9" strokeLinecap="round"/>
+              <path d="M 24 24.7 Q 22.5 23.2 23 22.3" stroke="white" strokeWidth="0.8" strokeOpacity="0.7" strokeLinecap="round"/>
+              {/* Leaf / greens */}
+              <path d="M 14.5 27.5 Q 17.5 23 21 27 Q 17.5 30 14.5 27.5Z" stroke="white" strokeWidth="1" strokeOpacity="0.9" fill="white" fillOpacity="0.2"/>
+              <path d="M 17.5 27 L 17.5 23.5" stroke="white" strokeWidth="0.7" strokeOpacity="0.7" strokeLinecap="round"/>
 
               {/* Light reflection on C */}
               <ellipse cx="25" cy="17" rx="2.5" ry="1.2" fill="white" fillOpacity="0.45" transform="rotate(-35 25 17)"/>
@@ -582,7 +584,7 @@ function Inner() {
               {/* Lens text — L large white, ens mint, flowing from C tail */}
               <text fontFamily="system-ui,-apple-system,Arial,sans-serif" fontWeight="900" filter="url(#cglow)">
                 <tspan x="31" y="40" fontSize="17" fill="white">L</tspan>
-                <tspan fontSize="9.5" dy="-0.5" fill="#6ee7b7">ens</tspan>
+                <tspan fontSize="9.5" dy="-0.5" fill="white">ens</tspan>
               </text>
 
               {/* Connecting curve: C tail → L */}
