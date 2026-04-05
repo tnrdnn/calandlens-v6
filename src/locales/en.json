@@ -419,5 +419,17 @@
     "reached": "🎯 You've hit your calorie goal!",
     "over_120": "⚠️ You've exceeded your calorie goal by 20%!",
     "evening_low": "🌙 You've logged less than half your goal today."
+  },
+  "macro_goals": {
+    "title": "Macro Goals",
+    "subtitle": "Protein / carb / fat split of your calorie goal",
+    "protein": "Protein",
+    "carbs": "Carbs",
+    "fat": "Fat",
+    "total": "Total",
+    "sum_error": "Total must equal 100%",
+    "save": "Save",
+    "reset": "Reset to Default",
+    "gram_target": "g target"
   }
 }

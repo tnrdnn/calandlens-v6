@@ -419,5 +419,17 @@
     "reached": "🎯 Vous avez atteint votre objectif calorique !",
     "over_120": "⚠️ Vous avez dépassé votre objectif de 20% !",
     "evening_low": "🌙 Vous n'avez enregistré que la moitié de votre objectif aujourd'hui."
+  },
+  "macro_goals": {
+    "title": "Objectifs Macro",
+    "subtitle": "Répartition protéines/glucides/lipides",
+    "protein": "Protéines",
+    "carbs": "Glucides",
+    "fat": "Lipides",
+    "total": "Total",
+    "sum_error": "Le total doit être de 100%",
+    "save": "Enregistrer",
+    "reset": "Réinitialiser",
+    "gram_target": "g objectif"
   }
 }

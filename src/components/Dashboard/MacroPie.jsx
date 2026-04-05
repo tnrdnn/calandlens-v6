@@ -56,8 +56,9 @@ function DonutChart({ slices }) {
 
 export default function MacroPie() {
   const { t } = useLanguage();
-  const { getDailyTotals } = useLocalStorage();
-  const totals = getDailyTotals();
+  const { getDailyTotals, getMacroGoals } = useLocalStorage();
+  const totals     = getDailyTotals();
+  const macroGoals = getMacroGoals();
 
   const protein = Math.round(totals.protein || 0);
   const carbs   = Math.round(totals.carbs   || 0);
@@ -73,9 +74,9 @@ export default function MacroPie() {
   const pct = (kcal) => total > 0 ? Math.round((kcal / total) * 100) : 0;
 
   const rows = [
-    { label: t('nutrition.protein'), val: protein, kcal: protein * 4, ...MACROS[0] },
-    { label: t('nutrition.carbs'),   val: carbs,   kcal: carbs * 4,   ...MACROS[1] },
-    { label: t('nutrition.fat'),     val: fat,     kcal: fat * 9,     ...MACROS[2] },
+    { label: t('nutrition.protein'), val: protein, kcal: protein * 4, target: macroGoals.protein, ...MACROS[0] },
+    { label: t('nutrition.carbs'),   val: carbs,   kcal: carbs * 4,   target: macroGoals.carbs,   ...MACROS[1] },
+    { label: t('nutrition.fat'),     val: fat,     kcal: fat * 9,     target: macroGoals.fat,     ...MACROS[2] },
   ];
 
   return (
@@ -106,12 +107,21 @@ export default function MacroPie() {
             <div key={row.key}>
               <div className="flex justify-between items-center mb-0.5">
                 <span className={`text-xs font-semibold ${row.text}`}>{row.label}</span>
-                <span className="text-xs text-gray-500 font-bold">{row.val}g <span className="text-gray-300 font-normal">({pct(row.kcal)}%)</span></span>
+                <span className="text-xs text-gray-500 font-bold">
+                  {row.val}g
+                  <span className="text-gray-300 font-normal"> ({pct(row.kcal)}%</span>
+                  <span className="text-gray-400 font-normal"> / {row.target}%)</span>
+                </span>
               </div>
-              <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+              <div className="relative h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all duration-700"
                   style={{ width: `${pct(row.kcal)}%`, backgroundColor: row.color }}
+                />
+                {/* Target marker */}
+                <div
+                  className="absolute top-0 bottom-0 w-0.5 rounded-full opacity-50"
+                  style={{ left: `${row.target}%`, backgroundColor: row.color }}
                 />
               </div>
             </div>

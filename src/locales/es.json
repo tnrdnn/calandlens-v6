@@ -419,5 +419,17 @@
     "reached": "🎯 ¡Alcanzaste tu meta calórica!",
     "over_120": "⚠️ ¡Superaste tu meta calórica en un 20%!",
     "evening_low": "🌙 Hoy registraste menos de la mitad de tu meta."
+  },
+  "macro_goals": {
+    "title": "Metas de Macros",
+    "subtitle": "Distribución proteína/carbo/grasa de tu meta calórica",
+    "protein": "Proteína",
+    "carbs": "Carbohidratos",
+    "fat": "Grasa",
+    "total": "Total",
+    "sum_error": "El total debe ser 100%",
+    "save": "Guardar",
+    "reset": "Restablecer",
+    "gram_target": "g objetivo"
   }
 }

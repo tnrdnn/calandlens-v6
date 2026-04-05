@@ -147,7 +147,7 @@ function TrendArrow({ data, labelUp, labelDown }) {
 /* ═══════════════════════════════════════════════════════════════════════════════ */
 export default function DailySummary({ onDeleteMeal }) {
   const { t, tArr, lang } = useLanguage();
-  const { getTodayMeals, getDailyTotals, getWeeklyData, getGoal, deleteMeal, getUserAllergens } = useLocalStorage();
+  const { getTodayMeals, getDailyTotals, getWeeklyData, getGoal, deleteMeal, getUserAllergens, getMacroGoals } = useLocalStorage();
   const userAllergens = getUserAllergens();
   const [tip, setTip]      = useState('');
   const [tipLoading, setTL]= useState(false);
@@ -157,7 +157,14 @@ export default function DailySummary({ onDeleteMeal }) {
   const totals = getDailyTotals(new Date());
   const goal   = getGoal();
   const over   = totals.calories > goal;
-  const MACRO_DV = { protein: 50, carbs: 260, fat: 78 };
+
+  // Macro targets derived from user's macro goals + calorie goal
+  const macroGoals = getMacroGoals();
+  const MACRO_DV = {
+    protein: Math.round((goal * macroGoals.protein / 100) / 4),
+    carbs:   Math.round((goal * macroGoals.carbs   / 100) / 4),
+    fat:     Math.round((goal * macroGoals.fat     / 100) / 9),
+  };
 
   // ── Localised weekday labels ─────────────────────────────────────────────
   // tArr('history.weekdays') returns e.g. ["Sun","Mon",...] in current lang.

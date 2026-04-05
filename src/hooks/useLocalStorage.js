@@ -11,6 +11,7 @@ const KEYS = {
   STEP_GOAL:  'calandlens_step_goal',   // number
   BODY:       'calandlens_body',        // [{ date, weight, waist, hip }]
   ALLERGENS:  'calandlens_allergens',   // string[] — seçili alerjen id'leri
+  MACRO_GOALS: 'calandlens_macro_goals', // { protein, carbs, fat } — % hedefleri
 };
 
 function todayKey() {
@@ -302,6 +303,16 @@ export function useLocalStorage() {
     refresh();
   }, []);
 
+  // ── Macro goals (%) ──────────────────────────────────────────────────────
+  const getMacroGoals = useCallback(() => {
+    return readJSON(KEYS.MACRO_GOALS, { protein: 25, carbs: 50, fat: 25 });
+  }, []);
+
+  const setMacroGoals = useCallback((goals) => {
+    writeJSON(KEYS.MACRO_GOALS, goals);
+    refresh();
+  }, []);
+
   // ── Clear ────────────────────────────────────────────────────────────────
   const clearAllData = useCallback(() => {
     Object.values(KEYS).forEach(k => localStorage.removeItem(k));
@@ -354,6 +365,9 @@ export function useLocalStorage() {
     // allergens
     getUserAllergens,
     setUserAllergens,
+    // macro goals
+    getMacroGoals,
+    setMacroGoals,
     // utils
     clearAllData,
     todayKey,

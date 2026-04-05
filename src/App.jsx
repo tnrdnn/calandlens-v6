@@ -28,13 +28,14 @@ import { getOrCreateUser, pushToCloud, pullFromCloud, isConfigured as firebaseCo
 ───────────────────────────────────────────────────────────── */
 function SettingsPage({ onClose }) {
   const { t } = useLanguage();
-  const { getGoal, setGoal, getWaterGoal, setWaterGoal, clearAllData, getUserAllergens, setUserAllergens } = useLocalStorage();
+  const { getGoal, setGoal, getWaterGoal, setWaterGoal, clearAllData, getUserAllergens, setUserAllergens, getMacroGoals, setMacroGoals } = useLocalStorage();
   const [selectedAllergens, setSelectedAllergens] = useState(() => getUserAllergens());
   const { isDark, toggleTheme } = useTheme();
   const { enable: enableReminders, disable: disableReminders } = useMealReminders(t);
   const [goalInput, setGoalInput]           = useState(String(getGoal()));
   const [waterGoalInput, setWaterGoalInput] = useState(String(getWaterGoal()));
   const [confirmClear, setConfirmClear]     = useState(false);
+  const [macroGoals, setMacroGoalsState]    = useState(() => getMacroGoals());
   const [remindersOn, setRemindersOn]       = useState(getRemindersEnabled());
   const [goalNotifsOn, setGoalNotifsOn]     = useState(getGoalNotifsEnabled());
   const [notifStatus, setNotifStatus]       = useState(
@@ -90,6 +91,81 @@ function SettingsPage({ onClose }) {
             </button>
           </div>
         </div>
+
+        {/* Makro Hedefleri */}
+        {(() => {
+          const COLORS = { protein: '#3b82f6', carbs: '#f59e0b', fat: '#ef4444' };
+          const KCAL   = { protein: 4, carbs: 4, fat: 9 };
+          const dailyKcal = parseInt(goalInput, 10) || getGoal();
+          const sum = macroGoals.protein + macroGoals.carbs + macroGoals.fat;
+          const sumOk = sum === 100;
+
+          const handleSlider = (key, val) => {
+            const v = Math.max(5, Math.min(90, Number(val)));
+            setMacroGoalsState(prev => ({ ...prev, [key]: v }));
+          };
+          const handleSaveMacro = () => {
+            if (!sumOk) return;
+            setMacroGoals(macroGoals);
+          };
+          const handleResetMacro = () => {
+            const def = { protein: 25, carbs: 50, fat: 25 };
+            setMacroGoalsState(def);
+            setMacroGoals(def);
+          };
+
+          return (
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+              <p className="text-sm font-bold text-gray-700 mb-1">🥧 {t('macro_goals.title')}</p>
+              <p className="text-xs text-gray-400 mb-4">{t('macro_goals.subtitle')}</p>
+
+              {['protein','carbs','fat'].map(key => {
+                const grams = Math.round((dailyKcal * macroGoals[key] / 100) / KCAL[key]);
+                return (
+                  <div key={key} className="mb-4">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-bold" style={{ color: COLORS[key] }}>
+                        {t(`macro_goals.${key}`)}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-400">{grams}g {t('macro_goals.gram_target')}</span>
+                        <span className="text-sm font-black" style={{ color: COLORS[key] }}>
+                          {macroGoals[key]}%
+                        </span>
+                      </div>
+                    </div>
+                    <input
+                      type="range" min="5" max="90" step="1"
+                      value={macroGoals[key]}
+                      onChange={e => handleSlider(key, e.target.value)}
+                      className="w-full h-2 rounded-full appearance-none cursor-pointer"
+                      style={{ accentColor: COLORS[key] }}
+                    />
+                  </div>
+                );
+              })}
+
+              {/* Sum indicator */}
+              <div className={`flex items-center justify-between rounded-xl px-3 py-2 mb-3 ${sumOk ? 'bg-emerald-50' : 'bg-red-50'}`}>
+                <span className="text-xs font-semibold text-gray-600">{t('macro_goals.total')}</span>
+                <span className={`text-sm font-black ${sumOk ? 'text-emerald-600' : 'text-red-500'}`}>
+                  {sum}% {!sumOk && `— ${t('macro_goals.sum_error')}`}
+                </span>
+              </div>
+
+              <div className="flex gap-2">
+                <button onClick={handleResetMacro}
+                  className="flex-1 py-2.5 border-2 border-gray-200 text-gray-500 font-semibold rounded-xl text-sm hover:bg-gray-50 transition-colors">
+                  {t('macro_goals.reset')}
+                </button>
+                <button onClick={handleSaveMacro} disabled={!sumOk}
+                  className="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-40 text-white font-bold rounded-xl text-sm transition-colors">
+                  {t('macro_goals.save')}
+                </button>
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Verileri temizle */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">

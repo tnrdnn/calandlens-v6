@@ -419,5 +419,17 @@
     "reached": "🎯 Du hast dein Kalorienziel erreicht!",
     "over_120": "⚠️ Du hast dein Kalorienziel um 20% überschritten!",
     "evening_low": "🌙 Du hast heute weniger als die Hälfte deines Ziels geloggt."
+  },
+  "macro_goals": {
+    "title": "Makro-Ziele",
+    "subtitle": "Protein/Kohlenhydrat/Fett-Verteilung",
+    "protein": "Eiweiß",
+    "carbs": "Kohlenhydrate",
+    "fat": "Fett",
+    "total": "Gesamt",
+    "sum_error": "Summe muss 100% ergeben",
+    "save": "Speichern",
+    "reset": "Zurücksetzen",
+    "gram_target": "g Ziel"
   }
 }
