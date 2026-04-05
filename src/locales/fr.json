@@ -126,7 +126,8 @@
     "trend": "Tendance",
     "score": "Score",
     "body": "Corps",
-    "tip": "Conseil"
+    "tip": "Conseil",
+    "compare": "Comparer"
   },
   "streak": {
     "title": "Série",
@@ -399,5 +400,14 @@
     "fish": "Poisson",
     "shellfish": "Crustacés",
     "soy": "Soja"
+  },
+  "compare": {
+    "title": "Comparaison Nutritionnelle",
+    "subtitle": "Comparez deux repas côte à côte",
+    "pick_a": "+ Choisir le repas A",
+    "pick_b": "+ Choisir le repas B",
+    "no_history": "Aucun repas trouvé dans l'historique",
+    "hint": "Sélectionnez deux repas pour voir la comparaison",
+    "higher": "plus élevé"
   }
 }

@@ -126,7 +126,8 @@
     "trend": "Tendencia",
     "score": "Puntuación",
     "body": "Cuerpo",
-    "tip": "Consejo"
+    "tip": "Consejo",
+    "compare": "Comparar"
   },
   "streak": {
     "title": "Racha",
@@ -399,5 +400,14 @@
     "fish": "Pescado",
     "shellfish": "Mariscos",
     "soy": "Soja"
+  },
+  "compare": {
+    "title": "Comparación de Alimentos",
+    "subtitle": "Compara dos comidas lado a lado",
+    "pick_a": "+ Elegir comida A",
+    "pick_b": "+ Elegir comida B",
+    "no_history": "No hay comidas en el historial",
+    "hint": "Selecciona dos comidas para ver la comparación",
+    "higher": "más alto"
   }
 }

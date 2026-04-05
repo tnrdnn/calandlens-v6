@@ -126,7 +126,8 @@
     "trend": "Trend",
     "score": "Score",
     "body": "Körper",
-    "tip": "Tipp"
+    "tip": "Tipp",
+    "compare": "Vergleich"
   },
   "streak": {
     "title": "Strähne",
@@ -399,5 +400,14 @@
     "fish": "Fisch",
     "shellfish": "Meeresfrüchte",
     "soy": "Soja"
+  },
+  "compare": {
+    "title": "Lebensmittelvergleich",
+    "subtitle": "Zwei Mahlzeiten direkt vergleichen",
+    "pick_a": "+ Mahlzeit A wählen",
+    "pick_b": "+ Mahlzeit B wählen",
+    "no_history": "Keine Mahlzeiten im Verlauf gefunden",
+    "hint": "Wähle zwei Mahlzeiten für den Vergleich",
+    "higher": "höher"
   }
 }

@@ -126,7 +126,8 @@
     "trend": "Trend",
     "score": "Score",
     "body": "Body",
-    "tip": "Tip"
+    "tip": "Tip",
+    "compare": "Compare"
   },
   "streak": {
     "title": "Streak Tracker",
@@ -399,5 +400,14 @@
     "fish": "Fish",
     "shellfish": "Shellfish",
     "soy": "Soy"
+  },
+  "compare": {
+    "title": "Food Comparison",
+    "subtitle": "Compare two meals side by side",
+    "pick_a": "+ Pick meal A",
+    "pick_b": "+ Pick meal B",
+    "no_history": "No meals found in history",
+    "hint": "Select two meals to see the comparison",
+    "higher": "higher"
   }
 }

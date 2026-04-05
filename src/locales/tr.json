@@ -230,7 +230,8 @@
     "trend": "Trend",
     "score": "Skor",
     "body": "Ölçüm",
-    "tip": "Öneri"
+    "tip": "Öneri",
+    "compare": "Karşılaştır"
   },
   "streak": {
     "title": "Seri Takibi",
@@ -402,5 +403,14 @@
     "fish": "Balık",
     "shellfish": "Kabuklu Deniz",
     "soy": "Soya"
+  },
+  "compare": {
+    "title": "Besin Karşılaştırma",
+    "subtitle": "İki öğünü yan yana karşılaştır",
+    "pick_a": "+ A öğünü seç",
+    "pick_b": "+ B öğünü seç",
+    "no_history": "Geçmişte kayıtlı öğün bulunamadı",
+    "hint": "İki öğün seçince karşılaştırma görünür",
+    "higher": "daha yüksek"
   }
 }

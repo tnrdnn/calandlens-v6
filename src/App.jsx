@@ -17,6 +17,7 @@ import { ALLERGENS } from './services/allergens';
 import CalorieTrend from './components/Dashboard/CalorieTrend';
 import NutritionScore from './components/Dashboard/NutritionScore';
 import BodyMeasurements from './components/Dashboard/BodyMeasurements';
+import FoodComparison from './components/Dashboard/FoodComparison';
 import HistoryPage from './components/History/HistoryPage';
 import { useMealReminders, getRemindersEnabled, setRemindersEnabled } from './hooks/useMealReminders';
 import { getOrCreateUser, pushToCloud, pullFromCloud, isConfigured as firebaseConfigured } from './services/firebase';
@@ -341,6 +342,7 @@ const CHIPS = [
   { id: 'sec-trend',   emoji: '📉', key: 'chips.trend'   },
   { id: 'sec-score',   emoji: '⭐', key: 'chips.score'   },
   { id: 'sec-body',    emoji: '📏', key: 'chips.body'    },
+  { id: 'sec-compare', emoji: '⚖️', key: 'chips.compare' },
 ];
 
 function Inner() {
@@ -526,6 +528,9 @@ function Inner() {
             </div>
             <div id="sec-body" className="scroll-mt-36">
               <BodyMeasurements />
+            </div>
+            <div id="sec-compare" className="scroll-mt-36">
+              <FoodComparison />
             </div>
           </div>
         )}
