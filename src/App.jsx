@@ -403,7 +403,7 @@ function Inner() {
                 stroke="white" strokeWidth="5.5" strokeLinecap="round"/>
               {/* Lens — L beyaz büyük, ens altın */}
               <text fontFamily="system-ui,-apple-system,Arial,sans-serif" fontWeight="900">
-                <tspan x="6" y="26" fontSize="20" fill="white">L</tspan>
+                <tspan x="6" y="26" fontSize="20" fill="black">L</tspan>
                 <tspan fontSize="11" dy="1.5" fill="#fde68a">ens</tspan>
               </text>
             </svg>
