@@ -393,14 +393,16 @@ function Inner() {
       <header className="bg-gradient-to-r from-emerald-500 to-teal-500 px-4 pt-safe-top pb-4 sticky top-0 z-30 shadow-lg shadow-emerald-200/40">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            {/* Logo — büyük C, içinde L */}
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* C: sağa açık kalın yay */}
+            {/* Logo — mavi C, içinde beyaz Lens */}
+            <svg width="38" height="36" viewBox="0 0 38 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* C: mavi, sağa açık kalın yay */}
               <path d="M 22 8 A 13 13 0 1 0 22 28"
-                stroke="white" strokeWidth="4.5" strokeLinecap="round"/>
-              {/* L: C'nin içinde, dikey + yatay */}
-              <line x1="15" y1="10" x2="15" y2="26" stroke="white" strokeWidth="3.5" strokeLinecap="round"/>
-              <line x1="15" y1="26" x2="23" y2="26" stroke="white" strokeWidth="3.5" strokeLinecap="round"/>
+                stroke="#60a5fa" strokeWidth="4.5" strokeLinecap="round"/>
+              {/* Lens: beyaz, L büyük + ens küçük */}
+              <text fill="white" fontFamily="system-ui,-apple-system,Arial,sans-serif" fontWeight="900">
+                <tspan x="4" y="23" fontSize="17">L</tspan>
+                <tspan fontSize="10" dy="2">ens</tspan>
+              </text>
             </svg>
             {/* Brand text */}
             <div>
