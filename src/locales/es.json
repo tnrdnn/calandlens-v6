@@ -95,6 +95,32 @@
     "source": "Fuente: Open Food Facts",
     "per_100g": "por 100g"
   },
+  "water": {
+    "title": "Registro de Agua",
+    "subtitle": "Controla tu consumo diario de agua",
+    "goal_label": "Meta",
+    "glasses": "vasos",
+    "reset": "Reiniciar",
+    "congrats": "¡Alcanzaste tu meta diaria! 🎉"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "enable": "Activar Notificaciones",
+    "enabled": "Notificaciones activadas ✓",
+    "denied": "Permiso denegado. Permítelo en la configuración del navegador.",
+    "unsupported": "Las notificaciones no son compatibles con este navegador."
+  },
+  "theme": {
+    "dark": "Modo Oscuro",
+    "light": "Modo Claro",
+    "toggle": "Cambiar Tema"
+  },
+  "exit": {
+    "title": "¿Quieres salir?",
+    "subtitle": "Todos tus datos han sido guardados.",
+    "no": "No",
+    "yes": "Sí, Salir"
+  },
   "history": {
     "title": "Días Anteriores",
     "subtitle": "Ver resúmenes diarios",
@@ -200,6 +226,8 @@
     "title": "Informe Semanal",
     "subtitle": "Resumen de los últimos 7 días",
     "avg_calories": "Cal. Promedio",
+    "kcal_per_day": "kcal/día",
+    "days_logged": "días registrados",
     "total_meals": "Total Comidas",
     "best_day": "Mejor Día",
     "consistency": "Consistencia",

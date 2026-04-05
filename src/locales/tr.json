@@ -110,7 +110,8 @@
     "title": "Bildirimler",
     "enable": "Bildirimleri Etkinleştir",
     "enabled": "Bildirimler açık ✓",
-    "denied": "İzin reddedildi. Tarayıcı ayarlarından izin verin."
+    "denied": "İzin reddedildi. Tarayıcı ayarlarından izin verin.",
+    "unsupported": "Bu tarayıcıda bildirim desteklenmiyor."
   },
   "theme": {
     "dark": "Karanlık Mod",
@@ -218,10 +219,18 @@
     "result_fast": "Yavaşlamayı deneyin. Yavaş yemek daha az kalori almanıza yardımcı olur.",
     "result_good": "Mükemmel tempo! Yavaş yemek sindirimi iyileştirir."
   },
+  "exit": {
+    "title": "Çıkmak istiyor musunuz?",
+    "subtitle": "Tüm verileriniz kaydedilmiştir.",
+    "no": "Hayır",
+    "yes": "Evet, Çık"
+  },
   "report": {
     "title": "Haftalık Rapor",
     "subtitle": "Son 7 günün özeti",
     "avg_calories": "Ort. Kalori",
+    "kcal_per_day": "kcal/gün",
+    "days_logged": "gün kayıt",
     "total_meals": "Toplam Öğün",
     "best_day": "En İyi Gün",
     "consistency": "Tutarlılık",

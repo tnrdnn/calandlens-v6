@@ -165,7 +165,7 @@ function SettingsPage({ onClose }) {
           ) : notifStatus === 'denied' ? (
             <p className="text-sm text-red-500">{t('notifications.denied')}</p>
           ) : notifStatus === 'unsupported' ? (
-            <p className="text-sm text-gray-400">Bu tarayıcıda bildirim desteklenmiyor.</p>
+            <p className="text-sm text-gray-400">{t('notifications.unsupported')}</p>
           ) : (
             <button onClick={handleRequestNotif}
               className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-xl transition-colors">
@@ -245,20 +245,21 @@ function CloudSyncPanel() {
    EXIT CONFIRM DIALOG
 ───────────────────────────────────────────────────────────── */
 function ExitConfirmDialog({ onConfirm, onCancel }) {
+  const { t } = useLanguage();
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="bg-white w-full max-w-xs rounded-3xl shadow-2xl p-6 text-center">
         <p className="text-3xl mb-3">👋</p>
-        <p className="font-black text-gray-800 text-lg mb-1">Çıkmak istiyor musunuz?</p>
-        <p className="text-sm text-gray-400 mb-6">Tüm verileriniz kaydedilmiştir.</p>
+        <p className="font-black text-gray-800 text-lg mb-1">{t('exit.title')}</p>
+        <p className="text-sm text-gray-400 mb-6">{t('exit.subtitle')}</p>
         <div className="flex gap-3">
           <button onClick={onCancel}
             className="flex-1 py-3 border-2 border-gray-200 rounded-2xl font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
-            Hayır
+            {t('exit.no')}
           </button>
           <button onClick={onConfirm}
             className="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl transition-colors">
-            Evet, Çık
+            {t('exit.yes')}
           </button>
         </div>
       </div>

@@ -95,6 +95,32 @@
     "source": "Source: Open Food Facts",
     "per_100g": "per 100g"
   },
+  "water": {
+    "title": "Water Tracking",
+    "subtitle": "Track your daily water intake",
+    "goal_label": "Goal",
+    "glasses": "glasses",
+    "reset": "Reset",
+    "congrats": "You reached your daily goal! 🎉"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "enable": "Enable Notifications",
+    "enabled": "Notifications on ✓",
+    "denied": "Permission denied. Allow it in browser settings.",
+    "unsupported": "Notifications are not supported in this browser."
+  },
+  "theme": {
+    "dark": "Dark Mode",
+    "light": "Light Mode",
+    "toggle": "Toggle Theme"
+  },
+  "exit": {
+    "title": "Do you want to exit?",
+    "subtitle": "All your data has been saved.",
+    "no": "No",
+    "yes": "Yes, Exit"
+  },
   "history": {
     "title": "Past Days",
     "subtitle": "View your daily summaries",
@@ -200,6 +226,8 @@
     "title": "Weekly Report",
     "subtitle": "Last 7 days summary",
     "avg_calories": "Avg Calories",
+    "kcal_per_day": "kcal/day",
+    "days_logged": "days logged",
     "total_meals": "Total Meals",
     "best_day": "Best Day",
     "consistency": "Consistency",

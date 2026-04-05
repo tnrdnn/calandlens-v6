@@ -68,9 +68,9 @@ export default function WeeklyReport() {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {stat(t('report.avg_calories'), avgCal ? `${avgCal}` : '—', 'kcal/gün', '🔥')}
+        {stat(t('report.avg_calories'), avgCal ? `${avgCal}` : '—', t('report.kcal_per_day'), '🔥')}
         {stat(t('report.days_on_track'), `${onTrack}/7`, `${Math.round((onTrack/7)*100)}%`, '🎯')}
-        {stat(t('report.consistency'), `${consistency}%`, `${withData.length} gün kayıt`, '📈')}
+        {stat(t('report.consistency'), `${consistency}%`, `${withData.length} ${t('report.days_logged')}`, '📈')}
         {stat(t('report.best_day'), bestDay ? bestDay.day : '—', bestDay ? `${bestDay.calories} kcal` : '', '🏆')}
       </div>
     </div>
