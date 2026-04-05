@@ -231,7 +231,7 @@ export default function DailySummary({ onDeleteMeal }) {
       <div className="bg-white rounded-3xl shadow-md border border-gray-100 p-5">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="font-bold text-gray-800 text-sm">{t('dashboard.weekly_chart')}</h3>
+            <h3 className="font-black text-emerald-700 text-base leading-tight bg-emerald-50 px-2.5 py-0.5 rounded-xl inline-block">{t('dashboard.weekly_chart')}</h3>
             <p className="text-xs text-gray-400 mt-0.5">{t('report.subtitle')}</p>
           </div>
           <TrendArrow
@@ -311,7 +311,7 @@ export default function DailySummary({ onDeleteMeal }) {
       {meals.length > 0 && (
         <div className="bg-white rounded-3xl shadow-md border border-gray-100 overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-50 flex items-center justify-between">
-            <h3 className="font-bold text-gray-800 text-sm">{t('dashboard.todays_meals')}</h3>
+            <h3 className="font-black text-emerald-700 text-base leading-tight bg-emerald-50 px-2.5 py-0.5 rounded-xl inline-block">{t('dashboard.todays_meals')}</h3>
             <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
               {meals.length} {t('history.meals_count')}
             </span>
