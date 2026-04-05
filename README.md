@@ -192,4 +192,4 @@ Production'da API anahtarını korumak için **Vercel Edge Function** kullanılm
 |vite-plugin-pwa | 0.19 | PWA/Service Worker |
 | Claude API | claude-opus-4-5 | AI analiz |
 | Open Food Facts | — | Barkod DB (ücretsiz) |
-# v6.2 - force cache clear
+# force deploy - v6.3
