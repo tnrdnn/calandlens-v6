@@ -21,7 +21,7 @@ import FoodComparison from './components/Dashboard/FoodComparison';
 import HistoryPage from './components/History/HistoryPage';
 import { useMealReminders, getRemindersEnabled, setRemindersEnabled } from './hooks/useMealReminders';
 import { useGoalNotifications, getGoalNotifsEnabled, setGoalNotifsEnabled } from './hooks/useGoalNotifications';
-import { getOrCreateUser, pushToCloud, pullFromCloud, isConfigured as firebaseConfigured } from './services/firebase';
+import { getOrCreateUserId, pushToCloud, pullFromCloud, isConfigured as supabaseConfigured } from './services/supabase';
 
 /* ─────────────────────────────────────────────────────────────
    SETTINGS PAGE
@@ -323,7 +323,7 @@ function SettingsPage({ onClose }) {
         </div>
 
         {/* Bulut Senkronizasyon */}
-        {firebaseConfigured && <CloudSyncPanel />}
+        {supabaseConfigured && <CloudSyncPanel />}
 
         <div className="text-center text-xs text-gray-300 py-2">CalAndLens v6.0</div>
       </div>
@@ -338,17 +338,12 @@ function CloudSyncPanel() {
   const { t } = useLanguage();
   const [status, setStatus] = useState('idle'); // idle | syncing | done | error
   const [lastSync, setLastSync] = useState(() => localStorage.getItem('calandlens_last_sync'));
-  const userRef = useRef(null);
-
-  useEffect(() => {
-    getOrCreateUser().then(u => { userRef.current = u; });
-  }, []);
+  const userId = getOrCreateUserId();
 
   const handlePush = async () => {
     setStatus('syncing');
     try {
-      const user = userRef.current || await getOrCreateUser();
-      await pushToCloud(user.uid);
+      await pushToCloud(userId);
       const ts = new Date().toLocaleTimeString();
       localStorage.setItem('calandlens_last_sync', ts);
       setLastSync(ts);
@@ -360,8 +355,7 @@ function CloudSyncPanel() {
   const handlePull = async () => {
     setStatus('syncing');
     try {
-      const user = userRef.current || await getOrCreateUser();
-      await pullFromCloud(user.uid);
+      await pullFromCloud(userId);
       const ts = new Date().toLocaleTimeString();
       localStorage.setItem('calandlens_last_sync', ts);
       setLastSync(ts);
