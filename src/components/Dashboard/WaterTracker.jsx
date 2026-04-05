@@ -24,7 +24,7 @@ export default function WaterTracker() {
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <div>
-          <h3 className="font-bold text-gray-800 text-sm flex items-center gap-1.5">
+          <h3 className="font-black text-emerald-700 text-base leading-tight bg-emerald-50 px-2.5 py-0.5 rounded-xl inline-flex items-center gap-1.5">
             💧 {t('water.title')}
           </h3>
           <p className="text-xs text-gray-400 mt-0.5">{t('water.goal_label')}: {goal} ml</p>

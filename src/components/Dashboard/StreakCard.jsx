@@ -25,7 +25,7 @@ export default function StreakCard() {
           {flame(current)}
         </div>
         <div>
-          <h3 className="font-bold text-gray-800 text-sm leading-tight">{t('streak.title')}</h3>
+          <h3 className="font-black text-emerald-700 text-base leading-tight bg-emerald-50 px-2.5 py-0.5 rounded-xl inline-block">{t('streak.title')}</h3>
           <p className="text-xs text-gray-400">{t('streak.subtitle')}</p>
         </div>
       </div>
