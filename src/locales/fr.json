@@ -10,6 +10,7 @@
     "settings": "Paramètres"
   },
   "tabs": {
+    "home": "Accueil",
     "camera": "Caméra",
     "dashboard": "Résumé",
     "history": "Historique",

@@ -287,24 +287,6 @@ function Inner() {
       <main className="px-4 pt-4 pb-32">
         {tab === 'home' && (
           <div className="space-y-4">
-            {/* Quick-access row */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => setTab('history')}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white border-2 border-gray-100 shadow-sm text-gray-700 font-semibold text-sm hover:border-emerald-300 hover:bg-emerald-50 active:scale-95 transition-all"
-              >
-                <span className="text-lg">📅</span>
-                <span>{t('tabs.history')}</span>
-              </button>
-              <button
-                onClick={() => setSettings(true)}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white border-2 border-gray-100 shadow-sm text-gray-700 font-semibold text-sm hover:border-emerald-300 hover:bg-emerald-50 active:scale-95 transition-all"
-              >
-                <GearIcon className="w-4 h-4 text-gray-500" />
-                <span>{t('settings.title')}</span>
-              </button>
-            </div>
-
             <DailySummary key={refresh} onDeleteMeal={() => setRefresh(r => r + 1)} />
             <WaterTracker key={refresh} />
             <EatingSpeedCoach />
@@ -332,7 +314,7 @@ function Inner() {
             >
               {tab === 'home' && <div className="absolute inset-0 rounded-2xl bg-emerald-50"/>}
               <span className={`relative text-2xl leading-none transition-transform duration-200 ${tab === 'home' ? 'scale-110' : ''}`}>🏠</span>
-              <span className={`relative text-[11px] font-semibold ${tab === 'home' ? 'text-emerald-600' : 'text-gray-400'}`}>{t('tabs.dashboard')}</span>
+              <span className={`relative text-[11px] font-semibold ${tab === 'home' ? 'text-emerald-600' : 'text-gray-400'}`}>{t('tabs.home')}</span>
             </button>
 
             {/* Left-mid: Geçmiş */}

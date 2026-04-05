@@ -10,6 +10,7 @@
     "settings": "Settings"
   },
   "tabs": {
+    "home": "Home",
     "camera": "Camera",
     "dashboard": "Summary",
     "history": "History",
