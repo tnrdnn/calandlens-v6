@@ -9,6 +9,7 @@ import GoalWizard from './components/Dashboard/GoalWizard';
 import EatingSpeedCoach from './components/Dashboard/EatingSpeedCoach';
 import WeeklyReport from './components/Dashboard/WeeklyReport';
 import WaterTracker from './components/Dashboard/WaterTracker';
+import StepTracker from './components/Dashboard/StepTracker';
 import HistoryPage from './components/History/HistoryPage';
 import { getOrCreateUser, pushToCloud, pullFromCloud, isConfigured as firebaseConfigured } from './services/firebase';
 
@@ -352,6 +353,7 @@ function Inner() {
           <div className="space-y-4">
             <DailySummary key={refresh} onDeleteMeal={() => setRefresh(r => r + 1)} />
             <WaterTracker key={refresh} />
+            <StepTracker />
             <EatingSpeedCoach />
             <WeeklyReport />
           </div>

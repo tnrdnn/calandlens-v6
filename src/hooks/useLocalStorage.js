@@ -7,6 +7,8 @@ const KEYS = {
   SETTINGS:   'calandlens_settings',
   WATER:      'calandlens_water',       // { [dateKey]: number (ml) }
   WATER_GOAL: 'calandlens_water_goal',  // number (ml)
+  STEPS:      'calandlens_steps',       // { [dateKey]: number }
+  STEP_GOAL:  'calandlens_step_goal',   // number
 };
 
 function todayKey() {
@@ -192,6 +194,52 @@ export function useLocalStorage() {
     refresh();
   }, []);
 
+  // ── Step tracking ────────────────────────────────────────────────────────
+  const getStepsToday = useCallback(() => {
+    const all = readJSON(KEYS.STEPS, {});
+    return all[todayKey()] || 0;
+  }, []);
+
+  const setStepsToday = useCallback((n) => {
+    const all = readJSON(KEYS.STEPS, {});
+    all[todayKey()] = Math.max(0, Math.round(n));
+    writeJSON(KEYS.STEPS, all);
+    refresh();
+  }, []);
+
+  const addStepsToday = useCallback((n) => {
+    const all = readJSON(KEYS.STEPS, {});
+    const key = todayKey();
+    all[key] = (all[key] || 0) + Math.round(n);
+    writeJSON(KEYS.STEPS, all);
+    refresh();
+  }, []);
+
+  const getStepGoal = useCallback(() => {
+    return parseInt(localStorage.getItem(KEYS.STEP_GOAL) || '10000');
+  }, []);
+
+  const setStepGoal = useCallback((n) => {
+    localStorage.setItem(KEYS.STEP_GOAL, String(n));
+    refresh();
+  }, []);
+
+  const getWeeklySteps = useCallback(() => {
+    const data = readJSON(KEYS.STEPS, {});
+    const result = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const key = dateKey(d);
+      result.push({
+        date: key,
+        day: d.toLocaleDateString('tr-TR', { weekday: 'short' }),
+        steps: data[key] || 0,
+      });
+    }
+    return result;
+  }, []);
+
   // ── Clear ────────────────────────────────────────────────────────────────
   const clearAllData = useCallback(() => {
     Object.values(KEYS).forEach(k => localStorage.removeItem(k));
@@ -227,6 +275,13 @@ export function useLocalStorage() {
     resetWaterToday,
     getWaterGoal,
     setWaterGoal,
+    // steps
+    getStepsToday,
+    setStepsToday,
+    addStepsToday,
+    getStepGoal,
+    setStepGoal,
+    getWeeklySteps,
     // utils
     clearAllData,
     todayKey,
