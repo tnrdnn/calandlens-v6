@@ -71,3 +71,4 @@ export async function pullFromCloud(userId) {
   });
   return updated_at;
 }
+
