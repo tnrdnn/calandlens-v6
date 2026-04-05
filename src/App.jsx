@@ -531,19 +531,62 @@ function Inner() {
       <header className="bg-gradient-to-r from-emerald-500 to-teal-500 px-4 pt-safe-top pb-4 sticky top-0 z-30 shadow-lg shadow-emerald-200/40">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            {/* Logo — pill arka plan, beyaz C, L beyaz + ens altın */}
-            <svg width="46" height="40" viewBox="0 0 46 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Frosted pill arka plan */}
-              <rect x="0.5" y="0.5" width="45" height="39" rx="11" fill="white" fillOpacity="0.18"/>
-              <rect x="0.5" y="0.5" width="45" height="39" rx="11" stroke="white" strokeOpacity="0.25" strokeWidth="1"/>
-              {/* C — beyaz, kalın */}
-              <path d="M 27 8 A 14 14 0 1 0 27 32"
-                stroke="white" strokeWidth="5.5" strokeLinecap="round"/>
-              {/* Lens — L beyaz büyük, ens altın */}
-              <text fontFamily="system-ui,-apple-system,Arial,sans-serif" fontWeight="900">
-                <tspan x="6" y="26" fontSize="20" fill="black">L</tspan>
-                <tspan fontSize="11" dy="1.5" fill="#fde68a">ens</tspan>
+            {/* Logo — Cal&Lens premium */}
+            <svg width="62" height="48" viewBox="0 0 62 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="cglow" x="-40%" y="-40%" width="180%" height="180%">
+                  <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <radialGradient id="cardShine" cx="35%" cy="25%" r="60%">
+                  <stop offset="0%" stopColor="white" stopOpacity="0.28"/>
+                  <stop offset="100%" stopColor="white" stopOpacity="0.04"/>
+                </radialGradient>
+                <radialGradient id="lensGlow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#a7f3d0" stopOpacity="0.25"/>
+                  <stop offset="100%" stopColor="#a7f3d0" stopOpacity="0"/>
+                </radialGradient>
+              </defs>
+
+              {/* Frosted glass card */}
+              <rect x="0.5" y="0.5" width="61" height="47" rx="13" fill="url(#cardShine)"/>
+              <rect x="0.5" y="0.5" width="61" height="47" rx="13" stroke="white" strokeOpacity="0.22" strokeWidth="0.75"/>
+
+              {/* C — center (21,24) r=13, opens right */}
+              {/* Lens inner glow behind C */}
+              <circle cx="21" cy="24" r="13" fill="url(#lensGlow)"/>
+              {/* Lens rings (camera effect) */}
+              <circle cx="21" cy="24" r="9"  stroke="white" strokeWidth="0.5" strokeOpacity="0.2"/>
+              <circle cx="21" cy="24" r="5"  stroke="white" strokeWidth="0.5" strokeOpacity="0.18"/>
+              {/* Scan ring — dashed */}
+              <circle cx="21" cy="24" r="11" stroke="white" strokeWidth="0.6" strokeOpacity="0.15"
+                strokeDasharray="2.5 2"/>
+
+              {/* C arc — thick white with glow */}
+              <path d="M 30 13 A 13 13 0 1 0 30 35"
+                stroke="white" strokeWidth="4.5" strokeLinecap="round" filter="url(#cglow)"/>
+
+              {/* Food icons inside C — minimal */}
+              {/* Avocado: oval + seed */}
+              <ellipse cx="18" cy="21" rx="2.2" ry="3" stroke="white" strokeWidth="0.7" strokeOpacity="0.65"/>
+              <ellipse cx="18" cy="22" rx="0.9" ry="1.2" fill="white" fillOpacity="0.4"/>
+              {/* Apple: circle + stem */}
+              <circle cx="24" cy="27" r="2.2" stroke="white" strokeWidth="0.7" strokeOpacity="0.65"/>
+              <path d="M 24 24.8 Q 25.5 23.5 25 22.8" stroke="white" strokeWidth="0.7" strokeOpacity="0.65" strokeLinecap="round"/>
+              {/* Leaf */}
+              <path d="M 15 27 Q 17.5 23.5 20 27 Q 17.5 29 15 27Z" stroke="white" strokeWidth="0.6" strokeOpacity="0.55" fill="white" fillOpacity="0.08"/>
+
+              {/* Light reflection on C */}
+              <ellipse cx="25" cy="17" rx="2.5" ry="1.2" fill="white" fillOpacity="0.45" transform="rotate(-35 25 17)"/>
+
+              {/* Lens text — L large white, ens mint, flowing from C tail */}
+              <text fontFamily="system-ui,-apple-system,Arial,sans-serif" fontWeight="900" filter="url(#cglow)">
+                <tspan x="31" y="40" fontSize="17" fill="white">L</tspan>
+                <tspan fontSize="9.5" dy="-0.5" fill="#6ee7b7">ens</tspan>
               </text>
+
+              {/* Connecting curve: C tail → L */}
+              <path d="M 30 35 Q 31 37 33 38" stroke="white" strokeWidth="1.2" strokeOpacity="0.3" strokeLinecap="round"/>
             </svg>
             {/* Brand text */}
             <div>
