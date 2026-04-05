@@ -229,7 +229,8 @@
     "report": "Rapor",
     "trend": "Trend",
     "score": "Skor",
-    "body": "Ölçüm"
+    "body": "Ölçüm",
+    "tip": "Öneri"
   },
   "streak": {
     "title": "Seri Takibi",
@@ -373,5 +374,33 @@
     "hip": "Kalça",
     "history": "Geçmiş ölçümler",
     "no_data": "Henüz ölçüm eklenmedi"
+  },
+  "tip": {
+    "label": "Akıllı Öneri",
+    "no_meals": "Henüz öğün eklemediniz. İlk öğününüzü ekleyerek güne başlayın! 🍽️",
+    "low_calories": "Bugün çok az yemişsiniz. Besleyici bir öğün ekleyin. ⚡",
+    "over_calories": "Günlük hedefi aştınız. Hafif besinleri tercih edin. ⚠️",
+    "low_protein": "Protein alımınız düşük. Yumurta, tavuk veya baklagil ekleyin. 💪",
+    "low_water": "Su içmeyi unutmayın! Günlük su hedefinizin yarısını bile doldurmadınız. 💧",
+    "mid_water": "Biraz daha su iç! Günlük hedefinize yaklaşıyorsunuz. 💧",
+    "low_steps": "Hareket zamanı! Kısa bir yürüyüş yapın, fark yaratır. 🚶",
+    "good_calories": "Kalori dengeniz harika! Bu tempoda devam edin. ✅",
+    "perfect_day": "Mükemmel gün! Kalori, su ve adım hedeflerinizin hepsini yakaladınız. 🌟",
+    "streak_7": "7 günlük seri yaptınız! Alışkanlık oluşuyor, harika gidiyorsunuz! 🔥",
+    "streak_30": "30 günlük seri! Bu kararlılık gerçekten ilham verici. 🏆",
+    "general": "Sağlıklı beslenme küçük adımlarla başlar. Bugün bir adım atın! 💡"
+  },
+  "allergen": {
+    "settings_title": "Alerjenlerim",
+    "settings_desc": "Seçtiğiniz alerjenler öğünlerinizde otomatik uyarı gösterir.",
+    "selected": "alerjen seçili",
+    "gluten": "Gluten",
+    "dairy": "Süt Ürünleri",
+    "egg": "Yumurta",
+    "peanut": "Yer Fıstığı",
+    "treenut": "Kuruyemiş",
+    "fish": "Balık",
+    "shellfish": "Kabuklu Deniz",
+    "soy": "Soya"
   }
 }

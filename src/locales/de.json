@@ -125,7 +125,8 @@
     "report": "Bericht",
     "trend": "Trend",
     "score": "Score",
-    "body": "Körper"
+    "body": "Körper",
+    "tip": "Tipp"
   },
   "streak": {
     "title": "Strähne",
@@ -370,5 +371,33 @@
     "hip": "Hüfte",
     "history": "Messungsverlauf",
     "no_data": "Noch keine Messungen"
+  },
+  "tip": {
+    "label": "Smarter Tipp",
+    "no_meals": "Noch keine Mahlzeiten erfasst. Starte deinen Tag mit einer gesunden Mahlzeit! 🍽️",
+    "low_calories": "Du hast heute sehr wenig gegessen. Füge eine nahrhafte Mahlzeit hinzu. ⚡",
+    "over_calories": "Du hast dein Tagesziel überschritten. Wähle leichtere Lebensmittel. ⚠️",
+    "low_protein": "Deine Proteinzufuhr ist gering. Füge Eier, Hühnchen oder Hülsenfrüchte hinzu. 💪",
+    "low_water": "Vergiss nicht zu trinken! Du hast noch nicht die Hälfte deines Ziels erreicht. 💧",
+    "mid_water": "Trink noch etwas mehr! Du kommst deinem Tagesziel näher. 💧",
+    "low_steps": "Zeit zum Bewegen! Ein kurzer Spaziergang macht einen Unterschied. 🚶",
+    "good_calories": "Deine Kalorienbilanz ist super! Weiter so. ✅",
+    "perfect_day": "Perfekter Tag! Du hast deine Kalorien-, Wasser- und Schrittziele erreicht. 🌟",
+    "streak_7": "7-Tage-Serie! Eine Gewohnheit entsteht — großartig! 🔥",
+    "streak_30": "30-Tage-Serie! Diese Entschlossenheit ist wirklich inspirierend. 🏆",
+    "general": "Gesunde Ernährung beginnt mit kleinen Schritten. Mach heute einen! 💡"
+  },
+  "allergen": {
+    "settings_title": "Meine Allergene",
+    "settings_desc": "Ausgewählte Allergene zeigen automatisch Warnungen bei deinen Mahlzeiten.",
+    "selected": "Allergen(e) ausgewählt",
+    "gluten": "Gluten",
+    "dairy": "Milchprodukte",
+    "egg": "Ei",
+    "peanut": "Erdnuss",
+    "treenut": "Schalenfrüchte",
+    "fish": "Fisch",
+    "shellfish": "Meeresfrüchte",
+    "soy": "Soja"
   }
 }

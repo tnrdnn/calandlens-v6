@@ -125,7 +125,8 @@
     "report": "Report",
     "trend": "Trend",
     "score": "Score",
-    "body": "Body"
+    "body": "Body",
+    "tip": "Tip"
   },
   "streak": {
     "title": "Streak Tracker",
@@ -370,5 +371,33 @@
     "hip": "Hip",
     "history": "Measurement history",
     "no_data": "No measurements added yet"
+  },
+  "tip": {
+    "label": "Smart Tip",
+    "no_meals": "You haven't logged any meals yet. Start your day with a nutritious meal! 🍽️",
+    "low_calories": "You've eaten very little today. Add a nutritious meal. ⚡",
+    "over_calories": "You exceeded your daily goal. Opt for lighter foods. ⚠️",
+    "low_protein": "Your protein intake is low. Add eggs, chicken or legumes. 💪",
+    "low_water": "Don't forget to drink water! You haven't reached half your daily goal. 💧",
+    "mid_water": "Drink a bit more water! You're getting close to your daily goal. 💧",
+    "low_steps": "Time to move! A short walk makes a big difference. 🚶",
+    "good_calories": "Your calorie balance is great! Keep it up. ✅",
+    "perfect_day": "Perfect day! You hit your calorie, water and step goals. 🌟",
+    "streak_7": "7-day streak! A habit is forming — you're doing great! 🔥",
+    "streak_30": "30-day streak! This dedication is truly inspiring. 🏆",
+    "general": "Healthy eating starts with small steps. Take one today! 💡"
+  },
+  "allergen": {
+    "settings_title": "My Allergens",
+    "settings_desc": "Selected allergens will show warnings on your meals automatically.",
+    "selected": "allergen(s) selected",
+    "gluten": "Gluten",
+    "dairy": "Dairy",
+    "egg": "Egg",
+    "peanut": "Peanut",
+    "treenut": "Tree Nuts",
+    "fish": "Fish",
+    "shellfish": "Shellfish",
+    "soy": "Soy"
   }
 }

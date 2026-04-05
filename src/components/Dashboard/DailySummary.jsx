@@ -5,6 +5,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { getDailyTip } from '../../services/aiService';
 import MicroNutrientsPanel from '../Analysis/MicroNutrientsPanel';
 import MealPhotoThumb from '../Meal/MealPhotoThumb';
+import { detectAllergens } from '../../services/allergens';
 
 /* ── SVG Circular Progress ──────────────────────────────────────────────────── */
 function CalorieRing({ consumed, goal, labelOver, labelRemaining, labelConsumed, labelGoal }) {
@@ -128,7 +129,8 @@ function TrendArrow({ data, labelUp, labelDown }) {
 /* ═══════════════════════════════════════════════════════════════════════════════ */
 export default function DailySummary({ onDeleteMeal }) {
   const { t, tArr, lang } = useLanguage();
-  const { getTodayMeals, getDailyTotals, getWeeklyData, getGoal, deleteMeal } = useLocalStorage();
+  const { getTodayMeals, getDailyTotals, getWeeklyData, getGoal, deleteMeal, getUserAllergens } = useLocalStorage();
+  const userAllergens = getUserAllergens();
   const [tip, setTip]      = useState('');
   const [tipLoading, setTL]= useState(false);
   const [deleteId, setDel] = useState(null);
@@ -334,6 +336,14 @@ export default function DailySummary({ onDeleteMeal }) {
                     {meal.source === 'barcode' && (
                       <span className="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full">🏷️ barkod</span>
                     )}
+                    {detectAllergens(meal.name, lang, userAllergens).map(a => (
+                      <span key={a.id}
+                        title={t(`allergen.${a.id}`)}
+                        className="text-xs px-1.5 py-0.5 rounded-full font-bold"
+                        style={{ backgroundColor: a.color + '22', color: a.color }}>
+                        {a.emoji} {t(`allergen.${a.id}`)}
+                      </span>
+                    ))}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">

@@ -10,6 +10,7 @@ const KEYS = {
   STEPS:      'calandlens_steps',       // { [dateKey]: number }
   STEP_GOAL:  'calandlens_step_goal',   // number
   BODY:       'calandlens_body',        // [{ date, weight, waist, hip }]
+  ALLERGENS:  'calandlens_allergens',   // string[] — seçili alerjen id'leri
 };
 
 function todayKey() {
@@ -291,6 +292,16 @@ export function useLocalStorage() {
     return result;
   }, []);
 
+  // ── Allergens ────────────────────────────────────────────────────────────
+  const getUserAllergens = useCallback(() => {
+    return readJSON(KEYS.ALLERGENS, []);
+  }, []);
+
+  const setUserAllergens = useCallback((ids) => {
+    writeJSON(KEYS.ALLERGENS, ids);
+    refresh();
+  }, []);
+
   // ── Clear ────────────────────────────────────────────────────────────────
   const clearAllData = useCallback(() => {
     Object.values(KEYS).forEach(k => localStorage.removeItem(k));
@@ -340,6 +351,9 @@ export function useLocalStorage() {
     getStepGoal,
     setStepGoal,
     getWeeklySteps,
+    // allergens
+    getUserAllergens,
+    setUserAllergens,
     // utils
     clearAllData,
     todayKey,

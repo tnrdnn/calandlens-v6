@@ -125,7 +125,8 @@
     "report": "Rapport",
     "trend": "Tendance",
     "score": "Score",
-    "body": "Corps"
+    "body": "Corps",
+    "tip": "Conseil"
   },
   "streak": {
     "title": "Série",
@@ -370,5 +371,33 @@
     "hip": "Tour de hanches",
     "history": "Historique des mesures",
     "no_data": "Aucune mesure encore"
+  },
+  "tip": {
+    "label": "Conseil Intelligent",
+    "no_meals": "Vous n'avez pas encore enregistré de repas. Commencez la journée! 🍽️",
+    "low_calories": "Vous avez très peu mangé aujourd'hui. Ajoutez un repas nutritif. ⚡",
+    "over_calories": "Vous avez dépassé votre objectif. Optez pour des aliments légers. ⚠️",
+    "low_protein": "Votre apport en protéines est faible. Ajoutez des œufs ou du poulet. 💪",
+    "low_water": "N'oubliez pas de boire de l'eau! Vous n'avez pas atteint la moitié. 💧",
+    "mid_water": "Buvez encore un peu! Vous approchez de votre objectif quotidien. 💧",
+    "low_steps": "Il est temps de bouger! Une petite marche fait la différence. 🚶",
+    "good_calories": "Votre équilibre calorique est parfait! Continuez. ✅",
+    "perfect_day": "Journée parfaite! Vous avez atteint vos objectifs calories, eau et pas. 🌟",
+    "streak_7": "Série de 7 jours! Une habitude se forme. Bravo! 🔥",
+    "streak_30": "Série de 30 jours! Cette persévérance est vraiment inspirante. 🏆",
+    "general": "La bonne nutrition commence par de petits pas. Faites-en un aujourd'hui! 💡"
+  },
+  "allergen": {
+    "settings_title": "Mes Allergènes",
+    "settings_desc": "Les allergènes sélectionnés afficheront des avertissements sur vos repas.",
+    "selected": "allergène(s) sélectionné(s)",
+    "gluten": "Gluten",
+    "dairy": "Produits Laitiers",
+    "egg": "Œuf",
+    "peanut": "Cacahuète",
+    "treenut": "Fruits à Coque",
+    "fish": "Poisson",
+    "shellfish": "Crustacés",
+    "soy": "Soja"
   }
 }

@@ -12,6 +12,8 @@ import WaterTracker from './components/Dashboard/WaterTracker';
 import StepTracker from './components/Dashboard/StepTracker';
 import StreakCard from './components/Dashboard/StreakCard';
 import MacroPie from './components/Dashboard/MacroPie';
+import SmartTip from './components/Dashboard/SmartTip';
+import { ALLERGENS } from './services/allergens';
 import CalorieTrend from './components/Dashboard/CalorieTrend';
 import NutritionScore from './components/Dashboard/NutritionScore';
 import BodyMeasurements from './components/Dashboard/BodyMeasurements';
@@ -24,7 +26,8 @@ import { getOrCreateUser, pushToCloud, pullFromCloud, isConfigured as firebaseCo
 ───────────────────────────────────────────────────────────── */
 function SettingsPage({ onClose }) {
   const { t } = useLanguage();
-  const { getGoal, setGoal, getWaterGoal, setWaterGoal, clearAllData } = useLocalStorage();
+  const { getGoal, setGoal, getWaterGoal, setWaterGoal, clearAllData, getUserAllergens, setUserAllergens } = useLocalStorage();
+  const [selectedAllergens, setSelectedAllergens] = useState(() => getUserAllergens());
   const { isDark, toggleTheme } = useTheme();
   const { enable: enableReminders, disable: disableReminders } = useMealReminders(t);
   const [goalInput, setGoalInput]           = useState(String(getGoal()));
@@ -182,6 +185,41 @@ function SettingsPage({ onClose }) {
           </div>
         )}
 
+        {/* Alerjen Seçimi */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <p className="text-sm font-bold text-gray-700 mb-1">⚠️ {t('allergen.settings_title')}</p>
+          <p className="text-xs text-gray-400 mb-3">{t('allergen.settings_desc')}</p>
+          <div className="flex flex-wrap gap-2">
+            {ALLERGENS.map(a => {
+              const active = selectedAllergens.includes(a.id);
+              return (
+                <button key={a.id}
+                  onClick={() => {
+                    const next = active
+                      ? selectedAllergens.filter(id => id !== a.id)
+                      : [...selectedAllergens, a.id];
+                    setSelectedAllergens(next);
+                    setUserAllergens(next);
+                  }}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border-2 transition-all ${
+                    active
+                      ? 'border-transparent text-white'
+                      : 'border-gray-200 text-gray-500 bg-gray-50'
+                  }`}
+                  style={active ? { backgroundColor: a.color, borderColor: a.color } : {}}
+                >
+                  {a.emoji} {t(`allergen.${a.id}`)}
+                </button>
+              );
+            })}
+          </div>
+          {selectedAllergens.length > 0 && (
+            <p className="text-xs text-emerald-600 font-semibold mt-3">
+              ✓ {selectedAllergens.length} {t('allergen.selected')}
+            </p>
+          )}
+        </div>
+
         {/* Bulut Senkronizasyon */}
         {firebaseConfigured && <CloudSyncPanel />}
 
@@ -293,6 +331,7 @@ function GearIcon({ className = 'w-5 h-5' }) {
 ───────────────────────────────────────────────────────────── */
 const CHIPS = [
   { id: 'sec-summary', emoji: '📊', key: 'chips.summary' },
+  { id: 'sec-tip',     emoji: '💡', key: 'chips.tip'     },
   { id: 'sec-streak',  emoji: '🔥', key: 'chips.streak'  },
   { id: 'sec-macro',   emoji: '🥧', key: 'chips.macro'   },
   { id: 'sec-water',   emoji: '💧', key: 'chips.water'   },
@@ -457,6 +496,9 @@ function Inner() {
           <div className="space-y-4">
             <div id="sec-summary" className="scroll-mt-36">
               <DailySummary key={refresh} onDeleteMeal={() => setRefresh(r => r + 1)} />
+            </div>
+            <div id="sec-tip" className="scroll-mt-36">
+              <SmartTip key={refresh} />
             </div>
             <div id="sec-streak" className="scroll-mt-36">
               <StreakCard key={refresh} />

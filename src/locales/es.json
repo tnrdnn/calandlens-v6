@@ -125,7 +125,8 @@
     "report": "Informe",
     "trend": "Tendencia",
     "score": "Puntuación",
-    "body": "Cuerpo"
+    "body": "Cuerpo",
+    "tip": "Consejo"
   },
   "streak": {
     "title": "Racha",
@@ -370,5 +371,33 @@
     "hip": "Cadera",
     "history": "Historial de medidas",
     "no_data": "Aún no hay medidas"
+  },
+  "tip": {
+    "label": "Consejo Inteligente",
+    "no_meals": "¡Aún no has registrado comidas. Empieza el día con una comida nutritiva! 🍽️",
+    "low_calories": "Has comido muy poco hoy. Añade una comida nutritiva. ⚡",
+    "over_calories": "Superaste tu meta diaria. Opta por alimentos más ligeros. ⚠️",
+    "low_protein": "Tu ingesta de proteínas es baja. Añade huevos, pollo o legumbres. 💪",
+    "low_water": "¡No olvides beber agua! Ni siquiera has alcanzado la mitad de tu meta. 💧",
+    "mid_water": "¡Bebe un poco más de agua! Te estás acercando a tu meta diaria. 💧",
+    "low_steps": "¡Es hora de moverse! Un pequeño paseo marca la diferencia. 🚶",
+    "good_calories": "¡Tu balance calórico es excelente! Sigue así. ✅",
+    "perfect_day": "¡Día perfecto! Alcanzaste tus metas de calorías, agua y pasos. 🌟",
+    "streak_7": "¡Racha de 7 días! Se está formando un hábito. ¡Genial! 🔥",
+    "streak_30": "¡Racha de 30 días! Esta dedicación es verdaderamente inspiradora. 🏆",
+    "general": "La alimentación saludable empieza con pequeños pasos. ¡Da uno hoy! 💡"
+  },
+  "allergen": {
+    "settings_title": "Mis Alérgenos",
+    "settings_desc": "Los alérgenos seleccionados mostrarán advertencias en tus comidas.",
+    "selected": "alérgeno(s) seleccionado(s)",
+    "gluten": "Gluten",
+    "dairy": "Lácteos",
+    "egg": "Huevo",
+    "peanut": "Cacahuete",
+    "treenut": "Frutos Secos",
+    "fish": "Pescado",
+    "shellfish": "Mariscos",
+    "soy": "Soja"
   }
 }
