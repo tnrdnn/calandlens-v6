@@ -393,15 +393,18 @@ function Inner() {
       <header className="bg-gradient-to-r from-emerald-500 to-teal-500 px-4 pt-safe-top pb-4 sticky top-0 z-30 shadow-lg shadow-emerald-200/40">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            {/* Logo — mavi C, içinde beyaz Lens */}
-            <svg width="38" height="36" viewBox="0 0 38 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* C: mavi, sağa açık kalın yay */}
-              <path d="M 22 8 A 13 13 0 1 0 22 28"
-                stroke="#60a5fa" strokeWidth="4.5" strokeLinecap="round"/>
-              {/* Lens: beyaz, L büyük + ens küçük */}
-              <text fill="white" fontFamily="system-ui,-apple-system,Arial,sans-serif" fontWeight="900">
-                <tspan x="4" y="23" fontSize="17">L</tspan>
-                <tspan fontSize="10" dy="2">ens</tspan>
+            {/* Logo — pill arka plan, beyaz C, L beyaz + ens altın */}
+            <svg width="46" height="40" viewBox="0 0 46 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* Frosted pill arka plan */}
+              <rect x="0.5" y="0.5" width="45" height="39" rx="11" fill="white" fillOpacity="0.18"/>
+              <rect x="0.5" y="0.5" width="45" height="39" rx="11" stroke="white" strokeOpacity="0.25" strokeWidth="1"/>
+              {/* C — beyaz, kalın */}
+              <path d="M 27 8 A 14 14 0 1 0 27 32"
+                stroke="white" strokeWidth="5.5" strokeLinecap="round"/>
+              {/* Lens — L beyaz büyük, ens altın */}
+              <text fontFamily="system-ui,-apple-system,Arial,sans-serif" fontWeight="900">
+                <tspan x="6" y="26" fontSize="20" fill="white">L</tspan>
+                <tspan fontSize="11" dy="1.5" fill="#fde68a">ens</tspan>
               </text>
             </svg>
             {/* Brand text */}
