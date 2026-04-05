@@ -315,17 +315,26 @@ function Inner() {
   const [showExitDialog, setExitDialog] = useState(false);
   const [refresh,        setRefresh]    = useState(0);
   const [activeChip,     setActiveChip] = useState('sec-summary');
+  const chipStripRef = useRef(null);
+  const chipButtonRefs = useRef({});
 
   const handleMealAdded = useCallback((meal) => {
     addMeal(meal);
     setRefresh(r => r + 1);
   }, [addMeal]);
 
-  /* Chip scroll */
+  /* Chip scroll — sayfayı kaydır + chip strip'te aktif chip'i ortala */
   const scrollToSection = useCallback((id) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setActiveChip(id);
+    // Chip strip'i kaydırarak aktif chip'i ve bir sonrakini göster
+    const btnEl  = chipButtonRefs.current[id];
+    const stripEl = chipStripRef.current;
+    if (btnEl && stripEl) {
+      const target = btnEl.offsetLeft - 8;
+      stripEl.scrollTo({ left: target, behavior: 'smooth' });
+    }
   }, []);
 
   /* IntersectionObserver — aktif chip takibi */
@@ -335,11 +344,30 @@ function Inner() {
       (entries) => {
         entries.forEach(e => { if (e.isIntersecting) setActiveChip(e.target.id); });
       },
-      { threshold: 0.4, rootMargin: '-100px 0px -40% 0px' }
+      { threshold: 0.3, rootMargin: '-90px 0px -45% 0px' }
     );
     CHIPS.forEach(c => { const el = document.getElementById(c.id); if (el) obs.observe(el); });
     return () => obs.disconnect();
   }, [tab, refresh]);
+
+  /* Sayfa en üste gelince "Özet"e dön */
+  useEffect(() => {
+    if (tab !== 'home') return;
+    const onScroll = () => {
+      if (window.scrollY < 80) setActiveChip('sec-summary');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [tab]);
+
+  /* activeChip değişince chip strip'i de kaydır */
+  useEffect(() => {
+    const btnEl   = chipButtonRefs.current[activeChip];
+    const stripEl = chipStripRef.current;
+    if (!btnEl || !stripEl) return;
+    const target = btnEl.offsetLeft - 8;
+    stripEl.scrollTo({ left: target, behavior: 'smooth' });
+  }, [activeChip]);
 
   /* Hardware / browser back-button handler */
   useEffect(() => {
@@ -383,10 +411,11 @@ function Inner() {
 
         {/* ── CHIP STRIP ── */}
         {tab === 'home' && (
-          <div className="flex gap-2 overflow-x-auto scrollbar-hide pt-3 pb-0.5 -mx-1 px-1">
+          <div ref={chipStripRef} className="flex gap-2 overflow-x-auto scrollbar-hide pt-3 pb-0.5 -mx-1 px-1">
             {CHIPS.map(chip => (
               <button
                 key={chip.id}
+                ref={el => { chipButtonRefs.current[chip.id] = el; }}
                 onClick={() => scrollToSection(chip.id)}
                 className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-200 ${
                   activeChip === chip.id
