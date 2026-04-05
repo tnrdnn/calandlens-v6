@@ -79,7 +79,13 @@
       "medium": "Moyen",
       "large": "Grand",
       "xlarge": "Très Grand"
-    }
+    },
+    "use": "Appliquer",
+    "hand_ref": "Estimer avec la main",
+    "ref_pinch": "pincée",
+    "ref_palm": "paume",
+    "ref_fist": "poing",
+    "ref_cupped": "deux mains"
   },
   "barcode": {
     "title": "Scanner de Code",

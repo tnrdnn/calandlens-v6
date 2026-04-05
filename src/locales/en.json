@@ -79,7 +79,13 @@
       "medium": "Medium",
       "large": "Large",
       "xlarge": "XLarge"
-    }
+    },
+    "use": "Apply",
+    "hand_ref": "Estimate with hand reference",
+    "ref_pinch": "pinch",
+    "ref_palm": "palm",
+    "ref_fist": "fist",
+    "ref_cupped": "cupped"
   },
   "barcode": {
     "title": "Barcode Scanner",

@@ -79,7 +79,13 @@
       "medium": "Mediano",
       "large": "Grande",
       "xlarge": "XGrande"
-    }
+    },
+    "use": "Aplicar",
+    "hand_ref": "Estimar con referencia de mano",
+    "ref_pinch": "pizca",
+    "ref_palm": "palma",
+    "ref_fist": "puño",
+    "ref_cupped": "dos manos"
   },
   "barcode": {
     "title": "Escáner de Código",

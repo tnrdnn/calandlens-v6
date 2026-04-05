@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../hooks/useLanguage';
 
-const PRESETS = [
-  { key: 'small',  grams: 80  },
-  { key: 'medium', grams: 150 },
-  { key: 'large',  grams: 250 },
-  { key: 'xlarge', grams: 380 },
+// Yemek tipine göre preset seçenekleri
+const HINT_PRESETS = {
+  soup:    [{ key: 'small', grams: 200 }, { key: 'medium', grams: 300 }, { key: 'large', grams: 400 }, { key: 'xlarge', grams: 500 }],
+  side:    [{ key: 'small', grams: 60  }, { key: 'medium', grams: 120 }, { key: 'large', grams: 200 }, { key: 'xlarge', grams: 300 }],
+  snack:   [{ key: 'small', grams: 30  }, { key: 'medium', grams: 60  }, { key: 'large', grams: 100 }, { key: 'xlarge', grams: 150 }],
+  dessert: [{ key: 'small', grams: 50  }, { key: 'medium', grams: 80  }, { key: 'large', grams: 120 }, { key: 'xlarge', grams: 180 }],
+  main:    [{ key: 'small', grams: 100 }, { key: 'medium', grams: 180 }, { key: 'large', grams: 280 }, { key: 'xlarge', grams: 400 }],
+};
+
+// El referansları
+const HAND_REFS = [
+  { emoji: '🤏', label_key: 'ref_pinch',  grams: 15  },
+  { emoji: '✋', label_key: 'ref_palm',   grams: 80  },
+  { emoji: '✊', label_key: 'ref_fist',   grams: 150 },
+  { emoji: '🤲', label_key: 'ref_cupped', grams: 250 },
 ];
 
-export default function PortionEstimator({ mealName, aiEstimate = 150, onConfirm, onCancel }) {
+export default function PortionEstimator({ mealName, aiEstimate = 150, portionHint = 'main', onConfirm, onCancel }) {
   const { t } = useLanguage();
   const [grams, setGrams] = useState(aiEstimate);
   const [inputVal, setInputVal] = useState(String(aiEstimate));
@@ -17,6 +27,8 @@ export default function PortionEstimator({ mealName, aiEstimate = 150, onConfirm
     setGrams(aiEstimate);
     setInputVal(String(aiEstimate));
   }, [aiEstimate]);
+
+  const presets = HINT_PRESETS[portionHint] || HINT_PRESETS.main;
 
   const handleSlider = (v) => { setGrams(v); setInputVal(String(v)); };
   const handleInput = (v) => {
@@ -36,13 +48,19 @@ export default function PortionEstimator({ mealName, aiEstimate = 150, onConfirm
         </div>
 
         <div className="p-6 space-y-5">
-          {/* AI badge */}
+          {/* AI estimate badge */}
           <div className="flex items-center gap-3 bg-blue-50 rounded-2xl px-4 py-3">
             <span className="text-2xl flex-shrink-0">🤖</span>
             <div>
               <p className="text-sm font-semibold text-blue-800">{t('portion.ai_estimate')}</p>
-              <p className="text-xs text-blue-500">{t('portion.ai_estimate_desc')} — {aiEstimate}g</p>
+              <p className="text-xs text-blue-500">{t('portion.ai_estimate_desc')} — <strong>{aiEstimate}g</strong></p>
             </div>
+            <button
+              onClick={() => handleSlider(aiEstimate)}
+              className="ml-auto text-xs font-bold text-blue-600 bg-blue-100 px-2.5 py-1 rounded-lg hover:bg-blue-200 transition-colors flex-shrink-0"
+            >
+              {t('portion.use')}
+            </button>
           </div>
 
           {/* Number input */}
@@ -73,9 +91,9 @@ export default function PortionEstimator({ mealName, aiEstimate = 150, onConfirm
             </div>
           </div>
 
-          {/* Quick presets */}
+          {/* Quick presets (dynamic per food type) */}
           <div className="grid grid-cols-4 gap-2">
-            {PRESETS.map(p => (
+            {presets.map(p => (
               <button
                 key={p.key}
                 onClick={() => handleSlider(p.grams)}
@@ -89,6 +107,24 @@ export default function PortionEstimator({ mealName, aiEstimate = 150, onConfirm
                 <span className={`block font-normal ${grams === p.grams ? 'text-emerald-100' : 'text-gray-400'}`}>{p.grams}g</span>
               </button>
             ))}
+          </div>
+
+          {/* Hand references */}
+          <div>
+            <p className="text-xs font-semibold text-gray-400 mb-2">👋 {t('portion.hand_ref')}</p>
+            <div className="grid grid-cols-4 gap-1.5">
+              {HAND_REFS.map(ref => (
+                <button
+                  key={ref.label_key}
+                  onClick={() => handleSlider(ref.grams)}
+                  className="flex flex-col items-center gap-0.5 py-2 rounded-xl bg-gray-50 hover:bg-emerald-50 transition-colors"
+                >
+                  <span className="text-xl">{ref.emoji}</span>
+                  <span className="text-[10px] font-bold text-gray-500">{ref.grams}g</span>
+                  <span className="text-[9px] text-gray-400">{t(`portion.${ref.label_key}`)}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Actions */}

@@ -79,7 +79,13 @@
       "medium": "Mittel",
       "large": "Groß",
       "xlarge": "Sehr Groß"
-    }
+    },
+    "use": "Anwenden",
+    "hand_ref": "Mit Hand schätzen",
+    "ref_pinch": "Prise",
+    "ref_palm": "Handfläche",
+    "ref_fist": "Faust",
+    "ref_cupped": "beide Hände"
   },
   "barcode": {
     "title": "Barcode-Scanner",

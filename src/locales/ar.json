@@ -79,7 +79,13 @@
       "medium": "متوسط",
       "large": "كبير",
       "xlarge": "كبير جداً"
-    }
+    },
+    "use": "تطبيق",
+    "hand_ref": "التقدير باليد",
+    "ref_pinch": "قرصة",
+    "ref_palm": "راحة اليد",
+    "ref_fist": "قبضة",
+    "ref_cupped": "كفّان"
   },
   "barcode": {
     "title": "ماسح الباركود",

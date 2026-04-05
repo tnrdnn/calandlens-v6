@@ -302,6 +302,7 @@ export default function CameraView({ onMealAdded }) {
         <PortionEstimator
           mealName={rawResult.name}
           aiEstimate={rawResult.portionEstimateGrams}
+          portionHint={rawResult.portionHint}
           onConfirm={handlePortionConfirm}
           onCancel={reset}
         />

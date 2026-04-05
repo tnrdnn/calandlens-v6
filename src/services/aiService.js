@@ -30,6 +30,28 @@ const FOOD_DB = {
 
 const DEFAULT_FOOD = { calories: 200, protein: 10, carbs: 20, fat: 8, sugar: 5, name: 'Yemek', icon: '🍽️' };
 
+// Yemek tipine göre tipik porsiyon tahmini (gram)
+const PORTION_ESTIMATES = {
+  'kebap':      { grams: 300, hint: 'main' },
+  'tavuk':      { grams: 200, hint: 'main' },
+  'pilav':      { grams: 250, hint: 'side' },
+  'makarna':    { grams: 280, hint: 'main' },
+  'salata':     { grams: 150, hint: 'side' },
+  'çorba':      { grams: 300, hint: 'soup' },
+  'pizza':      { grams: 200, hint: 'main' },
+  'hamburger':  { grams: 200, hint: 'main' },
+  'balık':      { grams: 200, hint: 'main' },
+  'köfte':      { grams: 180, hint: 'main' },
+  'patates':    { grams: 150, hint: 'side' },
+  'yumurta':    { grams: 100, hint: 'snack' },
+  'meyve':      { grams: 120, hint: 'snack' },
+  'tatlı':      { grams: 100, hint: 'dessert' },
+  'ekmek':      { grams: 60,  hint: 'side' },
+  'peynir':     { grams: 50,  hint: 'snack' },
+  'zeytin':     { grams: 40,  hint: 'snack' },
+  'yoğurt':     { grams: 150, hint: 'snack' },
+};
+
 // ── Yardımcı fonksiyonlar ──────────────────────────────────────────────────
 function isFoodRelated(label) {
   const foodKeywords = [
@@ -42,15 +64,25 @@ function isFoodRelated(label) {
   return foodKeywords.some(k => label.toLowerCase().includes(k));
 }
 
+function getPortionEstimate(key) {
+  return PORTION_ESTIMATES[key] || { grams: 200, hint: 'main' };
+}
+
 function matchFoodToNutrition(foodLabel) {
   const label = foodLabel.toLowerCase();
   for (const [key, value] of Object.entries(FOOD_DB)) {
-    if (label.includes(key)) return { ...value, portionEstimateGrams: 200, confidence: 0.85 };
+    if (label.includes(key)) {
+      const pe = getPortionEstimate(key);
+      return { ...value, portionEstimateGrams: pe.grams, portionHint: pe.hint, confidence: 0.85 };
+    }
   }
   for (const [key, value] of Object.entries(FOOD_DB)) {
-    if (key.includes(label) || label.includes(key)) return { ...value, portionEstimateGrams: 200, confidence: 0.7 };
+    if (key.includes(label) || label.includes(key)) {
+      const pe = getPortionEstimate(key);
+      return { ...value, portionEstimateGrams: pe.grams, portionHint: pe.hint, confidence: 0.7 };
+    }
   }
-  return { ...DEFAULT_FOOD, portionEstimateGrams: 200, confidence: 0.5 };
+  return { ...DEFAULT_FOOD, portionEstimateGrams: 200, portionHint: 'main', confidence: 0.5 };
 }
 
 function num(v) {

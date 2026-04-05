@@ -79,7 +79,13 @@
       "medium": "Orta",
       "large": "Çok",
       "xlarge": "Büyük"
-    }
+    },
+    "use": "Uygula",
+    "hand_ref": "El referansı ile tahmin",
+    "ref_pinch": "tutam",
+    "ref_palm": "avuç",
+    "ref_fist": "yumruk",
+    "ref_cupped": "iki avuç"
   },
   "barcode": {
     "title": "Barkod Tarayıcı",
