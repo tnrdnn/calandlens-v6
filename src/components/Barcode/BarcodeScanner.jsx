@@ -48,7 +48,6 @@ export default function BarcodeScanner({ onResult, onClose }) {
             reader.reset();
             setPhase(PHASE.SEARCHING);
             const found = await fetchByBarcode(result.getText());
-            if (!active) return;
             if (found) {
               setProduct(found);
               setPortionGrams(parseInt(found.servingSize) || 100);
