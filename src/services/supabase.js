@@ -1,5 +1,5 @@
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://omqnmdgaotlledbhtlvj.supabase.co';
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9tcW5tZGdhb3RsbGVkYmh0bHZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MjMxNTYsImV4cCI6MjA5MDk5OTE1Nn0.wO5LUsrNB1XK7Yr9WXlkTMPACiRZ3cUuGBpthot3iRc';
 
 export const isConfigured = !!(SUPABASE_URL && SUPABASE_KEY);
 
