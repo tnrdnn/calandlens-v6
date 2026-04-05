@@ -204,7 +204,8 @@
     "best_day": "Bester Tag",
     "consistency": "Konsistenz",
     "protein_avg": "Ø Protein",
-    "days_on_track": "Tage erreicht"
+    "days_on_track": "Tage erreicht",
+    "export_pdf": "PDF exportieren"
   },
   "settings": {
     "title": "Einstellungen",
@@ -235,6 +236,13 @@
     "kcal": "kcal",
     "g": "g",
     "mg": "mg"
+  },
+  "sync": {
+    "title": "Cloud-Synchronisation",
+    "push": "Hochladen",
+    "pull": "Herunterladen",
+    "last": "Letzte Sync",
+    "desc": "Daten in der Cloud sichern oder wiederherstellen"
   },
   "language": {
     "tr": "Türkçe",

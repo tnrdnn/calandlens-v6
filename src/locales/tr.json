@@ -226,7 +226,8 @@
     "best_day": "En İyi Gün",
     "consistency": "Tutarlılık",
     "protein_avg": "Ort. Protein",
-    "days_on_track": "Hedefe Ulaşılan Gün"
+    "days_on_track": "Hedefe Ulaşılan Gün",
+    "export_pdf": "PDF İndir"
   },
   "settings": {
     "title": "Ayarlar",
@@ -257,6 +258,13 @@
     "kcal": "kcal",
     "g": "g",
     "mg": "mg"
+  },
+  "sync": {
+    "title": "Bulut Senkronizasyon",
+    "push": "Yükle",
+    "pull": "İndir",
+    "last": "Son senkron",
+    "desc": "Verilerini buluta yedekle veya geri yükle"
   },
   "language": {
     "tr": "Türkçe",

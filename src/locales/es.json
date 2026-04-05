@@ -204,7 +204,8 @@
     "best_day": "Mejor Día",
     "consistency": "Consistencia",
     "protein_avg": "Prot. Promedio",
-    "days_on_track": "Días en Meta"
+    "days_on_track": "Días en Meta",
+    "export_pdf": "Exportar PDF"
   },
   "settings": {
     "title": "Ajustes",
@@ -235,6 +236,13 @@
     "kcal": "kcal",
     "g": "g",
     "mg": "mg"
+  },
+  "sync": {
+    "title": "Sincronización",
+    "push": "Subir",
+    "pull": "Descargar",
+    "last": "Última sync",
+    "desc": "Respalda o restaura tus datos en la nube"
   },
   "language": {
     "tr": "Türkçe",

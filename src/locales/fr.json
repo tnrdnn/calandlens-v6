@@ -204,7 +204,8 @@
     "best_day": "Meilleur Jour",
     "consistency": "Régularité",
     "protein_avg": "Prot. Moy.",
-    "days_on_track": "Jours Atteints"
+    "days_on_track": "Jours Atteints",
+    "export_pdf": "Exporter PDF"
   },
   "settings": {
     "title": "Paramètres",
@@ -235,6 +236,13 @@
     "kcal": "kcal",
     "g": "g",
     "mg": "mg"
+  },
+  "sync": {
+    "title": "Synchronisation",
+    "push": "Envoyer",
+    "pull": "Télécharger",
+    "last": "Dernière sync",
+    "desc": "Sauvegardez ou restaurez vos données dans le cloud"
   },
   "language": {
     "tr": "Türkçe",
