@@ -21,13 +21,6 @@ export default function AuthModal({ onClose }) {
       if (tab === 'register') {
         if (!name.trim()) { setError(t('auth.errFill')); setBusy(false); return; }
         const user = await signUp(email, pass, name);
-        if (user?.id) {
-          fetch('/api/register-profile', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user_id: user.id, email }),
-          }).catch(() => {});
-        }
         // email onayı kapalıysa session gelir, direkt kapat
         if (user?.confirmed_at || user?.email_confirmed_at || user?.identities?.length > 0) {
           onClose();

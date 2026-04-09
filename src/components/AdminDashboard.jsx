@@ -112,12 +112,6 @@ async function fetchRows() {
   return res.json();
 }
 
-async function fetchUsers() {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=email,country,created_at&order=created_at.desc`, {
-    headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` },
-  });
-  return res.json();
-}
 
 function startOf(unit) {
   const d = new Date();
@@ -158,11 +152,9 @@ function last30Days(rows) {
 
 export default function AdminDashboard() {
   const [rows, setRows]         = useState([]);
-  const [users, setUsers]       = useState([]);
   const [loading, setLoading]   = useState(true);
   const [authed, setAuthed]     = useState(false);
   const [checking, setChecking] = useState(true);
-  const [tab, setTab]           = useState('visitors'); // 'visitors' | 'users'
 
   // Verify stored token on mount
   useEffect(() => {
@@ -183,13 +175,10 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (!authed) return;
-    Promise.all([fetchRows(), fetchUsers()])
-      .then(([pageData, userData]) => {
-        setRows(Array.isArray(pageData) ? pageData : []);
-        setUsers(Array.isArray(userData) ? userData : []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    fetchRows().then(data => {
+      setRows(Array.isArray(data) ? data : []);
+      setLoading(false);
+    }).catch(() => setLoading(false));
   }, [authed]);
 
   if (checking) return (
@@ -217,12 +206,12 @@ export default function AdminDashboard() {
       <div className="max-w-4xl mx-auto">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <img src="/logo.png" alt="logo" className="w-10 h-10 rounded-xl object-cover" />
             <div>
               <h1 className="text-xl font-black text-white">CalAndLens Admin</h1>
-              <p className="text-xs text-gray-500">Panel</p>
+              <p className="text-xs text-gray-500">Ziyaretçi İstatistikleri</p>
             </div>
           </div>
           <button onClick={handleLogout}
@@ -230,75 +219,6 @@ export default function AdminDashboard() {
             Çıkış Yap
           </button>
         </div>
-
-        {/* Tabs */}
-        <div className="flex bg-gray-900 border border-gray-800 rounded-2xl p-1 mb-8">
-          {[
-            { id: 'visitors', label: '📊 Ziyaretçiler' },
-            { id: 'users',    label: `👤 Kullanıcılar (${users.length})` },
-          ].map(t_ => (
-            <button key={t_.id} onClick={() => setTab(t_.id)}
-              className={`flex-1 py-2.5 rounded-xl text-sm font-bold transition-all ${tab === t_.id ? 'bg-gray-700 text-white' : 'text-gray-500 hover:text-gray-300'}`}>
-              {t_.label}
-            </button>
-          ))}
-        </div>
-
-        {/* ── KULLANICILAR ─────────────────────────────────────────── */}
-        {tab === 'users' && (
-          <div>
-            <div className="bg-gray-900 rounded-2xl p-5 border border-gray-800 mb-6 flex items-center justify-between">
-              <div>
-                <p className="text-gray-400 text-sm">Toplam Kayıtlı Kullanıcı</p>
-                <p className="text-5xl font-black text-white mt-1">{users.length}</p>
-              </div>
-              <span className="text-5xl">👤</span>
-            </div>
-
-            {/* Ülkelere göre dağılım */}
-            {(() => {
-              const byCountry = users.reduce((acc, u) => {
-                const c = u.country || 'XX';
-                acc[c] = (acc[c] || 0) + 1;
-                return acc;
-              }, {});
-              return Object.keys(byCountry).length > 0 ? (
-                <div className="bg-gray-900 rounded-2xl p-5 border border-gray-800 mb-6">
-                  <p className="text-sm font-bold text-gray-300 mb-3">🌍 Ülkelere Göre</p>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {Object.entries(byCountry).sort((a,b) => b[1]-a[1]).map(([code, val]) => (
-                      <div key={code} className="flex items-center justify-between bg-gray-800 rounded-xl px-3 py-2">
-                        <span className="text-sm text-gray-300">{COUNTRY_NAMES[code] || `🌐 ${code}`}</span>
-                        <span className="text-emerald-400 font-black text-sm ml-2">{val}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : null;
-            })()}
-
-            {/* Kullanıcı listesi */}
-            <div className="bg-gray-900 rounded-2xl p-5 border border-gray-800">
-              <p className="text-sm font-bold text-gray-300 mb-3">Son Kayıt Olanlar</p>
-              {users.length === 0 ? (
-                <p className="text-gray-600 text-sm text-center py-6">Henüz kayıtlı kullanıcı yok</p>
-              ) : (
-                <div className="space-y-2">
-                  {users.map((u, i) => (
-                    <div key={i} className="flex items-center justify-between text-xs text-gray-400 border-b border-gray-800 pb-2">
-                      <span className="text-white">{u.email || '—'}</span>
-                      <span>{COUNTRY_NAMES[u.country] || u.country || '—'}</span>
-                      <span className="text-gray-600">{u.created_at ? new Date(u.created_at).toLocaleString('tr-TR') : '—'}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* ── ZİYARETÇİLER ─────────────────────────────────────────── */}
-        {tab === 'visitors' && <div>
 
         {/* Stats cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -406,7 +326,6 @@ export default function AdminDashboard() {
         <p className="text-center text-xs text-gray-700 mt-6">
           calandlens.com/?admin=calandlens2025
         </p>
-        </div>}
 
       </div>
     </div>
