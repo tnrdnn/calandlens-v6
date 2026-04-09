@@ -21,16 +21,28 @@ import FoodComparison from './components/Dashboard/FoodComparison';
 import HistoryPage from './components/History/HistoryPage';
 import { useMealReminders, getRemindersEnabled, setRemindersEnabled } from './hooks/useMealReminders';
 import { useGoalNotifications, getGoalNotifsEnabled, setGoalNotifsEnabled } from './hooks/useGoalNotifications';
-import { getOrCreateUserId, pushToCloud, pullFromCloud, isConfigured as supabaseConfigured } from './services/supabase';
+import { pushToCloud, pullFromCloud, isConfigured as supabaseConfigured } from './services/supabase';
+import { AuthProvider, useAuth } from './hooks/useAuth';
+import AuthModal from './components/AuthModal';
+import PWAInstallBanner from './components/PWAInstallBanner';
+import { usePWAInstall } from './hooks/usePWAInstall';
+import DesktopLandingPage from './components/DesktopLandingPage';
+import AdminDashboard from './components/AdminDashboard';
+import OnboardingQuiz from './components/OnboardingQuiz';
+import GuestPrompt from './components/GuestPrompt';
+import { trackVisit } from './services/analytics';
 
 /* ─────────────────────────────────────────────────────────────
    SETTINGS PAGE
 ───────────────────────────────────────────────────────────── */
 function SettingsPage({ onClose }) {
   const { t } = useLanguage();
+  const { user, signOut } = useAuth();
   const { getGoal, setGoal, getWaterGoal, setWaterGoal, clearAllData, getUserAllergens, setUserAllergens, getMacroGoals, setMacroGoals } = useLocalStorage();
   const [selectedAllergens, setSelectedAllergens] = useState(() => getUserAllergens());
   const { isDark, toggleTheme } = useTheme();
+  const { isStandalone, isMobile } = usePWAInstall();
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const { enable: enableReminders, disable: disableReminders } = useMealReminders(t);
   const [goalInput, setGoalInput]           = useState(String(getGoal()));
   const [waterGoalInput, setWaterGoalInput] = useState(String(getWaterGoal()));
@@ -62,7 +74,7 @@ function SettingsPage({ onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-40 bg-gray-50 max-w-md mx-auto flex flex-col">
+    <div className="fixed inset-0 z-40 bg-gray-50 dark:bg-gray-900 max-w-md mx-auto flex flex-col">
       <div className="bg-gradient-to-r from-emerald-500 to-teal-500 px-4 pt-safe-top pb-4 flex-shrink-0">
         <div className="flex items-center gap-3">
           <button onClick={onClose} className="p-2 rounded-full hover:bg-white/20 transition-colors text-white">
@@ -75,16 +87,60 @@ function SettingsPage({ onClose }) {
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4">
+        {/* Hesap */}
+        <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
+          {user ? (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-bold text-gray-700 dark:text-gray-200">👤 {user.user_metadata?.full_name || user.email}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{user.email}</p>
+              </div>
+              <button onClick={() => signOut()}
+                className="text-xs text-red-400 hover:text-red-600 border border-red-200 hover:border-red-400 px-3 py-1.5 rounded-xl transition-colors">
+                {t('auth.logout') || 'Çıkış'}
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-bold text-gray-700 dark:text-gray-200">👤 {t('auth.loginTab')}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{t('auth.guestNote') || 'Verilerini bulutta sakla'}</p>
+              </div>
+              <button onClick={() => setShowAuthModal(true)}
+                className="text-xs text-emerald-600 font-bold border border-emerald-300 hover:bg-emerald-50 px-3 py-1.5 rounded-xl transition-colors">
+                {t('auth.loginTab')}
+              </button>
+            </div>
+          )}
+        </div>
+        {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
+
+        {/* Karanlık mod */}
+        <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-bold text-gray-700 dark:text-gray-200">{t('theme.toggle')}</p>
+            <button
+              onClick={toggleTheme}
+              className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${isDark ? 'bg-emerald-500' : 'bg-gray-200'}`}
+            >
+              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 flex items-center justify-center text-xs ${isDark ? 'translate-x-6' : ''}`}>
+                {isDark ? '🌙' : '☀️'}
+              </span>
+            </button>
+          </div>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{isDark ? t('theme.dark') : t('theme.light')}</p>
+        </div>
+
         {/* Günlük kalori hedefi */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <p className="text-sm font-bold text-gray-700 mb-3">{t('settings.daily_goal')}</p>
+        <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
+          <p className="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">{t('settings.daily_goal')}</p>
           <div className="flex gap-3">
             <input
               type="number" value={goalInput} min="800" max="10000"
               onChange={e => setGoalInput(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-400 outline-none text-lg font-bold"
+              className="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-emerald-400 outline-none text-lg font-bold"
             />
-            <span className="flex items-center text-gray-500 font-medium">kcal</span>
+            <span className="flex items-center text-gray-500 dark:text-gray-400 font-medium">kcal</span>
             <button onClick={handleSaveGoal}
               className="px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors">
               {t('common.save')}
@@ -115,9 +171,9 @@ function SettingsPage({ onClose }) {
           };
 
           return (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <p className="text-sm font-bold text-gray-700 mb-1">🥧 {t('macro_goals.title')}</p>
-              <p className="text-xs text-gray-400 mb-4">{t('macro_goals.subtitle')}</p>
+            <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
+              <p className="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">🥧 {t('macro_goals.title')}</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">{t('macro_goals.subtitle')}</p>
 
               {['protein','carbs','fat'].map(key => {
                 const grams = Math.round((dailyKcal * macroGoals[key] / 100) / KCAL[key]);
@@ -128,7 +184,7 @@ function SettingsPage({ onClose }) {
                         {t(`macro_goals.${key}`)}
                       </span>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-gray-400">{grams}g {t('macro_goals.gram_target')}</span>
+                        <span className="text-xs text-gray-400 dark:text-gray-500">{grams}g {t('macro_goals.gram_target')}</span>
                         <span className="text-sm font-black" style={{ color: COLORS[key] }}>
                           {macroGoals[key]}%
                         </span>
@@ -146,8 +202,8 @@ function SettingsPage({ onClose }) {
               })}
 
               {/* Sum indicator */}
-              <div className={`flex items-center justify-between rounded-xl px-3 py-2 mb-3 ${sumOk ? 'bg-emerald-50' : 'bg-red-50'}`}>
-                <span className="text-xs font-semibold text-gray-600">{t('macro_goals.total')}</span>
+              <div className={`flex items-center justify-between rounded-xl px-3 py-2 mb-3 ${sumOk ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-red-50 dark:bg-red-900/20'}`}>
+                <span className="text-xs font-semibold text-gray-600 dark:text-gray-300">{t('macro_goals.total')}</span>
                 <span className={`text-sm font-black ${sumOk ? 'text-emerald-600' : 'text-red-500'}`}>
                   {sum}% {!sumOk && `— ${t('macro_goals.sum_error')}`}
                 </span>
@@ -155,7 +211,7 @@ function SettingsPage({ onClose }) {
 
               <div className="flex gap-2">
                 <button onClick={handleResetMacro}
-                  className="flex-1 py-2.5 border-2 border-gray-200 text-gray-500 font-semibold rounded-xl text-sm hover:bg-gray-50 transition-colors">
+                  className="flex-1 py-2.5 border-2 border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-300 font-semibold rounded-xl text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                   {t('macro_goals.reset')}
                 </button>
                 <button onClick={handleSaveMacro} disabled={!sumOk}
@@ -168,8 +224,8 @@ function SettingsPage({ onClose }) {
         })()}
 
         {/* Verileri temizle */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <p className="text-sm font-bold text-gray-700 mb-3">{t('settings.clear_data')}</p>
+        <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
+          <p className="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">{t('settings.clear_data')}</p>
           {!confirmClear ? (
             <button onClick={() => setConfirmClear(true)}
               className="w-full py-3 border-2 border-red-200 text-red-500 font-semibold rounded-xl hover:bg-red-50 transition-colors">
@@ -180,7 +236,7 @@ function SettingsPage({ onClose }) {
               <p className="text-sm text-red-500">{t('settings.clear_confirm')}</p>
               <div className="flex gap-2">
                 <button onClick={() => setConfirmClear(false)}
-                  className="flex-1 py-2.5 border-2 border-gray-200 rounded-xl font-semibold text-gray-600">
+                  className="flex-1 py-2.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl font-semibold text-gray-600 dark:text-gray-300">
                   {t('common.cancel')}
                 </button>
                 <button onClick={() => { clearAllData(); setConfirmClear(false); onClose(); }}
@@ -192,32 +248,16 @@ function SettingsPage({ onClose }) {
           )}
         </div>
 
-        {/* Karanlık mod */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-bold text-gray-700">{t('theme.toggle')}</p>
-            <button
-              onClick={toggleTheme}
-              className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${isDark ? 'bg-emerald-500' : 'bg-gray-200'}`}
-            >
-              <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 flex items-center justify-center text-xs ${isDark ? 'translate-x-6' : ''}`}>
-                {isDark ? '🌙' : '☀️'}
-              </span>
-            </button>
-          </div>
-          <p className="text-xs text-gray-400 mt-1">{isDark ? t('theme.dark') : t('theme.light')}</p>
-        </div>
-
         {/* Günlük su hedefi */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <p className="text-sm font-bold text-gray-700 mb-3">💧 {t('water.title')}</p>
+        <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
+          <p className="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">💧 {t('water.title')}</p>
           <div className="flex gap-3">
             <input
               type="number" value={waterGoalInput} min="500" max="5000" step="100"
               onChange={e => setWaterGoalInput(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-blue-400 outline-none text-lg font-bold"
+              className="flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:border-blue-400 outline-none text-lg font-bold"
             />
-            <span className="flex items-center text-gray-500 font-medium">ml</span>
+            <span className="flex items-center text-gray-500 dark:text-gray-400 font-medium">ml</span>
             <button onClick={handleSaveWaterGoal}
               className="px-5 py-3 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl transition-colors">
               {t('common.save')}
@@ -226,8 +266,8 @@ function SettingsPage({ onClose }) {
         </div>
 
         {/* Push bildirimler */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <p className="text-sm font-bold text-gray-700 mb-3">🔔 {t('notifications.title')}</p>
+        <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
+          <p className="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">🔔 {t('notifications.title')}</p>
           {notifStatus === 'granted' ? (
             <p className="text-sm text-emerald-600 font-semibold">{t('notifications.enabled')}</p>
           ) : notifStatus === 'denied' ? (
@@ -244,11 +284,11 @@ function SettingsPage({ onClose }) {
 
         {/* Öğün hatırlatıcısı */}
         {notifStatus === 'granted' && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-bold text-gray-700">🍽️ {t('reminders.title')}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{t('reminders.subtitle')}</p>
+                <p className="text-sm font-bold text-gray-700 dark:text-gray-200">🍽️ {t('reminders.title')}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{t('reminders.subtitle')}</p>
               </div>
               <button
                 onClick={async () => {
@@ -266,11 +306,11 @@ function SettingsPage({ onClose }) {
 
         {/* Hedef ilerleme bildirimi */}
         {notifStatus === 'granted' && (
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+          <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-bold text-gray-700">🎯 {t('goal_notif.title')}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{t('goal_notif.subtitle')}</p>
+                <p className="text-sm font-bold text-gray-700 dark:text-gray-200">🎯 {t('goal_notif.title')}</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{t('goal_notif.subtitle')}</p>
               </div>
               <button
                 onClick={() => {
@@ -288,9 +328,9 @@ function SettingsPage({ onClose }) {
         )}
 
         {/* Alerjen Seçimi */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <p className="text-sm font-bold text-gray-700 mb-1">⚠️ {t('allergen.settings_title')}</p>
-          <p className="text-xs text-gray-400 mb-3">{t('allergen.settings_desc')}</p>
+        <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
+          <p className="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">⚠️ {t('allergen.settings_title')}</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">{t('allergen.settings_desc')}</p>
           <div className="flex flex-wrap gap-2">
             {ALLERGENS.map(a => {
               const active = selectedAllergens.includes(a.id);
@@ -306,7 +346,7 @@ function SettingsPage({ onClose }) {
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border-2 transition-all ${
                     active
                       ? 'border-transparent text-white'
-                      : 'border-gray-200 text-gray-500 bg-gray-50'
+                      : 'border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700'
                   }`}
                   style={active ? { backgroundColor: a.color, borderColor: a.color } : {}}
                 >
@@ -325,6 +365,22 @@ function SettingsPage({ onClose }) {
         {/* Bulut Senkronizasyon */}
         {supabaseConfigured && <CloudSyncPanel />}
 
+        {/* Masaüstü sürümü — sadece standalone modda veya mobilden göster */}
+        {(isStandalone || isMobile) && (
+          <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
+            <p className="text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">🖥️ {t('pwa.desktop_btn')}</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">{t('pwa.desktop_desc')}</p>
+            <a
+              href="https://calandlens.com/?mode=web"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full py-3 text-center border-2 border-emerald-300 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400 font-semibold rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors text-sm"
+            >
+              🌐 {t('pwa.desktop_btn')}
+            </a>
+          </div>
+        )}
+
         <div className="text-center text-xs text-gray-300 py-2">CalAndLens v6.0</div>
       </div>
     </div>
@@ -338,7 +394,8 @@ function CloudSyncPanel() {
   const { t } = useLanguage();
   const [status, setStatus] = useState('idle'); // idle | syncing | done | error
   const [lastSync, setLastSync] = useState(() => localStorage.getItem('calandlens_last_sync'));
-  const userId = getOrCreateUserId();
+  const { user } = useAuth();
+  const userId = user?.id || localStorage.getItem('calandlens_sync_user_id') || 'anon';
 
   const handlePush = async () => {
     setStatus('syncing');
@@ -365,9 +422,9 @@ function CloudSyncPanel() {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-      <p className="text-sm font-bold text-gray-700 mb-3">☁️ {t('sync.title')}</p>
-      {lastSync && <p className="text-xs text-gray-400 mb-3">{t('sync.last')}: {lastSync}</p>}
+    <div className="bg-emerald-50 dark:bg-gray-800 rounded-2xl border border-emerald-100 dark:border-gray-700 shadow-sm p-5">
+      <p className="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">☁️ {t('sync.title')}</p>
+      {lastSync && <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">{t('sync.last')}: {lastSync}</p>}
       <div className="flex gap-2">
         <button onClick={handlePush} disabled={status === 'syncing'}
           className="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white font-semibold rounded-xl text-sm transition-colors">
@@ -378,7 +435,7 @@ function CloudSyncPanel() {
           ⬇️ {t('sync.pull')}
         </button>
       </div>
-      <p className="text-xs text-gray-400 mt-2">{t('sync.desc')}</p>
+      <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">{t('sync.desc')}</p>
     </div>
   );
 }
@@ -442,23 +499,32 @@ const CHIPS = [
 
 function Inner() {
   const { t } = useLanguage();
+  const { user } = useAuth();
   const { addMeal, getDailyTotals, getGoal } = useLocalStorage();
   useMealReminders(t);
   const _totals = getDailyTotals(new Date());
   useGoalNotifications(_totals.calories, getGoal(), t);
 
-  const [tab,            setTab]        = useState('home');
-  const [showWizard,     setWizard]     = useState(false);
-  const [showSettings,   setSettings]   = useState(false);
-  const [showExitDialog, setExitDialog] = useState(false);
-  const [refresh,        setRefresh]    = useState(0);
-  const [activeChip,     setActiveChip] = useState('sec-summary');
+  const [tab,             setTab]        = useState('home');
+  const [showWizard,      setWizard]     = useState(false);
+  const [showSettings,    setSettings]   = useState(false);
+  const [showAuthModal,   setShowAuth]   = useState(false);
+  const [showExitDialog,  setExitDialog] = useState(false);
+  const [refresh,         setRefresh]    = useState(0);
+  const [activeChip,      setActiveChip] = useState('sec-summary');
+  const [showGuestPrompt, setGuestPrompt] = useState(false);
   const chipStripRef = useRef(null);
   const chipButtonRefs = useRef({});
 
   const handleMealAdded = useCallback((meal) => {
     addMeal(meal);
     setRefresh(r => r + 1);
+    // Guest prompt: show after 3rd scan, once only
+    if (!localStorage.getItem('cal_guest_prompted')) {
+      const count = parseInt(localStorage.getItem('cal_scan_count') || '0') + 1;
+      localStorage.setItem('cal_scan_count', String(count));
+      if (count >= 3) setGuestPrompt(true);
+    }
   }, [addMeal]);
 
   /* Chip scroll — sayfayı kaydır + chip strip'te aktif chip'i ortala */
@@ -530,9 +596,9 @@ function Inner() {
       {/* ── HEADER ── */}
       <header className="bg-gradient-to-r from-emerald-500 to-teal-500 px-4 pt-safe-top pb-4 sticky top-0 z-30 shadow-lg shadow-emerald-200/40">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            {/* Logo — Cal&Lens premium */}
-            <svg width="62" height="48" viewBox="0 0 62 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <a href="https://calandlens.com" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
+            <img src="/logo.png" alt="CalAndLens" className="w-11 h-11 rounded-2xl object-cover shadow-md" />
+            {false && <svg width="62" height="48" viewBox="0 0 62 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <filter id="cglow" x="-40%" y="-40%" width="180%" height="180%">
                   <feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="blur"/>
@@ -589,7 +655,7 @@ function Inner() {
 
               {/* Connecting curve: C tail → L */}
               <path d="M 30 35 Q 31 37 33 38" stroke="white" strokeWidth="1.2" strokeOpacity="0.3" strokeLinecap="round"/>
-            </svg>
+            </svg>}
             {/* Brand text */}
             <div>
               <h1 className="text-xl font-black tracking-tight leading-none">
@@ -599,8 +665,23 @@ function Inner() {
               </h1>
               <p className="text-xs text-emerald-100 mt-0.5">{t('app.subtitle')}</p>
             </div>
-          </div>
+          </a>
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => user ? setSettings(true) : setShowAuth(true)}
+              className="w-9 h-9 rounded-xl bg-white/20 hover:bg-white/35 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+              title={user ? (user.user_metadata?.full_name || user.email) : t('auth.loginTab')}
+            >
+              {user ? (
+                <span className="text-white font-black text-sm">
+                  {(user.user_metadata?.full_name || user.email || '?')[0].toUpperCase()}
+                </span>
+              ) : (
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+              )}
+            </button>
             <button
               onClick={() => setSettings(true)}
               className="p-2.5 rounded-xl bg-white/15 hover:bg-white/30 text-white transition-all hover:scale-110 active:scale-95"
@@ -610,6 +691,7 @@ function Inner() {
             </button>
             <LanguageSelector compact />
           </div>
+          {showAuthModal && <AuthModal onClose={() => setShowAuth(false)} />}
         </div>
 
         {/* ── CHIP STRIP ── */}
@@ -673,6 +755,24 @@ function Inner() {
             </div>
             <div id="sec-compare" className="scroll-mt-36">
               <FoodComparison />
+            </div>
+
+            {/* Store buttons */}
+            <div className="flex flex-col gap-3 px-4 pb-6 pt-2">
+              <div className="relative cursor-not-allowed">
+                <div className="flex items-center gap-3 px-4 py-3 bg-gray-900 rounded-2xl shadow select-none">
+                  <svg className="w-6 h-6 text-white flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                  <p className="text-white font-bold text-sm">{t('storeIos')}</p>
+                </div>
+                <span className="absolute -top-2 -right-2 bg-amber-400 text-amber-900 text-xs font-black px-2 py-0.5 rounded-full shadow">YAKINDA</span>
+              </div>
+              <div className="relative cursor-not-allowed">
+                <div className="flex items-center gap-3 px-4 py-3 bg-gray-900 rounded-2xl shadow select-none">
+                  <svg className="w-6 h-6 text-white flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.65.18.96.03l11.65-6.57-2.52-2.52-10.09 9.06zM.35 1.5C.13 1.85 0 2.28 0 2.79v18.42c0 .51.13.94.35 1.29l.07.07 10.32-10.32v-.24L.42 1.43l-.07.07zM20.67 10.23l-2.8-1.58-2.83 2.83 2.83 2.83 2.82-1.6c.8-.45.8-1.19 0-1.48zM3.18.24L13.27 9.3l-2.52 2.52L-.78.27C-.47.1-.12.1.19.24l2.99-.0z"/></svg>
+                  <p className="text-white font-bold text-sm">{t('storeAndroid')}</p>
+                </div>
+                <span className="absolute -top-2 -right-2 bg-amber-400 text-amber-900 text-xs font-black px-2 py-0.5 rounded-full shadow">YAKINDA</span>
+              </div>
             </div>
           </div>
         )}
@@ -751,6 +851,8 @@ function Inner() {
       </nav>
 
       {/* ── OVERLAYS ── */}
+      <PWAInstallBanner />
+      {showGuestPrompt && <GuestPrompt onClose={() => setGuestPrompt(false)} />}
       {showWizard    && <GoalWizard   onClose={() => setWizard(false)} />}
       {showSettings  && <SettingsPage onClose={() => setSettings(false)} />}
       {showExitDialog && (
@@ -766,11 +868,45 @@ function Inner() {
 /* ─────────────────────────────────────────────────────────────
    ROOT
 ───────────────────────────────────────────────────────────── */
+const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const forceWeb = new URLSearchParams(window.location.search).get('mode') === 'web';
+const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'calandlens2025';
+
+// Ziyareti kaydet (günde bir kez)
+trackVisit();
+
+function MobileApp() {
+  const [onboarded, setOnboarded] = useState(
+    () => !!localStorage.getItem('cal_onboarded')
+  );
+
+  if (!onboarded) {
+    return (
+      <OnboardingQuiz
+        onComplete={() => {
+          localStorage.setItem('cal_onboarded', '1');
+          setOnboarded(true);
+        }}
+      />
+    );
+  }
+
+  return <Inner />;
+}
+
 export default function App() {
+  if (isAdmin) {
+    return <AdminDashboard />;
+  }
+  if (!isMobileDevice || forceWeb) {
+    return <DesktopLandingPage />;
+  }
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <Inner />
+        <AuthProvider>
+          <MobileApp />
+        </AuthProvider>
       </LanguageProvider>
     </ThemeProvider>
   );

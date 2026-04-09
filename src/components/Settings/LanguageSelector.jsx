@@ -9,6 +9,7 @@ export const LANGUAGE_OPTIONS = [
   { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
   { code: 'ar', label: 'العربية', flag: '🇸🇦' },
   { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+  { code: 'da', label: 'Dansk',   flag: '🇩🇰' },
 ];
 
 export default function LanguageSelector({ compact = false }) {

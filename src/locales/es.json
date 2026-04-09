@@ -99,7 +99,10 @@
     "search_button": "Buscar",
     "manual_search": "Búsqueda Manual",
     "source": "Fuente: Open Food Facts",
-    "per_100g": "por 100g"
+    "per_100g": "por 100g",
+    "scan_again": "Escanear de nuevo",
+    "portion": "Porción",
+    "add_button": "Añadir a comida"
   },
   "water": {
     "title": "Registro de Agua",
@@ -346,7 +349,8 @@
     "fr": "Français",
     "de": "Deutsch",
     "ar": "العربية",
-    "ru": "Русский"
+    "ru": "Русский",
+    "da": "Dansk"
   },
   "trend": {
     "title": "Tendencia de calorías",
@@ -437,5 +441,47 @@
     "save": "Guardar",
     "reset": "Restablecer",
     "gram_target": "g objetivo"
+  },
+  "pwa": {
+    "subtitle": "Rastreador de nutrición con IA",
+    "desc": "Añade a tu pantalla de inicio y úsala como una app.",
+    "ios_title": "¿Cómo añadir a la pantalla de inicio?",
+    "ios_step1": "Toca el botón compartir de Safari",
+    "ios_step2": "Selecciona \"Añadir a inicio\"",
+    "ios_step3": "¡Toca \"Añadir\" — listo!",
+    "ios_tip": "Asegúrate de usar Safari.",
+    "android_title": "Instalar la app",
+    "android_step1": "Toca el botón de abajo",
+    "android_step2": "Selecciona \"Instalar\"",
+    "android_step3": "¡Encuentra CalAndLens en tu pantalla de inicio!",
+    "android_manual_step1": "Toca el menú del navegador (⋮)",
+    "android_manual_step2": "Selecciona \"Añadir a pantalla de inicio\"",
+    "install_btn": "Instalar App",
+    "installing": "Instalando...",
+    "later": "Ahora no, continuar en el navegador",
+    "desktop_btn": "Abrir versión de escritorio",
+    "desktop_desc": "Abrir como sitio web normal"
+  },
+  "storeIos": "Descargar en App Store",
+  "storeAndroid": "Descargar en Google Play",
+  "auth": {
+    "loginTab": "Iniciar sesión",
+    "registerTab": "Registrarse",
+    "namePh": "Tu nombre",
+    "emailPh": "Correo electrónico",
+    "passwordPh": "Contraseña",
+    "passwordPhNew": "Contraseña (mín. 6 caracteres)",
+    "loginBtn": "Iniciar sesión",
+    "registerBtn": "Crear cuenta",
+    "errFill": "Por favor completa todos los campos.",
+    "errShort": "La contraseña debe tener al menos 6 caracteres.",
+    "errExists": "Este correo ya está registrado.",
+    "errWrong": "Correo o contraseña incorrectos.",
+    "confirmTitle": "Confirma tu correo",
+    "confirmSub": "Se ha enviado un correo de confirmación. Revisa tu bandeja de entrada.",
+    "ok": "OK",
+    "skip": "Ahora no",
+    "logout": "Cerrar sesión",
+    "guestNote": "Guarda tus datos en la nube"
   }
 }

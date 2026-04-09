@@ -99,7 +99,10 @@
     "search_button": "Rechercher",
     "manual_search": "Recherche Manuelle",
     "source": "Source: Open Food Facts",
-    "per_100g": "pour 100g"
+    "per_100g": "pour 100g",
+    "scan_again": "Scanner à nouveau",
+    "portion": "Portion",
+    "add_button": "Ajouter au repas"
   },
   "water": {
     "title": "Suivi d'eau",
@@ -346,7 +349,8 @@
     "fr": "Français",
     "de": "Deutsch",
     "ar": "العربية",
-    "ru": "Русский"
+    "ru": "Русский",
+    "da": "Dansk"
   },
   "trend": {
     "title": "Tendance calorique",
@@ -437,5 +441,47 @@
     "save": "Enregistrer",
     "reset": "Réinitialiser",
     "gram_target": "g objectif"
+  },
+  "pwa": {
+    "subtitle": "Suivi nutritionnel avec IA",
+    "desc": "Ajoutez à votre écran d'accueil et utilisez comme une app.",
+    "ios_title": "Comment ajouter à l'écran d'accueil?",
+    "ios_step1": "Appuyez sur le bouton partager de Safari",
+    "ios_step2": "Sélectionnez \"Sur l'écran d'accueil\"",
+    "ios_step3": "Appuyez sur \"Ajouter\" — c'est prêt!",
+    "ios_tip": "Assurez-vous d'utiliser Safari.",
+    "android_title": "Installer l'application",
+    "android_step1": "Appuyez sur le bouton ci-dessous",
+    "android_step2": "Sélectionnez \"Installer\"",
+    "android_step3": "Trouvez CalAndLens sur votre écran d'accueil!",
+    "android_manual_step1": "Appuyez sur le menu du navigateur (⋮)",
+    "android_manual_step2": "Sélectionnez \"Ajouter à l'écran d'accueil\"",
+    "install_btn": "Installer l'App",
+    "installing": "Installation...",
+    "later": "Pas maintenant, continuer dans le navigateur",
+    "desktop_btn": "Ouvrir la version bureau",
+    "desktop_desc": "Ouvrir comme site web normal"
+  },
+  "storeIos": "Télécharger sur App Store",
+  "storeAndroid": "Télécharger sur Google Play",
+  "auth": {
+    "loginTab": "Connexion",
+    "registerTab": "Inscription",
+    "namePh": "Ton prénom",
+    "emailPh": "E-mail",
+    "passwordPh": "Mot de passe",
+    "passwordPhNew": "Mot de passe (min. 6 caractères)",
+    "loginBtn": "Se connecter",
+    "registerBtn": "Créer un compte",
+    "errFill": "Veuillez remplir tous les champs.",
+    "errShort": "Le mot de passe doit contenir au moins 6 caractères.",
+    "errExists": "Cet e-mail est déjà enregistré.",
+    "errWrong": "E-mail ou mot de passe incorrect.",
+    "confirmTitle": "Confirme ton e-mail",
+    "confirmSub": "Un e-mail de confirmation a été envoyé. Vérifie ta boîte de réception.",
+    "ok": "OK",
+    "skip": "Pas maintenant",
+    "logout": "Déconnexion",
+    "guestNote": "Sauvegarde tes données dans le cloud"
   }
 }

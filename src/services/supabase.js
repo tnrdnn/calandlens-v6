@@ -1,20 +1,44 @@
+import { createClient } from '@supabase/supabase-js';
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://omqnmdgaotlledbhtlvj.supabase.co';
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9tcW5tZGdhb3RsbGVkYmh0bHZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MjMxNTYsImV4cCI6MjA5MDk5OTE1Nn0.wO5LUsrNB1XK7Yr9WXlkTMPACiRZ3cUuGBpthot3iRc';
 
+export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 export const isConfigured = !!(SUPABASE_URL && SUPABASE_KEY);
 
-const USER_ID_KEY = 'calandlens_sync_user_id';
-
-// Anonim kullanıcı ID — localStorage'da saklanır, cihaza özgü
-export function getOrCreateUserId() {
-  let id = localStorage.getItem(USER_ID_KEY);
-  if (!id) {
-    id = 'user_' + crypto.randomUUID();
-    localStorage.setItem(USER_ID_KEY, id);
-  }
-  return id;
+// ── Auth ──────────────────────────────────────────────────────────────────────
+export async function signUp(email, password, name) {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { full_name: name } },
+  });
+  if (error) throw error;
+  return data.user;
 }
 
+export async function signIn(email, password) {
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) throw error;
+  return data.user;
+}
+
+export async function signOut() {
+  await supabase.auth.signOut();
+}
+
+export async function getSession() {
+  const { data } = await supabase.auth.getSession();
+  return data.session;
+}
+
+export function onAuthChange(callback) {
+  return supabase.auth.onAuthStateChange((_event, session) => {
+    callback(session?.user ?? null);
+  });
+}
+
+// ── Data Sync ─────────────────────────────────────────────────────────────────
 const SYNC_KEYS = [
   'calandlens_meals',
   'calandlens_goal',
@@ -29,24 +53,6 @@ const SYNC_KEYS = [
   'calandlens_best_streak',
 ];
 
-async function supaFetch(path, method, body) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
-    method,
-    headers: {
-      'apikey': SUPABASE_KEY,
-      'Authorization': `Bearer ${SUPABASE_KEY}`,
-      'Content-Type': 'application/json',
-      'Prefer': method === 'POST' ? 'resolution=merge-duplicates' : '',
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Supabase ${method} ${path}: ${err}`);
-  }
-  return method === 'GET' ? res.json() : null;
-}
-
 export async function pushToCloud(userId) {
   const data = {};
   SYNC_KEYS.forEach(key => {
@@ -54,21 +60,23 @@ export async function pushToCloud(userId) {
     if (val) data[key] = val;
   });
 
-  await supaFetch('user_data', 'POST', {
-    user_id: userId,
-    data,
-    updated_at: new Date().toISOString(),
-  });
+  const { error } = await supabase
+    .from('user_data')
+    .upsert({ user_id: userId, data, updated_at: new Date().toISOString() });
+  if (error) throw error;
 }
 
 export async function pullFromCloud(userId) {
-  const rows = await supaFetch(`user_data?user_id=eq.${encodeURIComponent(userId)}&select=data,updated_at`, 'GET');
-  if (!rows || rows.length === 0) return null;
+  const { data: rows, error } = await supabase
+    .from('user_data')
+    .select('data, updated_at')
+    .eq('user_id', userId)
+    .single();
 
-  const { data, updated_at } = rows[0];
+  if (error || !rows) return null;
+
   SYNC_KEYS.forEach(key => {
-    if (data[key]) localStorage.setItem(key, data[key]);
+    if (rows.data[key]) localStorage.setItem(key, rows.data[key]);
   });
-  return updated_at;
+  return rows.updated_at;
 }
-

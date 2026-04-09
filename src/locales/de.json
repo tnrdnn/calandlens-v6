@@ -99,7 +99,10 @@
     "search_button": "Suchen",
     "manual_search": "Manuelle Suche",
     "source": "Quelle: Open Food Facts",
-    "per_100g": "pro 100g"
+    "per_100g": "pro 100g",
+    "scan_again": "Erneut scannen",
+    "portion": "Portion",
+    "add_button": "Zur Mahlzeit hinzufügen"
   },
   "water": {
     "title": "Wasserverfolgung",
@@ -346,7 +349,8 @@
     "fr": "Français",
     "de": "Deutsch",
     "ar": "العربية",
-    "ru": "Русский"
+    "ru": "Русский",
+    "da": "Dansk"
   },
   "trend": {
     "title": "Kalorientrend",
@@ -437,5 +441,47 @@
     "save": "Speichern",
     "reset": "Zurücksetzen",
     "gram_target": "g Ziel"
+  },
+  "pwa": {
+    "subtitle": "KI-gestützter Ernährungstracker",
+    "desc": "Zum Startbildschirm hinzufügen und wie eine App nutzen.",
+    "ios_title": "Zum Startbildschirm hinzufügen",
+    "ios_step1": "Tippe unten auf die Safari-Teilen-Schaltfläche",
+    "ios_step2": "Wähle \"Zum Home-Bildschirm\"",
+    "ios_step3": "Tippe auf \"Hinzufügen\" — fertig!",
+    "ios_tip": "Stelle sicher, dass du Safari verwendest.",
+    "android_title": "App installieren",
+    "android_step1": "Tippe auf die Schaltfläche unten",
+    "android_step2": "Wähle \"Installieren\"",
+    "android_step3": "Finde CalAndLens auf deinem Startbildschirm!",
+    "android_manual_step1": "Tippe auf das Browser-Menü (⋮)",
+    "android_manual_step2": "Wähle \"Zum Startbildschirm hinzufügen\"",
+    "install_btn": "App installieren",
+    "installing": "Wird installiert...",
+    "later": "Nicht jetzt, im Browser fortfahren",
+    "desktop_btn": "Desktop-Version öffnen",
+    "desktop_desc": "Als normale Website im Browser öffnen"
+  },
+  "storeIos": "Im App Store laden",
+  "storeAndroid": "Bei Google Play laden",
+  "auth": {
+    "loginTab": "Anmelden",
+    "registerTab": "Registrieren",
+    "namePh": "Dein Name",
+    "emailPh": "E-Mail",
+    "passwordPh": "Passwort",
+    "passwordPhNew": "Passwort (mind. 6 Zeichen)",
+    "loginBtn": "Anmelden",
+    "registerBtn": "Konto erstellen",
+    "errFill": "Bitte alle Felder ausfüllen.",
+    "errShort": "Passwort muss mindestens 6 Zeichen lang sein.",
+    "errExists": "Diese E-Mail ist bereits registriert.",
+    "errWrong": "Falsche E-Mail oder falsches Passwort.",
+    "confirmTitle": "E-Mail bestätigen",
+    "confirmSub": "Eine Bestätigungs-E-Mail wurde gesendet. Prüfe deinen Posteingang.",
+    "ok": "OK",
+    "skip": "Nicht jetzt",
+    "logout": "Abmelden",
+    "guestNote": "Deine Daten in der Cloud speichern"
   }
 }

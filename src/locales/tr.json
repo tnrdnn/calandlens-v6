@@ -101,7 +101,7 @@
     "source": "Kaynak: Open Food Facts",
     "per_100g": "100g başına",
     "portion": "Porsiyon",
-    "add_button": "Ekle",
+    "add_button": "Öğüne Ekle",
     "scan_again": "Tekrar Tara"
   },
   "water": {
@@ -349,7 +349,8 @@
     "fr": "Français",
     "de": "Deutsch",
     "ar": "العربية",
-    "ru": "Русский"
+    "ru": "Русский",
+    "da": "Dansk"
   },
   "trend": {
     "title": "Kalori Trendi",
@@ -440,5 +441,47 @@
     "save": "Kaydet",
     "reset": "Varsayılana Dön",
     "gram_target": "g hedef"
+  },
+  "pwa": {
+    "subtitle": "AI destekli beslenme takip uygulaması",
+    "desc": "Ana ekranına ekleyerek uygulama gibi kullan — tamamen ücretsiz, internet bağlantısı gerekmez.",
+    "ios_title": "Ana Ekrana Nasıl Eklenir?",
+    "ios_step1": "Alttaki Safari paylaş butonuna dokun",
+    "ios_step2": "\"Ana Ekrana Ekle\" seçeneğini seç",
+    "ios_step3": "\"Ekle\" butonuna dokun — hazır!",
+    "ios_tip": "Safari tarayıcısında açık olduğundan emin ol. Chrome veya başka tarayıcıdan eklenemez.",
+    "android_title": "Uygulamayı Yükle",
+    "android_step1": "Aşağıdaki butona dokun",
+    "android_step2": "Açılan ekranda \"Yükle\" seç",
+    "android_step3": "Ana ekranda CalAndLens ikonunu bul!",
+    "android_manual_step1": "Tarayıcı menüsüne dokun (⋮)",
+    "android_manual_step2": "\"Ana ekrana ekle\" veya \"Uygulamayı yükle\" seç",
+    "install_btn": "Uygulamayı Yükle",
+    "installing": "Yükleniyor...",
+    "later": "Şimdi değil, tarayıcıda devam et",
+    "desktop_btn": "Masaüstü Sürümünü Aç",
+    "desktop_desc": "Tarayıcıda normal web sitesi olarak aç"
+  },
+  "storeIos": "App Store'dan İndir",
+  "storeAndroid": "Google Play'de İndir",
+  "auth": {
+    "loginTab": "Giriş Yap",
+    "registerTab": "Kayıt Ol",
+    "namePh": "Adın",
+    "emailPh": "E-posta",
+    "passwordPh": "Şifre",
+    "passwordPhNew": "Şifre (min. 6 karakter)",
+    "loginBtn": "Giriş Yap",
+    "registerBtn": "Hesap Oluştur",
+    "errFill": "Tüm alanları doldur.",
+    "errShort": "Şifre en az 6 karakter olmalı.",
+    "errExists": "Bu e-posta zaten kayıtlı.",
+    "errWrong": "E-posta veya şifre hatalı.",
+    "confirmTitle": "E-postanı onayla",
+    "confirmSub": "Kayıt e-postası gönderildi. Gelen kutunu kontrol et.",
+    "ok": "Tamam",
+    "skip": "Şimdi değil",
+    "logout": "Çıkış Yap",
+    "guestNote": "Verilerini bulutta sakla"
   }
 }

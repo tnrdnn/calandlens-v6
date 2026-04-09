@@ -99,7 +99,10 @@
     "search_button": "Search",
     "manual_search": "Manual Search",
     "source": "Source: Open Food Facts",
-    "per_100g": "per 100g"
+    "per_100g": "per 100g",
+    "scan_again": "Scan Again",
+    "portion": "Portion",
+    "add_button": "Add to Meal"
   },
   "water": {
     "title": "Water Tracking",
@@ -346,7 +349,8 @@
     "fr": "Français",
     "de": "Deutsch",
     "ar": "العربية",
-    "ru": "Русский"
+    "ru": "Русский",
+    "da": "Dansk"
   },
   "trend": {
     "title": "Calorie Trend",
@@ -437,5 +441,47 @@
     "save": "Save",
     "reset": "Reset to Default",
     "gram_target": "g target"
+  },
+  "pwa": {
+    "subtitle": "AI-powered nutrition tracker",
+    "desc": "Add to your home screen and use like an app — completely free, no internet required.",
+    "ios_title": "How to Add to Home Screen",
+    "ios_step1": "Tap the Safari share button at the bottom",
+    "ios_step2": "Select \"Add to Home Screen\"",
+    "ios_step3": "Tap \"Add\" — you're ready!",
+    "ios_tip": "Make sure you're using Safari. It cannot be added from Chrome or other browsers.",
+    "android_title": "Install the App",
+    "android_step1": "Tap the button below",
+    "android_step2": "Select \"Install\" on the next screen",
+    "android_step3": "Find CalAndLens on your home screen!",
+    "android_manual_step1": "Tap the browser menu (⋮)",
+    "android_manual_step2": "Select \"Add to home screen\" or \"Install app\"",
+    "install_btn": "Install App",
+    "installing": "Installing...",
+    "later": "Not now, continue in browser",
+    "desktop_btn": "Open Desktop Version",
+    "desktop_desc": "Open as normal website in browser"
+  },
+  "storeIos": "Download on the App Store",
+  "storeAndroid": "Get it on Google Play",
+  "auth": {
+    "loginTab": "Log In",
+    "registerTab": "Sign Up",
+    "namePh": "Your name",
+    "emailPh": "Email",
+    "passwordPh": "Password",
+    "passwordPhNew": "Password (min. 6 chars)",
+    "loginBtn": "Log In",
+    "registerBtn": "Create Account",
+    "errFill": "Please fill all fields.",
+    "errShort": "Password must be at least 6 characters.",
+    "errExists": "This email is already registered.",
+    "errWrong": "Wrong email or password.",
+    "confirmTitle": "Confirm your email",
+    "confirmSub": "A confirmation email has been sent. Check your inbox.",
+    "ok": "OK",
+    "skip": "Not now",
+    "logout": "Log Out",
+    "guestNote": "Save your data to the cloud"
   }
 }

@@ -6,9 +6,10 @@ import fr from '../locales/fr.json';
 import de from '../locales/de.json';
 import ar from '../locales/ar.json';
 import ru from '../locales/ru.json';
+import da from '../locales/da.json';
 
-const LOCALES     = { tr, en, es, fr, de, ar, ru };
-const SUPPORTED   = ['tr', 'en', 'es', 'fr', 'de', 'ar', 'ru'];
+const LOCALES     = { tr, en, es, fr, de, ar, ru, da };
+const SUPPORTED   = ['tr', 'en', 'es', 'fr', 'de', 'ar', 'ru', 'da'];
 const STORAGE_KEY = 'calandlens_lang';
 
 export const LANGUAGE_OPTIONS = [
@@ -19,6 +20,7 @@ export const LANGUAGE_OPTIONS = [
   { code: 'de', label: 'Deutsch',  flag: '🇩🇪' },
   { code: 'ar', label: 'العربية', flag: '🇸🇦' },
   { code: 'ru', label: 'Русский',  flag: '🇷🇺' },
+  { code: 'da', label: 'Dansk',    flag: '🇩🇰' },
 ];
 
 function detectLang() {

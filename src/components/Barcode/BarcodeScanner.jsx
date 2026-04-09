@@ -1,72 +1,151 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useLanguage } from '../../hooks/useLanguage';
 import { fetchByBarcode, searchByName, scaleToGrams } from '../../services/openFoodFacts';
 
-// ZXing is loaded via CDN fallback; also works via npm @zxing/library
-let BrowserMultiFormatReader;
-async function getReader() {
-  if (BrowserMultiFormatReader) return new BrowserMultiFormatReader();
-  try {
-    const mod = await import('@zxing/library');
-    BrowserMultiFormatReader = mod.BrowserMultiFormatReader;
-  } catch {
-    throw new Error('Barkod kütüphanesi yüklenemedi. npm install @zxing/library çalıştırın.');
-  }
-  return new BrowserMultiFormatReader();
+const PHASE = { SCAN: 'scan', SEARCHING: 'searching', FOUND: 'found', NOT_FOUND: 'not_found', MANUAL: 'manual' };
+
+// ── Scanning engines ────────────────────────────────────────────────────────
+
+async function startCamera(videoEl) {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+  });
+  videoEl.srcObject = stream;
+  await new Promise((res, rej) => {
+    videoEl.onloadedmetadata = res;
+    videoEl.onerror = rej;
+  });
+  await videoEl.play();
+  return stream;
 }
 
-const PHASE = { SCAN: 'scan', SEARCHING: 'searching', FOUND: 'found', NOT_FOUND: 'not_found', MANUAL: 'manual' };
+function stopCamera(stream) {
+  try { stream?.getTracks().forEach(t => t.stop()); } catch (_) {}
+}
+
+// Engine 1: Native BarcodeDetector (Chrome 83+, Safari 17+)
+async function scanWithNativeDetector(videoEl, onDetected, abortSignal) {
+  const detector = new window.BarcodeDetector({
+    formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'code_39', 'qr_code', 'data_matrix'],
+  });
+  return new Promise((resolve) => {
+    const tick = async () => {
+      if (abortSignal.aborted) { resolve(); return; }
+      try {
+        if (videoEl.readyState >= 2) {
+          const results = await detector.detect(videoEl);
+          if (results.length > 0 && !abortSignal.aborted) {
+            onDetected(results[0].rawValue);
+            resolve();
+            return;
+          }
+        }
+      } catch (_) {}
+      if (!abortSignal.aborted) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
+
+// Engine 2: ZXing fallback
+let _ZXingReader;
+async function getZXingReader() {
+  if (_ZXingReader) return _ZXingReader;
+  const mod = await import('@zxing/library');
+  _ZXingReader = mod.BrowserMultiFormatReader;
+  return _ZXingReader;
+}
+
+async function scanWithZXing(videoEl, onDetected, abortSignal) {
+  const ReaderClass = await getZXingReader();
+  const reader = new ReaderClass();
+  return new Promise((resolve) => {
+    let done = false;
+    abortSignal.addEventListener('abort', () => {
+      if (!done) { done = true; try { reader.reset(); } catch (_) {} resolve(); }
+    });
+    reader.decodeFromConstraints(
+      { audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } } },
+      videoEl,
+      (result) => {
+        if (result && !done && !abortSignal.aborted) {
+          done = true;
+          try { reader.reset(); } catch (_) {}
+          onDetected(result.getText());
+          resolve();
+        }
+      }
+    ).catch(() => { if (!done) { done = true; resolve(); } });
+  });
+}
+
+// ── Component ────────────────────────────────────────────────────────────────
 
 export default function BarcodeScanner({ onResult, onClose }) {
   const { t } = useLanguage();
-  const videoRef = useRef(null);
-  const readerRef = useRef(null);
-  const [phase, setPhase] = useState(PHASE.SCAN);
-  const [product, setProduct] = useState(null);
+  const videoRef    = useRef(null);
+  const streamRef   = useRef(null);
+  const abortRef    = useRef(null);
+  const [phase, setPhase]               = useState(PHASE.SCAN);
+  const [product, setProduct]           = useState(null);
   const [portionGrams, setPortionGrams] = useState(100);
-  const [query, setQuery] = useState('');
+  const [query, setQuery]               = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [searching, setSearching] = useState(false);
-  const [loadErr, setLoadErr] = useState(null);
+  const [searching, setSearching]       = useState(false);
+  const [error, setError]               = useState(null);
 
-  // Start ZXing scanner
+  const stopScan = useCallback(() => {
+    abortRef.current?.abort();
+    stopCamera(streamRef.current);
+    streamRef.current = null;
+  }, []);
+
+  const startScan = useCallback(async () => {
+    setError(null);
+    const abort = new AbortController();
+    abortRef.current = abort;
+
+    try {
+      // ZXing manages its own camera; native needs manual stream
+      const useNative = 'BarcodeDetector' in window;
+
+      if (useNative) {
+        const stream = await startCamera(videoRef.current);
+        streamRef.current = stream;
+        if (abort.signal.aborted) { stopCamera(stream); return; }
+        await scanWithNativeDetector(videoRef.current, handleBarcodeDetected, abort.signal);
+      } else {
+        await scanWithZXing(videoRef.current, handleBarcodeDetected, abort.signal);
+      }
+    } catch (e) {
+      if (!abort.signal.aborted) setError(e.message || 'Kamera açılamadı.');
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleBarcodeDetected = async (text) => {
+    stopScan();
+    setPhase(PHASE.SEARCHING);
+    const found = await fetchByBarcode(text);
+    if (found) {
+      setProduct(found);
+      setPortionGrams(parseInt(found.servingSize) || 100);
+      setPhase(PHASE.FOUND);
+    } else {
+      setPhase(PHASE.NOT_FOUND);
+    }
+  };
+
+  // Start/stop scan when phase === SCAN
   useEffect(() => {
     if (phase !== PHASE.SCAN) return;
-    let active = true;
+    startScan();
+    return () => stopScan();
+  }, [phase, startScan, stopScan]);
 
-    (async () => {
-      try {
-        const reader = await getReader();
-        readerRef.current = reader;
-        if (!active || !videoRef.current) return;
-        // FIX: arka kamera açıkça belirtiliyor
-        await reader.decodeFromConstraints(
-          { audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } } },
-          videoRef.current,
-          async (result, err) => {
-            if (!result || !active) return;
-            reader.reset();
-            setPhase(PHASE.SEARCHING);
-            const found = await fetchByBarcode(result.getText());
-            if (found) {
-              setProduct(found);
-              setPortionGrams(parseInt(found.servingSize) || 100);
-              setPhase(PHASE.FOUND);
-            } else {
-              setPhase(PHASE.NOT_FOUND);
-            }
-          }
-        );
-      } catch (e) {
-        if (active) setLoadErr(e.message);
-      }
-    })();
-
-    return () => {
-      active = false;
-      try { readerRef.current?.reset(); } catch (_) {}
-    };
-  }, [phase]);
+  // Cleanup on unmount
+  useEffect(() => () => stopScan(), [stopScan]);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -89,18 +168,26 @@ export default function BarcodeScanner({ onResult, onClose }) {
     onResult({ ...scaled, name: product.name, icon: '🏷️', timestamp: Date.now() });
   };
 
+  const retryScanner = () => {
+    stopScan();
+    setPhase(PHASE.SCAN);
+  };
+
   // ── Render ────────────────────────────────────────────────────────────────
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col">
+
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 pt-safe-top py-3 text-white flex-shrink-0">
-        <button onClick={onClose} className="p-2 rounded-full hover:bg-white/10 transition-colors">
+        <button onClick={() => { stopScan(); onClose(); }}
+          className="p-2 rounded-full hover:bg-white/10 transition-colors">
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
           </svg>
         </button>
         <h2 className="text-base font-bold">{t('barcode.title')}</h2>
-        <button onClick={() => setPhase(PHASE.MANUAL)} className="text-sm text-emerald-400 font-semibold px-2 py-1 rounded-lg hover:bg-white/10">
+        <button onClick={() => { stopScan(); setPhase(PHASE.MANUAL); }}
+          className="text-sm text-emerald-400 font-semibold px-2 py-1 rounded-lg hover:bg-white/10">
           {t('barcode.manual_search')}
         </button>
       </div>
@@ -108,38 +195,58 @@ export default function BarcodeScanner({ onResult, onClose }) {
       {/* Camera view */}
       {(phase === PHASE.SCAN || phase === PHASE.SEARCHING) && (
         <div className="flex-1 relative overflow-hidden">
-          {loadErr ? (
+          {error ? (
             <div className="flex flex-col items-center justify-center h-full text-white gap-4 px-6">
               <span className="text-5xl">⚠️</span>
-              <p className="text-center text-sm text-gray-300">{loadErr}</p>
-              <button onClick={() => setPhase(PHASE.MANUAL)} className="px-5 py-2.5 bg-emerald-500 rounded-2xl font-semibold text-sm">
-                {t('barcode.manual_search')}
-              </button>
+              <p className="text-center text-sm text-gray-300">{error}</p>
+              <div className="flex gap-3">
+                <button onClick={retryScanner}
+                  className="px-5 py-2.5 bg-white/20 rounded-2xl font-semibold text-sm">
+                  {t('barcode.scan_again')}
+                </button>
+                <button onClick={() => { stopScan(); setPhase(PHASE.MANUAL); }}
+                  className="px-5 py-2.5 bg-emerald-500 rounded-2xl font-semibold text-sm">
+                  {t('barcode.manual_search')}
+                </button>
+              </div>
             </div>
           ) : (
             <>
-              <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover" playsInline muted />
-              {/* Viewfinder */}
+              <video ref={videoRef}
+                className="absolute inset-0 w-full h-full object-cover"
+                playsInline muted autoPlay />
+
+              {/* Dim overlay with viewfinder cutout */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="relative w-64 h-44">
-                  <div className="absolute inset-0 border-2 border-emerald-400/50 rounded-xl" />
-                  {['tl','tr','bl','br'].map(c => (
-                    <div key={c} className={`absolute w-7 h-7 border-emerald-400
-                      ${c==='tl'?'top-0 left-0 border-t-4 border-l-4 rounded-tl-xl':''}
-                      ${c==='tr'?'top-0 right-0 border-t-4 border-r-4 rounded-tr-xl':''}
-                      ${c==='bl'?'bottom-0 left-0 border-b-4 border-l-4 rounded-bl-xl':''}
-                      ${c==='br'?'bottom-0 right-0 border-b-4 border-r-4 rounded-br-xl':''}`}
-                    />
+                <div className="relative w-72 h-48">
+                  {/* Corner brackets */}
+                  {[
+                    'top-0 left-0 border-t-4 border-l-4 rounded-tl-2xl',
+                    'top-0 right-0 border-t-4 border-r-4 rounded-tr-2xl',
+                    'bottom-0 left-0 border-b-4 border-l-4 rounded-bl-2xl',
+                    'bottom-0 right-0 border-b-4 border-r-4 rounded-br-2xl',
+                  ].map((cls, i) => (
+                    <div key={i} className={`absolute w-8 h-8 border-emerald-400 ${cls}`} />
                   ))}
+
+                  {/* Scan line animation */}
+                  {phase === PHASE.SCAN && (
+                    <div className="absolute inset-x-2 top-2 bottom-2 overflow-hidden rounded-xl">
+                      <div className="scan-line absolute left-0 right-0 h-0.5 bg-emerald-400/80"
+                        style={{ animation: 'scanLine 1.8s ease-in-out infinite' }} />
+                    </div>
+                  )}
+
                   {phase === PHASE.SEARCHING && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-xl">
-                      <div className="w-8 h-8 border-3 border-emerald-400 border-t-transparent rounded-full animate-spin" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-xl">
+                      <div className="w-10 h-10 border-4 border-emerald-400 border-t-transparent rounded-full animate-spin" />
                     </div>
                   )}
                 </div>
               </div>
+
               <div className="absolute bottom-10 left-0 right-0 text-center">
-                <span className="text-white text-sm bg-black/40 px-4 py-2 rounded-full">
+                <span className="text-white text-sm bg-black/50 px-4 py-2 rounded-full">
                   {phase === PHASE.SEARCHING ? t('barcode.scanning') : t('barcode.align')}
                 </span>
               </div>
@@ -161,24 +268,33 @@ export default function BarcodeScanner({ onResult, onClose }) {
                 className="flex-1 px-4 py-3 rounded-2xl border-2 border-gray-200 focus:border-emerald-400 outline-none text-sm"
               />
               <button type="submit" disabled={searching}
-                className="px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-semibold text-sm disabled:opacity-50 transition-colors">
+                className="px-5 py-3 bg-emerald-500 text-white rounded-2xl font-semibold text-sm disabled:opacity-50 transition-colors">
                 {searching ? '…' : t('barcode.search_button')}
               </button>
             </form>
-            <p className="text-xs text-center text-gray-400 mb-3">{t('barcode.source')}</p>
+
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-xs text-gray-400">{t('barcode.source')}</p>
+              <button onClick={retryScanner}
+                className="text-xs text-emerald-600 font-semibold flex items-center gap-1">
+                📷 {t('barcode.scan_again')}
+              </button>
+            </div>
 
             <div className="space-y-2">
               {searchResults.map((p, i) => (
                 <button key={p.barcode || i} onClick={() => selectProduct(p)}
                   className="w-full flex items-center gap-3 p-3 rounded-2xl hover:bg-gray-50 text-left border border-gray-100 transition-colors">
                   {p.image
-                    ? <img src={p.image} alt={p.name} className="w-14 h-14 object-contain rounded-xl bg-gray-100 flex-shrink-0"/>
+                    ? <img src={p.image} alt={p.name} className="w-14 h-14 object-contain rounded-xl bg-gray-100 flex-shrink-0" />
                     : <div className="w-14 h-14 rounded-xl bg-gray-100 flex items-center justify-center text-3xl flex-shrink-0">🏷️</div>
                   }
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-800 text-sm truncate">{p.name}</p>
                     {p.brand && <p className="text-xs text-gray-400 truncate">{p.brand}</p>}
-                    <p className="text-xs text-emerald-600 font-bold mt-0.5">{p.calories} kcal <span className="font-normal text-gray-400">{t('barcode.per_100g')}</span></p>
+                    <p className="text-xs text-emerald-600 font-bold mt-0.5">
+                      {p.calories} kcal <span className="font-normal text-gray-400">{t('barcode.per_100g')}</span>
+                    </p>
                   </div>
                   <svg className="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
@@ -194,10 +310,9 @@ export default function BarcodeScanner({ onResult, onClose }) {
       {phase === PHASE.FOUND && product && (
         <div className="flex-1 bg-white overflow-y-auto">
           <div className="p-5">
-            {/* Product header */}
             <div className="flex items-start gap-4 mb-5">
               {product.image
-                ? <img src={product.image} alt={product.name} className="w-20 h-20 object-contain rounded-2xl bg-gray-50 border border-gray-100 flex-shrink-0"/>
+                ? <img src={product.image} alt={product.name} className="w-20 h-20 object-contain rounded-2xl bg-gray-50 border border-gray-100 flex-shrink-0" />
                 : <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center text-4xl flex-shrink-0">🏷️</div>
               }
               <div className="flex-1 min-w-0">
@@ -259,10 +374,16 @@ export default function BarcodeScanner({ onResult, onClose }) {
               </div>
             )}
 
-            <button onClick={handleConfirm}
-              className="w-full py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-2xl text-lg transition-colors">
-              {t('barcode.add_button')} — {Math.round(product.calories * portionGrams / 100)} kcal
-            </button>
+            <div className="flex gap-3">
+              <button onClick={retryScanner}
+                className="py-4 px-5 border-2 border-gray-200 text-gray-600 font-semibold rounded-2xl text-sm transition-colors">
+                📷
+              </button>
+              <button onClick={handleConfirm}
+                className="flex-1 py-4 bg-emerald-500 text-white font-black rounded-2xl text-lg transition-colors">
+                {t('barcode.add_button')} — {Math.round(product.calories * portionGrams / 100)} kcal
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -274,15 +395,26 @@ export default function BarcodeScanner({ onResult, onClose }) {
           <p className="text-xl font-bold">{t('barcode.not_found')}</p>
           <p className="text-sm text-gray-400 text-center">{t('barcode.not_found_detail')}</p>
           <div className="flex gap-3 w-full">
-            <button onClick={() => setPhase(PHASE.SCAN)} className="flex-1 py-3 border-2 border-white/30 rounded-2xl font-semibold text-sm">
+            <button onClick={retryScanner}
+              className="flex-1 py-3 border-2 border-white/30 rounded-2xl font-semibold text-sm">
               {t('barcode.scan_again')}
             </button>
-            <button onClick={() => setPhase(PHASE.MANUAL)} className="flex-1 py-3 bg-emerald-500 rounded-2xl font-semibold text-sm">
+            <button onClick={() => setPhase(PHASE.MANUAL)}
+              className="flex-1 py-3 bg-emerald-500 rounded-2xl font-semibold text-sm">
               {t('barcode.manual_search')}
             </button>
           </div>
         </div>
       )}
+
+      {/* Scan line CSS */}
+      <style>{`
+        @keyframes scanLine {
+          0%   { top: 4px; }
+          50%  { top: calc(100% - 4px); }
+          100% { top: 4px; }
+        }
+      `}</style>
     </div>
   );
 }

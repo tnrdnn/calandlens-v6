@@ -13,35 +13,37 @@ function CalorieRing({ consumed, goal, labelOver, labelRemaining, labelConsumed,
   const pct       = Math.min(1, consumed / goal);
   const remaining = Math.max(0, goal - consumed);
 
-  const R    = 88;
-  const CX   = 110;
-  const CY   = 110;
-  const SW   = 18;
+  const R    = 108;
+  const CX   = 130;
+  const CY   = 130;
+  const SW   = 20;
   const circ = 2 * Math.PI * R;
   const dash = circ * pct;
   const gap  = circ - dash;
-
-  const strokeColor = over ? '#fb923c' : '#10b981';
 
   return (
     <div className="relative flex flex-col items-center">
       <div
         className="relative"
-        style={{ filter: `drop-shadow(0 0 18px ${over ? 'rgba(251,146,60,0.35)' : 'rgba(16,185,129,0.35)'})` }}
+        style={{ filter: `drop-shadow(0 0 32px ${over ? 'rgba(251,146,60,0.55)' : 'rgba(16,185,129,0.55)'})` }}
       >
-        <svg width="220" height="220" viewBox="0 0 220 220">
+        <svg width="260" height="260" viewBox="0 0 260 260">
           <defs>
             <radialGradient id="innerFill" cx="50%" cy="50%" r="50%">
-              <stop offset="0%"   stopColor={over ? '#fff7ed' : '#ecfdf5'} stopOpacity="1"/>
-              <stop offset="100%" stopColor={over ? '#ffedd5' : '#d1fae5'} stopOpacity="0.6"/>
+              <stop offset="0%"   stopColor="#ffffff" stopOpacity="1"/>
+              <stop offset="100%" stopColor="#f8fafc" stopOpacity="1"/>
             </radialGradient>
             <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%"   stopColor={over ? '#fb923c' : '#34d399'}/>
+              <stop offset="0%"   stopColor={over ? '#fbbf24' : '#34d399'}/>
+              <stop offset="50%"  stopColor={over ? '#fb923c' : '#10b981'}/>
               <stop offset="100%" stopColor={over ? '#f97316' : '#059669'}/>
             </linearGradient>
           </defs>
+          {/* Inner bg */}
           <circle cx={CX} cy={CY} r={R - SW / 2} fill="url(#innerFill)"/>
-          <circle cx={CX} cy={CY} r={R} fill="none" stroke="#f3f4f6" strokeWidth={SW}/>
+          {/* Track */}
+          <circle cx={CX} cy={CY} r={R} fill="none" stroke="#e2e8f0" strokeWidth={SW}/>
+          {/* Progress arc */}
           <circle
             cx={CX} cy={CY} r={R}
             fill="none"
@@ -54,24 +56,28 @@ function CalorieRing({ consumed, goal, labelOver, labelRemaining, labelConsumed,
           />
         </svg>
 
+        {/* Center content */}
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 pointer-events-none">
-          <span className="text-[11px] font-semibold text-gray-400 tracking-wide uppercase">
-            {over ? labelOver : labelRemaining}
+          <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">{labelConsumed}</span>
+          <span
+            className="font-black leading-none"
+            style={{ fontSize: '3.4rem', color: over ? '#ea580c' : '#065f46' }}
+          >
+            {Math.round(consumed)}
           </span>
-          <span className="font-black leading-none"
-            style={{ fontSize: '2.6rem', color: over ? '#ea580c' : '#065f46' }}>
-            {over ? `+${Math.round(consumed - goal)}` : Math.round(remaining)}
-          </span>
-          <span className="text-[11px] font-semibold text-gray-400">kcal</span>
+          <span className="text-sm font-bold text-gray-400 -mt-1">kcal</span>
+          <div
+            className="mt-2 px-3 py-1 rounded-full"
+            style={{ background: over ? '#fff7ed' : '#ecfdf5' }}
+          >
+            <span className="text-xs font-black" style={{ color: over ? '#ea580c' : '#059669' }}>
+              {over
+                ? `+${Math.round(consumed - goal)} ${labelOver}`
+                : `${Math.round(remaining)} ${labelRemaining}`}
+            </span>
+          </div>
           <span className="text-[10px] text-gray-300 mt-1">{labelGoal}: {goal} kcal</span>
         </div>
-      </div>
-
-      <div className="mt-1 flex items-center gap-1.5">
-        <div className="w-2 h-2 rounded-full" style={{ background: strokeColor }}/>
-        <span className="text-sm font-bold text-gray-600">
-          {Math.round(consumed)} kcal {labelConsumed}
-        </span>
       </div>
     </div>
   );
@@ -82,26 +88,34 @@ function MacroCard({ icon, label, value, unit = 'g', pct, gradFrom, gradTo, text
   const clampedPct = Math.min(100, Math.max(0, pct));
   return (
     <div
-      className="flex-1 rounded-2xl shadow-md p-3.5 flex flex-col gap-2 relative overflow-hidden"
-      style={{ background: `linear-gradient(135deg, ${gradFrom}, ${gradTo})` }}
+      className="flex-1 rounded-2xl p-4 flex flex-col gap-2.5 relative overflow-hidden"
+      style={{
+        background: `linear-gradient(145deg, ${gradFrom}, ${gradTo})`,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.07)',
+      }}
     >
-      <div className="absolute inset-0 rounded-2xl"
-        style={{ background: 'linear-gradient(135deg,rgba(255,255,255,0.22) 0%,rgba(255,255,255,0) 60%)' }}/>
+      {/* Shine overlay */}
+      <div
+        className="absolute inset-0 rounded-2xl pointer-events-none"
+        style={{ background: 'linear-gradient(135deg,rgba(255,255,255,0.35) 0%,rgba(255,255,255,0) 55%)' }}
+      />
       <div className="relative z-10">
-        <span className="text-xl leading-none">{icon}</span>
+        <span className="text-2xl leading-none">{icon}</span>
       </div>
       <div className="relative z-10">
-        <p className="font-black leading-none" style={{ fontSize: '1.25rem', color: textColor }}>
+        <p className="font-black leading-none" style={{ fontSize: '1.65rem', color: textColor }}>
           {Math.round(value * 10) / 10}
-          <span className="text-xs font-semibold ml-0.5 opacity-80">{unit}</span>
+          <span className="text-sm font-semibold ml-1 opacity-75">{unit}</span>
         </p>
-        <p className="text-xs font-semibold mt-0.5" style={{ color: textColor, opacity: 0.75 }}>{label}</p>
+        <p className="text-xs font-bold mt-1" style={{ color: textColor, opacity: 0.7 }}>{label}</p>
       </div>
       <div className="relative z-10 h-1.5 rounded-full bg-black/10 overflow-hidden">
-        <div className="h-full rounded-full transition-all duration-700"
-          style={{ width: `${clampedPct}%`, background: textColor, opacity: 0.7 }}/>
+        <div
+          className="h-full rounded-full transition-all duration-700"
+          style={{ width: `${clampedPct}%`, background: textColor, opacity: 0.65 }}
+        />
       </div>
-      <p className="relative z-10 text-[10px] font-bold" style={{ color: textColor, opacity: 0.6 }}>
+      <p className="relative z-10 text-xs font-black" style={{ color: textColor, opacity: 0.55 }}>
         %{clampedPct}
       </p>
     </div>
@@ -136,7 +150,7 @@ function TrendArrow({ data, labelUp, labelDown }) {
   const up   = last >= prev;
   return (
     <span
-      className="text-xs font-bold px-1.5 py-0.5 rounded-full"
+      className="text-xs font-bold px-2 py-1 rounded-full"
       style={{ background: up ? '#d1fae5' : '#fee2e2', color: up ? '#065f46' : '#991b1b' }}
     >
       {up ? `↑ ${labelUp}` : `↓ ${labelDown}`}
@@ -167,17 +181,13 @@ export default function DailySummary({ onDeleteMeal }) {
   };
 
   // ── Localised weekday labels ─────────────────────────────────────────────
-  // tArr('history.weekdays') returns e.g. ["Sun","Mon",...] in current lang.
-  // getWeeklyData() always returns 7 entries oldest→newest (Sun=0…Sat=6).
-  // We replace the hardcoded 'day' string with the correct localised label.
-  const weekdays = tArr('history.weekdays'); // ["Paz","Pzt",...] or ["Sun","Mon",...]
+  const weekdays = tArr('history.weekdays');
   const rawWeekly = getWeeklyData();
   const weekly = rawWeekly.map(entry => {
-    // entry.date is "YYYY-MM-DD"
-    const dow = new Date(entry.date + 'T12:00:00').getDay(); // 0=Sun … 6=Sat
+    const dow = new Date(entry.date + 'T12:00:00').getDay();
     return {
       ...entry,
-      day: weekdays[dow] ?? entry.day, // replace with localised label
+      day: weekdays[dow] ?? entry.day,
     };
   });
 
@@ -195,11 +205,14 @@ export default function DailySummary({ onDeleteMeal }) {
   const handleDelete = (id) => { deleteMeal(id); onDeleteMeal?.(); setDel(null); };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
 
-      {/* ── 1. CALORIE RING ──────────────────────────────────────────────── */}
-      <div className="bg-white rounded-3xl shadow-md border border-gray-100 px-5 pt-5 pb-6">
-        <div className="flex items-center justify-between mb-4">
+      {/* ── 1. CALORIE RING + MACROS ─────────────────────────────────────── */}
+      <div className="bg-white rounded-3xl border border-gray-100 px-5 pt-6 pb-7"
+        style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.06)' }}>
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-5">
           <h2 className="font-black text-emerald-700 text-base leading-tight bg-emerald-50 px-2.5 py-0.5 rounded-xl inline-block">{t('dashboard.title')}</h2>
           <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${
             over ? 'bg-orange-100 text-orange-600' : 'bg-emerald-100 text-emerald-700'
@@ -211,7 +224,8 @@ export default function DailySummary({ onDeleteMeal }) {
           </span>
         </div>
 
-        <div className="flex justify-center mb-5">
+        {/* Ring */}
+        <div className="flex justify-center mb-7">
           <CalorieRing
             consumed={totals.calories}
             goal={goal}
@@ -222,8 +236,8 @@ export default function DailySummary({ onDeleteMeal }) {
           />
         </div>
 
-        {/* ── 2. MACRO CARDS ─────────────────────────────────────────────── */}
-        <div className="flex gap-2.5">
+        {/* Macro Cards */}
+        <div className="flex gap-3">
           <MacroCard
             icon="🥩"
             label={t('nutrition.protein')}
@@ -254,9 +268,10 @@ export default function DailySummary({ onDeleteMeal }) {
       {/* ── Micro nutrients ──────────────────────────────────────────────── */}
       <MicroNutrientsPanel totals={totals} />
 
-      {/* ── 3. WEEKLY CHART ─────────────────────────────────────────────── */}
-      <div className="bg-white rounded-3xl shadow-md border border-gray-100 p-5">
-        <div className="flex items-center justify-between mb-4">
+      {/* ── 3. WEEKLY CHART ──────────────────────────────────────────────── */}
+      <div className="bg-white rounded-3xl border border-gray-100 p-5"
+        style={{ boxShadow: '0 4px 32px rgba(0,0,0,0.06)' }}>
+        <div className="flex items-center justify-between mb-5">
           <div>
             <h3 className="font-black text-emerald-700 text-base leading-tight bg-emerald-50 px-2.5 py-0.5 rounded-xl inline-block">{t('dashboard.weekly_chart')}</h3>
             <p className="text-xs text-gray-400 mt-0.5">{t('report.subtitle')}</p>
@@ -267,11 +282,11 @@ export default function DailySummary({ onDeleteMeal }) {
             labelDown="↓"
           />
         </div>
-        <ResponsiveContainer width="100%" height={130}>
-          <BarChart data={weekly} barSize={22} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+        <ResponsiveContainer width="100%" height={160}>
+          <BarChart data={weekly} barSize={26} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
             <XAxis
               dataKey="day"
-              tick={{ fontSize: 11, fill: '#9ca3af', fontWeight: 600 }}
+              tick={{ fontSize: 11, fill: '#94a3b8', fontWeight: 700 }}
               axisLine={false}
               tickLine={false}
             />
@@ -279,7 +294,7 @@ export default function DailySummary({ onDeleteMeal }) {
             <Tooltip
               cursor={{ fill: 'rgba(16,185,129,0.06)', radius: 8 }}
               contentStyle={{
-                borderRadius: '14px', border: 'none',
+                borderRadius: '16px', border: 'none',
                 boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
                 fontSize: '12px', fontWeight: 700,
                 padding: '8px 14px',
@@ -287,7 +302,7 @@ export default function DailySummary({ onDeleteMeal }) {
               formatter={(v) => [`${v} kcal`, '']}
               labelFormatter={(l) => l}
             />
-            <Bar dataKey="calories" radius={[8, 8, 3, 3]}>
+            <Bar dataKey="calories" radius={[10, 10, 4, 4]}>
               {weekly.map((entry, i) => (
                 <Cell
                   key={i}
@@ -303,20 +318,24 @@ export default function DailySummary({ onDeleteMeal }) {
         </ResponsiveContainer>
       </div>
 
-      {/* ── 4. AI TIP CARD ──────────────────────────────────────────────── */}
+      {/* ── 4. AI TIP CARD ───────────────────────────────────────────────── */}
       <div
-        className="rounded-3xl shadow-lg overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 45%, #4c1d95 100%)' }}
+        className="rounded-3xl overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, #7c3aed 0%, #6d28d9 45%, #4c1d95 100%)',
+          boxShadow: '0 8px 32px rgba(109,40,217,0.28)',
+        }}
       >
         <div
-          className="p-4"
+          className="p-5"
           style={{ background: 'linear-gradient(135deg,rgba(255,255,255,0.12) 0%,rgba(255,255,255,0) 55%)' }}
         >
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-7 h-7 rounded-xl bg-white/20 flex items-center justify-center flex-shrink-0">
-              <span className="text-sm">✨</span>
+          <div className="flex items-center gap-2.5 mb-3">
+            <div className="w-8 h-8 rounded-2xl bg-white/20 flex items-center justify-center flex-shrink-0
+              backdrop-blur-sm">
+              <span className="text-base">✨</span>
             </div>
-            <span className="font-bold text-white text-sm tracking-wide">{t('dashboard.ai_tip')}</span>
+            <span className="font-black text-white text-sm tracking-wide">{t('dashboard.ai_tip')}</span>
           </div>
 
           {tipLoading ? (
@@ -334,7 +353,7 @@ export default function DailySummary({ onDeleteMeal }) {
         </div>
       </div>
 
-      {/* ── 5. TODAY'S MEALS (grouped by category) ──────────────────────── */}
+      {/* ── 5. TODAY'S MEALS (grouped by category) ───────────────────────── */}
       {meals.length > 0 && (() => {
         const grouped = {};
         for (const cat of CATEGORY_ORDER) {
@@ -343,7 +362,7 @@ export default function DailySummary({ onDeleteMeal }) {
         return (
           <div className="space-y-3">
             <div className="flex items-center justify-between px-1">
-              <h3 className="font-black text-emerald-700 text-base leading-tight bg-emerald-50 px-2.5 py-0.5 rounded-xl inline-block">
+              <h3 className="font-black text-gray-800 text-base">
                 {t('dashboard.todays_meals')}
               </h3>
               <span className="text-xs font-semibold text-gray-400 bg-gray-100 px-2.5 py-1 rounded-full">
@@ -357,10 +376,11 @@ export default function DailySummary({ onDeleteMeal }) {
               const meta = CATEGORY_META[cat];
               const catCal = catMeals.reduce((s, m) => s + (m.calories || 0), 0);
               return (
-                <div key={cat} className="bg-white rounded-3xl shadow-md border overflow-hidden"
-                  style={{ borderColor: meta.border }}>
+                <div key={cat}
+                  className="bg-white rounded-3xl overflow-hidden border"
+                  style={{ borderColor: meta.border, boxShadow: '0 2px 16px rgba(0,0,0,0.05)' }}>
                   {/* Category header */}
-                  <div className="flex items-center justify-between px-4 py-2.5"
+                  <div className="flex items-center justify-between px-4 py-3"
                     style={{ backgroundColor: meta.bg }}>
                     <div className="flex items-center gap-2">
                       <span className="text-base">{meta.icon}</span>
@@ -368,7 +388,7 @@ export default function DailySummary({ onDeleteMeal }) {
                         {t(`meal.${cat}`)}
                       </span>
                     </div>
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full"
                       style={{ backgroundColor: meta.color + '22', color: meta.color }}>
                       {Math.round(catCal)} kcal
                     </span>
