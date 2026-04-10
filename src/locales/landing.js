@@ -12,6 +12,7 @@ const T = {
       login: 'Giriş Yap',
       start: 'Ücretsiz Başla',
       logout: 'çıkış',
+      about: 'Hakkımızda',
     },
     banner: {
       text: 'Uygulamayı kullanmak için telefona yükle — masaüstü tarayıcıda tam deneyim yaşanamaz.',
@@ -189,6 +190,18 @@ const T = {
       sub: 'CalAndLens mobil cihazlar için tasarlandı.\nQR kodu okutarak hemen başla — ücretsiz.',
       close: 'Kapat',
     },
+    about: {
+      label: 'Hakkımızda',
+      title: 'Neden CalAndLens?',
+      sub: 'Sağlıklı beslenmeyi herkes için akıllı ve erişilebilir hale getiriyoruz.',
+      mission: { title: 'Misyonumuz', text: 'CalAndLens, yapay zeka gücüyle günlük besin takibini mümkün olduğunca kolaylaştırmak için tasarlandı. Tek yapmanız gereken yemeğinizin fotoğrafını çekmek — gerisini biz hallediyoruz.' },
+      values: [
+        { icon: '🤖', title: 'Yapay Zeka Odaklı', desc: 'Claude AI ile saniyeler içinde besin analizi yapın.' },
+        { icon: '🔒', title: 'Gizlilik Önce', desc: 'Verileriniz cihazınızda güvende kalır, sunucuya gönderilmez.' },
+        { icon: '🌍', title: '8 Dil Desteği', desc: 'Türkçe, İngilizce, Almanca ve daha fazlası.' },
+        { icon: '💚', title: 'Ücretsiz Başla', desc: 'Temel özellikler tamamen ücretsiz, kart gerekmez.' },
+      ],
+    },
     auth: {
       loginTab: 'Giriş Yap',
       registerTab: 'Kayıt Ol',
@@ -214,7 +227,7 @@ const T = {
 
   en: {
     rtl: false,
-    nav: { features: 'Features', howItWorks: 'How It Works', reviews: 'Reviews', download: 'Download', login: 'Log In', start: 'Start Free', logout: 'logout' },
+    nav: { features: 'Features', howItWorks: 'How It Works', reviews: 'Reviews', download: 'Download', login: 'Log In', start: 'Start Free', logout: 'logout', about: 'About' },
     banner: { text: 'Install the app on your phone for the full experience — desktop browser is limited.', howTo: 'How to Install?', home: 'Home' },
     hero: {
       badge: 'AI-Powered Nutrition Tracking',
@@ -305,6 +318,18 @@ const T = {
     },
     cta: { title: 'Healthy living is one click away', sub: 'Create a free account and start right now.', btn1: '🚀 Create Free Account', btn2: 'Try Without Signing In →' },
     qr: { title: 'Try on Your Phone', sub: 'CalAndLens is designed for mobile.\nScan the QR code to get started — free.', close: 'Close' },
+    about: {
+      label: 'About Us',
+      title: 'Why CalAndLens?',
+      sub: 'Making healthy eating smart and accessible for everyone.',
+      mission: { title: 'Our Mission', text: 'CalAndLens was built to make daily nutrition tracking as effortless as possible using the power of AI. Just take a photo of your meal — we handle the rest.' },
+      values: [
+        { icon: '🤖', title: 'AI-Powered', desc: 'Instant nutrition analysis with Claude AI.' },
+        { icon: '🔒', title: 'Privacy First', desc: 'Your data stays safe on your device.' },
+        { icon: '🌍', title: '8 Languages', desc: 'Designed for people everywhere.' },
+        { icon: '💚', title: 'Free to Start', desc: 'Core features are completely free, no card needed.' },
+      ],
+    },
     auth: {
       loginTab: 'Log In', registerTab: 'Sign Up', name: 'Full Name', namePh: 'Enter your name',
       email: 'Email', emailPh: 'example@mail.com', password: 'Password', passwordPh: 'Enter your password', passwordPhNew: 'At least 6 characters',
@@ -316,7 +341,7 @@ const T = {
 
   de: {
     rtl: false,
-    nav: { features: 'Funktionen', howItWorks: 'So funktioniert\'s', reviews: 'Bewertungen', download: 'Herunterladen', login: 'Anmelden', start: 'Kostenlos starten', logout: 'abmelden' },
+    nav: { features: 'Funktionen', howItWorks: 'So funktioniert\'s', reviews: 'Bewertungen', download: 'Herunterladen', login: 'Anmelden', start: 'Kostenlos starten', logout: 'abmelden', about: 'Über uns' },
     banner: { text: 'Installiere die App auf deinem Telefon für das volle Erlebnis.', howTo: 'Wie installieren?', home: 'Startseite' },
     hero: {
       badge: 'KI-gestützte Ernährungsverfolgung',
@@ -355,12 +380,13 @@ const T = {
     install: { label: 'Auf dem Telefon installieren', title: 'Immer dabei', sub: 'QR-Code scannen oder calandlens.com auf dem Telefon besuchen — funktioniert wie eine App', steps: [{ icon: '📱', text: 'calandlens.com auf deinem Telefon besuchen' }, { icon: '📲', text: 'Installationsanleitung folgen (30 Sekunden)' }, { icon: '🚀', text: 'CalAndLens-Symbol auf dem Startbildschirm finden!' }] },
     cta: { title: 'Gesundes Leben ist einen Klick entfernt', sub: 'Kostenloses Konto erstellen und sofort loslegen.', btn1: '🚀 Kostenloses Konto erstellen', btn2: 'Ohne Anmeldung testen →' },
     qr: { title: 'Auf dem Telefon testen', sub: 'CalAndLens ist für Mobilgeräte entwickelt.\nQR-Code scannen und kostenlos starten.', close: 'Schließen' },
+    about: { label: 'Über uns', title: 'Warum CalAndLens?', sub: 'Gesunde Ernährung für jeden smart und zugänglich machen.', mission: { title: 'Unsere Mission', text: 'CalAndLens wurde entwickelt, um die tägliche Ernährungsverfolgung mit KI so einfach wie möglich zu machen. Mach einfach ein Foto von deiner Mahlzeit — wir erledigen den Rest.' }, values: [{ icon: '🤖', title: 'KI-gestützt', desc: 'Sofortige Nährwertanalyse mit Claude AI.' }, { icon: '🔒', title: 'Datenschutz zuerst', desc: 'Deine Daten bleiben sicher auf deinem Gerät.' }, { icon: '🌍', title: '8 Sprachen', desc: 'Für Menschen auf der ganzen Welt entwickelt.' }, { icon: '💚', title: 'Kostenlos starten', desc: 'Grundfunktionen komplett kostenlos, keine Karte nötig.' }] },
     auth: { loginTab: 'Anmelden', registerTab: 'Registrieren', name: 'Vollständiger Name', namePh: 'Name eingeben', email: 'E-Mail', emailPh: 'beispiel@mail.com', password: 'Passwort', passwordPh: 'Passwort eingeben', passwordPhNew: 'Mindestens 6 Zeichen', loginBtn: 'Anmelden', registerBtn: 'Konto erstellen — Kostenlos', toRegister: 'Noch kein Konto?', toLogin: 'Bereits ein Konto?', registerLink: 'Registrieren', loginLink: 'Anmelden', errFill: 'Bitte alle Felder ausfüllen.', errShort: 'Passwort muss mindestens 6 Zeichen lang sein.', errExists: 'Diese E-Mail ist bereits registriert.', errWrong: 'Falsche E-Mail oder falsches Passwort.' },
   },
 
   fr: {
     rtl: false,
-    nav: { features: 'Fonctionnalités', howItWorks: 'Comment ça marche', reviews: 'Avis', download: 'Télécharger', login: 'Se connecter', start: 'Commencer gratuitement', logout: 'déconnexion' },
+    nav: { features: 'Fonctionnalités', howItWorks: 'Comment ça marche', reviews: 'Avis', download: 'Télécharger', login: 'Se connecter', start: 'Commencer gratuitement', logout: 'déconnexion', about: 'À propos' },
     banner: { text: "Installez l'application sur votre téléphone pour une expérience complète.", howTo: 'Comment installer ?', home: 'Accueil' },
     hero: {
       badge: 'Suivi nutritionnel alimenté par IA',
@@ -399,12 +425,13 @@ const T = {
     install: { label: 'Installer sur votre téléphone', title: 'Toujours avec vous', sub: "Scannez le QR code ou visitez calandlens.com sur votre téléphone", steps: [{ icon: '📱', text: 'Visitez calandlens.com sur votre téléphone' }, { icon: '📲', text: "Suivez le guide d'installation (30 secondes)" }, { icon: '🚀', text: 'Trouvez l\'icône CalAndLens sur votre écran d\'accueil!' }] },
     cta: { title: 'La vie saine est à un clic', sub: 'Créez un compte gratuit et commencez maintenant.', btn1: '🚀 Créer un compte gratuit', btn2: 'Essayer sans inscription →' },
     qr: { title: 'Essayez sur votre téléphone', sub: 'CalAndLens est conçu pour mobile.\nScannez le QR code pour commencer gratuitement.', close: 'Fermer' },
+    about: { label: 'À propos', title: 'Pourquoi CalAndLens ?', sub: 'Rendre une alimentation saine intelligente et accessible à tous.', mission: { title: 'Notre mission', text: "CalAndLens a été conçu pour rendre le suivi nutritionnel quotidien aussi simple que possible grâce à l'IA. Prenez simplement une photo de votre repas — on s'occupe du reste." }, values: [{ icon: '🤖', title: "Propulsé par l'IA", desc: 'Analyse nutritionnelle instantanée avec Claude AI.' }, { icon: '🔒', title: "Confidentialité d'abord", desc: 'Vos données restent en sécurité sur votre appareil.' }, { icon: '🌍', title: '8 langues', desc: 'Conçu pour les personnes du monde entier.' }, { icon: '💚', title: 'Gratuit pour commencer', desc: 'Les fonctionnalités de base sont entièrement gratuites.' }] },
     auth: { loginTab: 'Se connecter', registerTab: "S'inscrire", name: 'Nom complet', namePh: 'Entrez votre nom', email: 'E-mail', emailPh: 'exemple@mail.com', password: 'Mot de passe', passwordPh: 'Entrez votre mot de passe', passwordPhNew: 'Au moins 6 caractères', loginBtn: 'Se connecter', registerBtn: 'Créer un compte — Gratuit', toRegister: 'Pas de compte ?', toLogin: 'Déjà un compte ?', registerLink: "S'inscrire", loginLink: 'Se connecter', errFill: 'Veuillez remplir tous les champs.', errShort: 'Le mot de passe doit comporter au moins 6 caractères.', errExists: 'Cet e-mail est déjà enregistré.', errWrong: 'E-mail ou mot de passe incorrect.' },
   },
 
   es: {
     rtl: false,
-    nav: { features: 'Funciones', howItWorks: 'Cómo funciona', reviews: 'Reseñas', download: 'Descargar', login: 'Iniciar sesión', start: 'Empezar gratis', logout: 'salir' },
+    nav: { features: 'Funciones', howItWorks: 'Cómo funciona', reviews: 'Reseñas', download: 'Descargar', login: 'Iniciar sesión', start: 'Empezar gratis', logout: 'salir', about: 'Sobre nosotros' },
     banner: { text: 'Instala la app en tu teléfono para la experiencia completa.', howTo: '¿Cómo instalar?', home: 'Inicio' },
     hero: {
       badge: 'Seguimiento nutricional con IA',
@@ -443,12 +470,13 @@ const T = {
     install: { label: 'Instalar en tu teléfono', title: 'Siempre contigo', sub: 'Escanea el código QR o visita calandlens.com en tu teléfono', steps: [{ icon: '📱', text: 'Visita calandlens.com en tu teléfono' }, { icon: '📲', text: 'Sigue la guía de instalación (30 segundos)' }, { icon: '🚀', text: 'Encuentra el icono de CalAndLens en tu pantalla de inicio!' }] },
     cta: { title: 'La vida saludable está a un clic', sub: 'Crea una cuenta gratuita y empieza ahora.', btn1: '🚀 Crear cuenta gratuita', btn2: 'Probar sin registrarse →' },
     qr: { title: 'Prueba en tu teléfono', sub: 'CalAndLens está diseñado para móviles.\nEscanea el código QR para empezar gratis.', close: 'Cerrar' },
+    about: { label: 'Sobre nosotros', title: '¿Por qué CalAndLens?', sub: 'Haciendo que la alimentación saludable sea inteligente y accesible para todos.', mission: { title: 'Nuestra misión', text: 'CalAndLens fue diseñado para hacer el seguimiento nutricional diario lo más fácil posible con IA. Solo toma una foto de tu comida — nosotros hacemos el resto.' }, values: [{ icon: '🤖', title: 'Impulsado por IA', desc: 'Análisis nutricional instantáneo con Claude AI.' }, { icon: '🔒', title: 'Privacidad primero', desc: 'Tus datos permanecen seguros en tu dispositivo.' }, { icon: '🌍', title: '8 idiomas', desc: 'Diseñado para personas de todo el mundo.' }, { icon: '💚', title: 'Empieza gratis', desc: 'Las funciones básicas son completamente gratuitas.' }] },
     auth: { loginTab: 'Iniciar sesión', registerTab: 'Registrarse', name: 'Nombre completo', namePh: 'Ingresa tu nombre', email: 'Correo electrónico', emailPh: 'ejemplo@mail.com', password: 'Contraseña', passwordPh: 'Ingresa tu contraseña', passwordPhNew: 'Mínimo 6 caracteres', loginBtn: 'Iniciar sesión', registerBtn: 'Crear cuenta — Gratis', toRegister: '¿No tienes cuenta?', toLogin: '¿Ya tienes cuenta?', registerLink: 'Regístrate', loginLink: 'Inicia sesión', errFill: 'Por favor completa todos los campos.', errShort: 'La contraseña debe tener al menos 6 caracteres.', errExists: 'Este correo ya está registrado.', errWrong: 'Correo o contraseña incorrectos.' },
   },
 
   ar: {
     rtl: true,
-    nav: { features: 'الميزات', howItWorks: 'كيف يعمل', reviews: 'التقييمات', download: 'تحميل', login: 'تسجيل الدخول', start: 'ابدأ مجاناً', logout: 'خروج' },
+    nav: { features: 'الميزات', howItWorks: 'كيف يعمل', reviews: 'التقييمات', download: 'تحميل', login: 'تسجيل الدخول', start: 'ابدأ مجاناً', logout: 'خروج', about: 'من نحن' },
     banner: { text: 'ثبّت التطبيق على هاتفك للحصول على التجربة الكاملة.', howTo: 'كيفية التثبيت؟', home: 'الرئيسية' },
     hero: {
       badge: 'تتبع التغذية بالذكاء الاصطناعي',
@@ -487,12 +515,13 @@ const T = {
     install: { label: 'ثبّت على هاتفك', title: 'معك دائماً', sub: 'امسح رمز QR أو زر calandlens.com على هاتفك', steps: [{ icon: '📱', text: 'زيارة calandlens.com على هاتفك' }, { icon: '📲', text: 'اتبع دليل التثبيت (30 ثانية)' }, { icon: '🚀', text: 'ابحث عن أيقونة CalAndLens على شاشتك الرئيسية!' }] },
     cta: { title: 'الحياة الصحية على بُعد نقرة', sub: 'أنشئ حساباً مجانياً وابدأ الآن.', btn1: '🚀 إنشاء حساب مجاني', btn2: 'جرّب بدون تسجيل →' },
     qr: { title: 'جرّب على هاتفك', sub: 'CalAndLens مصمم للجوال.\nامسح رمز QR للبدء مجاناً.', close: 'إغلاق' },
+    about: { label: 'من نحن', title: 'لماذا CalAndLens؟', sub: 'نجعل الأكل الصحي ذكياً وفي متناول الجميع.', mission: { title: 'مهمتنا', text: 'تم تصميم CalAndLens لجعل تتبع التغذية اليومية أسهل ما يمكن باستخدام الذكاء الاصطناعي. فقط التقط صورة لوجبتك — ونحن نتولى الباقي.' }, values: [{ icon: '🤖', title: 'مدعوم بالذكاء الاصطناعي', desc: 'تحليل غذائي فوري مع Claude AI.' }, { icon: '🔒', title: 'الخصوصية أولاً', desc: 'تبقى بياناتك آمنة على جهازك.' }, { icon: '🌍', title: '8 لغات', desc: 'مصمم للناس في كل مكان.' }, { icon: '💚', title: 'ابدأ مجاناً', desc: 'الميزات الأساسية مجانية تماماً.' }] },
     auth: { loginTab: 'تسجيل الدخول', registerTab: 'إنشاء حساب', name: 'الاسم الكامل', namePh: 'أدخل اسمك', email: 'البريد الإلكتروني', emailPh: 'example@mail.com', password: 'كلمة المرور', passwordPh: 'أدخل كلمة المرور', passwordPhNew: '6 أحرف على الأقل', loginBtn: 'تسجيل الدخول', registerBtn: 'إنشاء حساب — مجاني', toRegister: 'ليس لديك حساب؟', toLogin: 'لديك حساب بالفعل؟', registerLink: 'إنشاء حساب', loginLink: 'تسجيل الدخول', errFill: 'يرجى ملء جميع الحقول.', errShort: 'يجب أن تتكون كلمة المرور من 6 أحرف على الأقل.', errExists: 'هذا البريد الإلكتروني مسجل بالفعل.', errWrong: 'بريد إلكتروني أو كلمة مرور غير صحيحة.' },
   },
 
   ru: {
     rtl: false,
-    nav: { features: 'Функции', howItWorks: 'Как это работает', reviews: 'Отзывы', download: 'Скачать', login: 'Войти', start: 'Начать бесплатно', logout: 'выйти' },
+    nav: { features: 'Функции', howItWorks: 'Как это работает', reviews: 'Отзывы', download: 'Скачать', login: 'Войти', start: 'Начать бесплатно', logout: 'выйти', about: 'О нас' },
     banner: { text: 'Установите приложение на телефон для полного функционала.', howTo: 'Как установить?', home: 'Главная' },
     hero: {
       badge: 'Отслеживание питания с ИИ',
@@ -531,12 +560,13 @@ const T = {
     install: { label: 'Установить на телефон', title: 'Всегда с тобой', sub: 'Отсканируй QR-код или зайди на calandlens.com с телефона', steps: [{ icon: '📱', text: 'Зайди на calandlens.com с телефона' }, { icon: '📲', text: 'Следуй руководству по установке (30 секунд)' }, { icon: '🚀', text: 'Найди иконку CalAndLens на главном экране!' }] },
     cta: { title: 'Здоровая жизнь в одном клике', sub: 'Создай бесплатный аккаунт и начни прямо сейчас.', btn1: '🚀 Создать бесплатный аккаунт', btn2: 'Попробовать без регистрации →' },
     qr: { title: 'Попробуй на телефоне', sub: 'CalAndLens создан для мобильных устройств.\nОтсканируй QR-код для бесплатного начала.', close: 'Закрыть' },
+    about: { label: 'О нас', title: 'Почему CalAndLens?', sub: 'Делаем здоровое питание умным и доступным для каждого.', mission: { title: 'Наша миссия', text: 'CalAndLens создан для того, чтобы сделать ежедневный учёт питания максимально простым с помощью ИИ. Просто сфотографируйте еду — остальное мы сделаем сами.' }, values: [{ icon: '🤖', title: 'На основе ИИ', desc: 'Мгновенный анализ питания с Claude AI.' }, { icon: '🔒', title: 'Конфиденциальность', desc: 'Ваши данные остаются в безопасности на вашем устройстве.' }, { icon: '🌍', title: '8 языков', desc: 'Создано для людей по всему миру.' }, { icon: '💚', title: 'Начать бесплатно', desc: 'Основные функции полностью бесплатны.' }] },
     auth: { loginTab: 'Войти', registerTab: 'Регистрация', name: 'Полное имя', namePh: 'Введите ваше имя', email: 'Эл. почта', emailPh: 'example@mail.com', password: 'Пароль', passwordPh: 'Введите пароль', passwordPhNew: 'Не менее 6 символов', loginBtn: 'Войти', registerBtn: 'Создать аккаунт — Бесплатно', toRegister: 'Нет аккаунта?', toLogin: 'Уже есть аккаунт?', registerLink: 'Зарегистрироваться', loginLink: 'Войти', errFill: 'Пожалуйста, заполните все поля.', errShort: 'Пароль должен быть не менее 6 символов.', errExists: 'Этот email уже зарегистрирован.', errWrong: 'Неверный email или пароль.' },
   },
 
   da: {
     rtl: false,
-    nav: { features: 'Funktioner', howItWorks: 'Sådan fungerer det', reviews: 'Anmeldelser', download: 'Download', login: 'Log ind', start: 'Start gratis', logout: 'log ud' },
+    nav: { features: 'Funktioner', howItWorks: 'Sådan fungerer det', reviews: 'Anmeldelser', download: 'Download', login: 'Log ind', start: 'Start gratis', logout: 'log ud', about: 'Om os' },
     banner: { text: 'Installér appen på din telefon for den fulde oplevelse — desktop-browseren er begrænset.', howTo: 'Hvordan installerer man?', home: 'Hjem' },
     hero: {
       badge: 'AI-drevet ernæringsregistrering',
@@ -612,6 +642,7 @@ const T = {
     },
     cta: { title: 'Sundt liv er et klik væk', sub: 'Opret en gratis konto og start nu.', btn1: '🚀 Opret gratis konto', btn2: 'Prøv uden at logge ind →' },
     qr: { title: 'Prøv på din telefon', sub: 'CalAndLens er designet til mobil.\nScan QR-koden for at starte gratis.', close: 'Luk' },
+    about: { label: 'Om os', title: 'Hvorfor CalAndLens?', sub: 'Vi gør sund kost smart og tilgængelig for alle.', mission: { title: 'Vores mission', text: 'CalAndLens er bygget til at gøre daglig ernæringssporing så nem som muligt med AI. Tag blot et billede af dit måltid — vi klarer resten.' }, values: [{ icon: '🤖', title: 'AI-drevet', desc: 'Øjeblikkelig ernæringsanalyse med Claude AI.' }, { icon: '🔒', title: 'Privatliv først', desc: 'Dine data forbliver sikre på din enhed.' }, { icon: '🌍', title: '8 sprog', desc: 'Designet til mennesker overalt i verden.' }, { icon: '💚', title: 'Start gratis', desc: 'Grundlæggende funktioner er helt gratis.' }] },
     auth: {
       loginTab: 'Log ind', registerTab: 'Opret konto', name: 'Fulde navn', namePh: 'Indtast dit navn',
       email: 'E-mail', emailPh: 'eksempel@mail.com', password: 'Adgangskode', passwordPh: 'Indtast din adgangskode', passwordPhNew: 'Mindst 6 tegn',

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import T, { detectLang } from '../locales/landing';
 import OnboardingQuiz from './OnboardingQuiz';
+import PricingSection from './PricingSection';
 
 const SITE_URL = 'https://calandlens.com';
 const lang = detectLang();
@@ -21,7 +22,9 @@ const NAV_LINKS = [
   { href: '#features',    label: t.nav.features },
   { href: '#how-it-works',label: t.nav.howItWorks },
   { href: '#testimonials',label: t.nav.reviews },
+  { href: '#pricing',     label: t.pricing.nav },
   { href: '#install',     label: t.nav.download },
+  { href: '#about',       label: t.nav.about },
 ];
 
 const STATS = t.stats;
@@ -801,6 +804,36 @@ export default function DesktopLandingPage() {
         </div>
       </section>
 
+      {/* ── ABOUT ── */}
+      <section id="about" className="py-24 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-6">
+          <p className="text-emerald-600 font-semibold mb-3 text-center">{t.about.label}</p>
+          <h2 className="text-4xl font-black text-center mb-4">{t.about.title}</h2>
+          <p className="text-gray-500 text-center mb-16 max-w-xl mx-auto">{t.about.sub}</p>
+
+          {/* Mission */}
+          <div className="bg-white rounded-3xl p-10 mb-12 shadow-sm border border-gray-100 max-w-3xl mx-auto text-center">
+            <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-5">🎯</div>
+            <h3 className="text-xl font-black mb-4">{t.about.mission.title}</h3>
+            <p className="text-gray-500 leading-relaxed">{t.about.mission.text}</p>
+          </div>
+
+          {/* Values */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {t.about.values.map((v, i) => (
+              <div key={i} className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
+                <div className="text-4xl mb-3">{v.icon}</div>
+                <h4 className="font-black text-gray-900 mb-2 text-sm">{v.title}</h4>
+                <p className="text-gray-500 text-xs leading-relaxed">{v.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── PRICING ── */}
+      <PricingSection strings={t.pricing} dark={false} onCta={() => {}} />
+
       {/* ── INSTALL / QR ── */}
       <section id="install" className="py-24">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -856,6 +889,7 @@ export default function DesktopLandingPage() {
             <a href="#how-it-works" className="hover:text-emerald-500 transition-colors">{t.nav.howItWorks}</a>
             <a href="#testimonials" className="hover:text-emerald-500 transition-colors">{t.nav.reviews}</a>
             <a href={SITE_URL + '?mode=web'} className="hover:text-emerald-500 transition-colors">{t.nav.download}</a>
+            <a href="#about" className="hover:text-emerald-500 transition-colors">{t.nav.about}</a>
           </div>
           <p className="text-sm text-gray-400">© 2025 CalAndLens</p>
         </div>
