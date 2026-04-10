@@ -3,6 +3,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import T, { detectLang } from '../locales/landing';
 import OnboardingQuiz from './OnboardingQuiz';
 import PricingSection from './PricingSection';
+import { resetPassword } from '../services/supabase';
 
 const SITE_URL = 'https://calandlens.com';
 const lang = detectLang();
@@ -49,11 +50,39 @@ function saveUsers(u) { localStorage.setItem('cal_users', JSON.stringify(u)); }
 function getCurrentUser() { try { return JSON.parse(localStorage.getItem('cal_current_user') || 'null'); } catch { return null; } }
 function setCurrentUser(u) { u ? localStorage.setItem('cal_current_user', JSON.stringify(u)) : localStorage.removeItem('cal_current_user'); }
 
+// ── Text Modal (Privacy / Terms) ──────────────────────────────────────────────
+function TextModal({ title, content, onClose }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-8 py-5 border-b border-gray-100">
+          <h3 className="text-lg font-black">{title}</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-700 text-xl">✕</button>
+        </div>
+        <div className="overflow-y-auto px-8 py-6 text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+          {content.split('\n').map((line, i) => {
+            if (line.startsWith('**') && line.endsWith('**')) {
+              return <p key={i} className="font-bold text-gray-900 mt-4 mb-1">{line.replace(/\*\*/g, '')}</p>;
+            }
+            return <p key={i} className={line === '' ? 'mt-2' : ''}>{line}</p>;
+          })}
+        </div>
+        <div className="px-8 py-4 border-t border-gray-100">
+          <button onClick={onClose} className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-semibold rounded-xl transition-colors">Kapat</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Auth Modal ────────────────────────────────────────────────────────────────
 function AuthModal({ mode, onClose, onSuccess }) {
   const [tab, setTab] = useState(mode);
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
+  const [showReset, setShowReset] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetSent, setResetSent] = useState(false);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   const handleSubmit = (e) => {
@@ -80,9 +109,42 @@ function AuthModal({ mode, onClose, onSuccess }) {
   };
 
   const at = t.auth;
+
+  const handleReset = async (e) => {
+    e.preventDefault();
+    try {
+      await resetPassword(resetEmail);
+      setResetSent(true);
+    } catch {
+      setError(at.errWrong);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
       <div className={`bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 ${t.rtl ? 'text-right' : ''}`} dir={t.rtl ? 'rtl' : 'ltr'} onClick={e => e.stopPropagation()}>
+
+      {showReset ? (
+        <>
+          <button onClick={onClose} className={`absolute top-5 ${t.rtl ? 'left-5' : 'right-5'} text-gray-400 hover:text-gray-700 text-xl`}>✕</button>
+          <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">🔑</div>
+          <h3 className="text-xl font-black text-center mb-2">{at.resetTitle}</h3>
+          <p className="text-gray-500 text-sm text-center mb-6">{at.resetSub}</p>
+          {resetSent ? (
+            <p className="text-emerald-600 bg-emerald-50 rounded-xl px-4 py-3 text-sm text-center font-semibold">{at.resetSent}</p>
+          ) : (
+            <form onSubmit={handleReset} className="space-y-4">
+              <input type="email" value={resetEmail} onChange={e => setResetEmail(e.target.value)} required
+                placeholder={at.emailPh}
+                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-400 outline-none text-sm" />
+              {error && <p className="text-sm text-red-500 bg-red-50 rounded-xl px-4 py-2">{error}</p>}
+              <button type="submit" className="w-full py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-xl transition-colors">{at.resetBtn}</button>
+            </form>
+          )}
+          <button onClick={() => { setShowReset(false); setResetSent(false); setError(''); }} className="w-full text-center text-sm text-gray-400 hover:text-gray-600 mt-4">{at.resetBack}</button>
+        </>
+      ) : (
+        <>
         <button onClick={onClose} className={`absolute top-5 ${t.rtl ? 'left-5' : 'right-5'} text-gray-400 hover:text-gray-700 text-xl`}>✕</button>
         <div className="flex bg-gray-100 rounded-2xl p-1 mb-8">
           {['login', 'register'].map(tab_ => (
@@ -125,6 +187,13 @@ function AuthModal({ mode, onClose, onSuccess }) {
             : <><span>{at.toLogin} </span><button onClick={() => setTab('login')} className="text-emerald-600 font-semibold">{at.loginLink}</button></>
           }
         </p>
+        {tab === 'login' && (
+          <p className="text-center mt-2">
+            <button onClick={() => { setShowReset(true); setError(''); }} className="text-xs text-gray-400 hover:text-emerald-600 transition-colors">{at.forgot}</button>
+          </p>
+        )}
+        </>
+      )}
       </div>
     </div>
   );
@@ -235,6 +304,8 @@ export default function DesktopLandingPage() {
   const [authModal, setAuthModal] = useState(null);
   const [showQR, setShowQR] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showTerms, setShowTerms] = useState(false);
   const [user, setUser] = useState(() => getCurrentUser());
   const cameFromApp = new URLSearchParams(window.location.search).get('mode') === 'web';
   const openApp = () => setShowQR(true);
@@ -819,7 +890,7 @@ export default function DesktopLandingPage() {
           </div>
 
           {/* Values */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
             {t.about.values.map((v, i) => (
               <div key={i} className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
                 <div className="text-4xl mb-3">{v.icon}</div>
@@ -827,6 +898,14 @@ export default function DesktopLandingPage() {
                 <p className="text-gray-500 text-xs leading-relaxed">{v.desc}</p>
               </div>
             ))}
+          </div>
+
+          {/* Contact */}
+          <div className="text-center">
+            <p className="text-gray-400 text-sm">
+              {t.footer?.contact && <>{t.footer.contact}: </>}
+              <a href="mailto:support@calandlens.com" className="text-emerald-600 font-semibold hover:underline">support@calandlens.com</a>
+            </p>
           </div>
         </div>
       </section>
@@ -884,15 +963,18 @@ export default function DesktopLandingPage() {
             <img src="/logo.png" alt="CalAndLens" className="h-7 w-7 rounded-lg object-cover" />
             <span className="font-black text-emerald-600">CalAndLens</span>
           </div>
-          <div className="flex items-center gap-6 text-sm text-gray-400">
+          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-400">
             <a href="#features" className="hover:text-emerald-500 transition-colors">{t.nav.features}</a>
             <a href="#how-it-works" className="hover:text-emerald-500 transition-colors">{t.nav.howItWorks}</a>
             <a href="#testimonials" className="hover:text-emerald-500 transition-colors">{t.nav.reviews}</a>
             <a href="#pricing" className="hover:text-emerald-500 transition-colors">{t.pricing.nav}</a>
             <a href={SITE_URL + '?mode=web'} className="hover:text-emerald-500 transition-colors">{t.nav.download}</a>
             <a href="#about" className="hover:text-emerald-500 transition-colors">{t.nav.about}</a>
+            <button onClick={() => setShowPrivacy(true)} className="hover:text-emerald-500 transition-colors">{t.footer?.privacy}</button>
+            <button onClick={() => setShowTerms(true)} className="hover:text-emerald-500 transition-colors">{t.footer?.terms}</button>
+            <a href="mailto:support@calandlens.com" className="hover:text-emerald-500 transition-colors">{t.footer?.contact}</a>
           </div>
-          <p className="text-sm text-gray-400">© 2025 CalAndLens</p>
+          <p className="text-sm text-gray-400">© 2026 CalAndLens</p>
         </div>
       </footer>
 
@@ -904,6 +986,10 @@ export default function DesktopLandingPage() {
 
       {/* ── QR MODAL ── */}
       {showQR && <QRModal onClose={() => setShowQR(false)} />}
+
+      {/* ── PRIVACY / TERMS MODALS ── */}
+      {showPrivacy && <TextModal title={t.privacy?.title} content={t.privacy?.content} onClose={() => setShowPrivacy(false)} />}
+      {showTerms && <TextModal title={t.terms?.title} content={t.terms?.content} onClose={() => setShowTerms(false)} />}
 
       {/* ── ONBOARDING QUIZ ── */}
       {showQuiz && <OnboardingQuiz onComplete={handleQuizComplete} />}

@@ -28,6 +28,8 @@ import PWAInstallBanner from './components/PWAInstallBanner';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import DesktopLandingPage from './components/DesktopLandingPage';
 import AdminDashboard from './components/AdminDashboard';
+import PricingSection from './components/PricingSection';
+import LandingT from './locales/landing';
 import OnboardingQuiz from './components/OnboardingQuiz';
 import GuestPrompt from './components/GuestPrompt';
 import { trackVisit } from './services/analytics';
@@ -36,7 +38,7 @@ import { trackVisit } from './services/analytics';
    SETTINGS PAGE
 ───────────────────────────────────────────────────────────── */
 function SettingsPage({ onClose }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { user, signOut } = useAuth();
   const { getGoal, setGoal, getWaterGoal, setWaterGoal, clearAllData, getUserAllergens, setUserAllergens, getMacroGoals, setMacroGoals } = useLocalStorage();
   const [selectedAllergens, setSelectedAllergens] = useState(() => getUserAllergens());
@@ -498,7 +500,7 @@ const CHIPS = [
 ];
 
 function Inner() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { user } = useAuth();
   const { addMeal, getDailyTotals, getGoal } = useLocalStorage();
   useMealReminders(t);
@@ -513,6 +515,7 @@ function Inner() {
   const [refresh,         setRefresh]    = useState(0);
   const [activeChip,      setActiveChip] = useState('sec-summary');
   const [showGuestPrompt, setGuestPrompt] = useState(false);
+  const [showPricing,     setShowPricing] = useState(false);
   const chipStripRef = useRef(null);
   const chipButtonRefs = useRef({});
 
@@ -774,6 +777,14 @@ function Inner() {
                 <span className="absolute -top-2 -right-2 bg-amber-400 text-amber-900 text-xs font-black px-2 py-0.5 rounded-full shadow">YAKINDA</span>
               </div>
             </div>
+
+            {/* Pricing */}
+            <div className="px-2 pb-6">
+              <button onClick={() => setShowPricing(true)}
+                className="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black rounded-2xl shadow-lg shadow-emerald-500/20 text-sm">
+                💎 {(LandingT[lang] || LandingT['tr']).pricing.plans[1].cta}
+              </button>
+            </div>
           </div>
         )}
 
@@ -830,7 +841,7 @@ function Inner() {
 
             {/* Right-mid: Speed */}
             <button
-              onClick={() => {}}
+              onClick={() => scrollToSection('sec-speed')}
               className="flex-1 flex flex-col items-center py-3 gap-0.5 rounded-2xl text-gray-400 hover:text-gray-600 transition-all"
             >
               <span className="text-2xl leading-none">⏱️</span>
@@ -855,6 +866,23 @@ function Inner() {
       {showGuestPrompt && <GuestPrompt onClose={() => setGuestPrompt(false)} />}
       {showWizard    && <GoalWizard   onClose={() => setWizard(false)} />}
       {showSettings  && <SettingsPage onClose={() => setSettings(false)} />}
+      {showPricing && (
+        <div className="fixed inset-0 z-50 bg-gray-950 overflow-y-auto">
+          <div className="sticky top-0 z-10 bg-gray-950 px-4 py-3 flex items-center gap-3 border-b border-gray-800">
+            <button onClick={() => setShowPricing(false)} className="p-2 rounded-full hover:bg-gray-800 text-gray-400 hover:text-white transition-colors">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            <p className="text-white font-black">💎 Planlar</p>
+          </div>
+          <PricingSection
+            strings={(LandingT[lang] || LandingT['tr']).pricing}
+            dark={true}
+            onCta={() => {}}
+          />
+        </div>
+      )}
       {showExitDialog && (
         <ExitConfirmDialog
           onConfirm={handleExitConfirm}

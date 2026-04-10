@@ -14,6 +14,16 @@ export async function signUp(email, password, name) {
     options: { data: { full_name: name } },
   });
   if (error) throw error;
+
+  // Save country + name to profiles table via edge function
+  if (data.user?.id) {
+    fetch('/api/user-register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: data.user.id, full_name: name }),
+    }).catch(() => {});
+  }
+
   return data.user;
 }
 
@@ -25,6 +35,13 @@ export async function signIn(email, password) {
 
 export async function signOut() {
   await supabase.auth.signOut();
+}
+
+export async function resetPassword(email) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://calandlens.com',
+  });
+  if (error) throw error;
 }
 
 export async function getSession() {
