@@ -888,6 +888,7 @@ export default function DesktopLandingPage() {
             <a href="#features" className="hover:text-emerald-500 transition-colors">{t.nav.features}</a>
             <a href="#how-it-works" className="hover:text-emerald-500 transition-colors">{t.nav.howItWorks}</a>
             <a href="#testimonials" className="hover:text-emerald-500 transition-colors">{t.nav.reviews}</a>
+            <a href="#pricing" className="hover:text-emerald-500 transition-colors">{t.pricing.nav}</a>
             <a href={SITE_URL + '?mode=web'} className="hover:text-emerald-500 transition-colors">{t.nav.download}</a>
             <a href="#about" className="hover:text-emerald-500 transition-colors">{t.nav.about}</a>
           </div>
