@@ -4,8 +4,7 @@
 
 @layer base {
   * { -webkit-tap-highlight-color: transparent; }
-  body { font-family: 'Inter', system-ui, sans-serif; overscroll-behavior: none; overflow-x: hidden; }
-  html { overflow-x: hidden; }
+  body { font-family: 'Inter', system-ui, sans-serif; overscroll-behavior: none; }
   input[type=range] { -webkit-appearance: none; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; }
 
