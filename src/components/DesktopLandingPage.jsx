@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import T, { detectLang } from '../locales/landing';
 import OnboardingQuiz from './OnboardingQuiz';
 import PricingSection from './PricingSection';
-import { resetPassword, updatePassword } from '../services/supabase';
+import { resetPassword, updatePassword, supabase } from '../services/supabase';
 
 const SITE_URL = 'https://calandlens.com';
 const lang = detectLang();
@@ -406,10 +406,18 @@ export default function DesktopLandingPage() {
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // Supabase şifre sıfırlama hash tespiti
-  const isRecovery = window.location.hash.includes('type=recovery');
-  const [showSetPassword, setShowSetPassword] = useState(isRecovery);
+  const [showSetPassword, setShowSetPassword] = useState(false);
   const [user, setUser] = useState(() => getCurrentUser());
+
+  // Supabase şifre sıfırlama event'ini dinle
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setShowSetPassword(true);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, []);
   const cameFromApp = new URLSearchParams(window.location.search).get('mode') === 'web';
   const openApp = () => setShowQR(true);
   const openQuiz = () => setShowQuiz(true);
