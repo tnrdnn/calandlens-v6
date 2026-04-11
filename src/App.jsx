@@ -23,6 +23,7 @@ import { useMealReminders, getRemindersEnabled, setRemindersEnabled } from './ho
 import { useGoalNotifications, getGoalNotifsEnabled, setGoalNotifsEnabled } from './hooks/useGoalNotifications';
 import { pushToCloud, pullFromCloud, isConfigured as supabaseConfigured } from './services/supabase';
 import { AuthProvider, useAuth } from './hooks/useAuth';
+import NotFound from './components/NotFound';
 import AuthModal from './components/AuthModal';
 import PWAInstallBanner from './components/PWAInstallBanner';
 import { usePWAInstall } from './hooks/usePWAInstall';
@@ -923,6 +924,10 @@ function MobileApp() {
 }
 
 export default function App() {
+  const validPaths = ['/', ''];
+  if (!validPaths.includes(window.location.pathname)) {
+    return <NotFound />;
+  }
   if (isAdmin) {
     return <AdminDashboard />;
   }
