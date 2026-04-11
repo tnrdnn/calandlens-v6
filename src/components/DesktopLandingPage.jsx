@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import T, { detectLang } from '../locales/landing';
 import OnboardingQuiz from './OnboardingQuiz';
@@ -199,10 +199,45 @@ function AuthModal({ mode, onClose, onSuccess }) {
   );
 }
 
+// ── Mockup Carousel ───────────────────────────────────────────────────────────
+function MockupCarousel({ slides }) {
+  const ref = useRef(null);
+  const [active, setActive] = useState(0);
+  const handleScroll = () => {
+    if (!ref.current) return;
+    const idx = Math.round(ref.current.scrollLeft / ref.current.offsetWidth);
+    setActive(Math.min(idx, slides.length - 1));
+  };
+  const goTo = (i) => {
+    ref.current?.scrollTo({ left: i * ref.current.offsetWidth, behavior: 'smooth' });
+  };
+  return (
+    <div className="w-full flex flex-col items-center">
+      <div ref={ref} onScroll={handleScroll}
+        className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth w-full"
+        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+        {slides.map((slide, i) => (
+          <div key={i} className="snap-center flex-shrink-0 w-full flex justify-center px-4">
+            {slide}
+          </div>
+        ))}
+      </div>
+      {slides.length > 1 && (
+        <div className="flex justify-center gap-2 mt-5">
+          {slides.map((_, i) => (
+            <button key={i} onClick={() => goTo(i)}
+              className={`h-2 rounded-full transition-all duration-300 ${i === active ? 'bg-emerald-500 w-6' : 'bg-gray-300 w-2'}`} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Phone Mockup ──────────────────────────────────────────────────────────────
 function PhoneMockup() {
   return (
-    <div className="relative w-[250px] h-[500px] bg-gray-900 rounded-[40px] shadow-2xl border-4 border-gray-800 overflow-hidden mx-auto flex-shrink-0">
+    <div className="relative w-[220px] sm:w-[250px] h-[440px] sm:h-[500px] bg-gray-900 rounded-[36px] sm:rounded-[40px] shadow-2xl border-4 border-gray-800 overflow-hidden mx-auto flex-shrink-0">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-5 bg-gray-900 rounded-b-2xl z-10" />
       <div className="absolute inset-0 bg-gradient-to-b from-emerald-500 to-teal-600 flex flex-col items-center justify-center gap-3 p-5">
         <img src="/logo.png" alt="CalAndLens" className="w-14 h-14 rounded-2xl object-cover" />
@@ -306,6 +341,7 @@ export default function DesktopLandingPage() {
   const [showQuiz, setShowQuiz] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(() => getCurrentUser());
   const cameFromApp = new URLSearchParams(window.location.search).get('mode') === 'web';
   const openApp = () => setShowQR(true);
@@ -313,7 +349,7 @@ export default function DesktopLandingPage() {
   const handleQuizComplete = () => { setShowQuiz(false); setAuthModal('register'); };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900" dir={t.rtl ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden" dir={t.rtl ? 'rtl' : 'ltr'}>
 
       {/* ── APP BANNER (sadece ?mode=web ile gelindiğinde) ── */}
       {cameFromApp && (
@@ -339,47 +375,70 @@ export default function DesktopLandingPage() {
 
       {/* ── NAVBAR ── */}
       <nav className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <a href="#" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
             <img src="/logo.png" alt="CalAndLens" className="h-9 w-9 rounded-xl object-cover" />
             <span className="text-xl font-black text-emerald-600">CalAndLens</span>
           </a>
+          {/* Desktop nav links */}
           <div className="hidden md:flex items-center gap-7">
             {NAV_LINKS.map(l => (
               <a key={l.href} href={l.href}
                 className="text-sm text-gray-500 hover:text-emerald-600 font-medium transition-colors">{l.label}</a>
             ))}
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {user ? (
               <>
                 <button onClick={openApp}
-                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm transition-colors">
+                  className="hidden sm:block px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm transition-colors">
                   Uygulamayı Aç →
                 </button>
                 <div className="flex items-center gap-2 text-sm">
                   <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 font-black text-xs">
                     {user.name.slice(0,2).toUpperCase()}
                   </div>
-                  <span className="hidden sm:inline font-medium text-gray-700">{user.name.split(' ')[0]}</span>
                   <button onClick={() => { setCurrentUser(null); setUser(null); }}
-                    className="text-gray-400 hover:text-red-500 text-xs ml-1 transition-colors">{t.nav.logout}</button>
+                    className="hidden sm:block text-gray-400 hover:text-red-500 text-xs transition-colors">{t.nav.logout}</button>
                 </div>
               </>
             ) : (
               <>
                 <button onClick={() => setAuthModal('login')}
-                  className="text-sm text-gray-600 hover:text-emerald-600 font-semibold px-2 py-1 transition-colors">
+                  className="hidden sm:block text-sm text-gray-600 hover:text-emerald-600 font-semibold px-2 py-1 transition-colors">
                   {t.nav.login}
                 </button>
                 <button onClick={openQuiz}
-                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm transition-colors">
+                  className="px-3 sm:px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm transition-colors">
                   {t.nav.start}
                 </button>
               </>
             )}
+            {/* Hamburger — mobile only */}
+            <button onClick={() => setMobileMenuOpen(v => !v)}
+              className="md:hidden ml-1 p-2 rounded-xl text-gray-500 hover:bg-gray-100 transition-colors">
+              {mobileMenuOpen
+                ? <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/></svg>
+                : <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16"/></svg>
+              }
+            </button>
           </div>
         </div>
+        {/* Mobile menu dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-100 px-4 py-3 flex flex-col gap-1">
+            {NAV_LINKS.map(l => (
+              <a key={l.href} href={l.href} onClick={() => setMobileMenuOpen(false)}
+                className="text-sm text-gray-600 hover:text-emerald-600 font-medium py-2.5 border-b border-gray-50 transition-colors">{l.label}</a>
+            ))}
+            {user
+              ? <button onClick={() => { setCurrentUser(null); setUser(null); setMobileMenuOpen(false); }}
+                  className="text-sm text-red-500 font-medium py-2.5 text-left">{t.nav.logout}</button>
+              : <button onClick={() => { setAuthModal('login'); setMobileMenuOpen(false); }}
+                  className="text-sm text-emerald-600 font-bold py-2.5 text-left">{t.nav.login}</button>
+            }
+          </div>
+        )}
       </nav>
 
       {/* ── HERO ── */}
@@ -389,12 +448,12 @@ export default function DesktopLandingPage() {
           <img src={PHOTOS.hero} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 to-white/30" />
         </div>
-        <div className="relative z-10 max-w-6xl mx-auto px-6 py-24 flex flex-col lg:flex-row items-center gap-16">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-12 lg:py-24 flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
           <div className="flex-1 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-sm font-semibold mb-6">
               <span>✨</span> {t.hero.badge}
             </div>
-            <h1 className="text-5xl lg:text-6xl font-black leading-tight mb-6">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6">
               {t.hero.h1a}<br />
               <span className="text-emerald-500">{t.hero.h1b}</span>
             </h1>
@@ -449,7 +508,7 @@ export default function DesktopLandingPage() {
       </div>
 
       {/* ── FEATURES ── */}
-      <section id="features" className="bg-gray-50 py-24">
+      <section id="features" className="bg-gray-50 py-12 lg:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <p className="text-center text-emerald-600 font-semibold mb-3">{t.featuresSection.label}</p>
           <h2 className="text-4xl font-black text-center mb-4">{t.featuresSection.title}</h2>
@@ -461,8 +520,8 @@ export default function DesktopLandingPage() {
       </section>
 
       {/* ── APP PREVIEW 1: Ana Ekran ── */}
-      <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-16">
+      <section className="py-12 lg:py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
           {/* Text */}
           <div className="flex-1 text-center lg:text-left">
             <p className="text-emerald-600 font-semibold mb-3">{t.preview1.label}</p>
@@ -477,8 +536,10 @@ export default function DesktopLandingPage() {
               ))}
             </div>
           </div>
-          {/* Phone mockups */}
-          <div className="flex-shrink-0 flex gap-4 items-end">
+          {/* Phone mockups — desktop: yan yana, mobile: carousel */}
+          <div className="w-full lg:w-auto lg:flex-shrink-0">
+            {/* Desktop: yan yana */}
+            <div className="hidden lg:flex gap-4 items-end">
             {/* Main phone */}
             <div className="w-[220px] h-[440px] bg-gray-900 rounded-[36px] border-4 border-gray-800 overflow-hidden shadow-2xl relative">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-gray-900 rounded-b-xl z-10" />
@@ -578,13 +639,73 @@ export default function DesktopLandingPage() {
                 </div>
               </div>
             </div>
-          </div>
+            </div>{/* closes hidden lg:flex */}
+            {/* Mobile: carousel */}
+            <div className="lg:hidden">
+              <MockupCarousel slides={[
+                <div className="w-[220px] h-[440px] bg-gray-900 rounded-[36px] border-4 border-gray-800 overflow-hidden shadow-2xl relative">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-gray-900 rounded-b-xl z-10" />
+                  <div className="absolute inset-0 bg-white flex flex-col">
+                    <div className="bg-gradient-to-r from-emerald-500 to-teal-500 px-4 pt-6 pb-3 text-center">
+                      <p className="text-white font-black text-sm">🏠 Ana Ekran</p>
+                      <p className="text-emerald-100 text-xs">Günlük Özet</p>
+                    </div>
+                    <div className="flex-1 flex flex-col items-center justify-center gap-3 p-4">
+                      <div className="relative w-24 h-24">
+                        <svg className="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
+                          <circle cx="50" cy="50" r="40" stroke="#d1fae5" strokeWidth="8" fill="none"/>
+                          <circle cx="50" cy="50" r="40" stroke="#10b981" strokeWidth="8" fill="none" strokeDasharray="251" strokeDashoffset="50" strokeLinecap="round"/>
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <p className="font-black text-lg leading-none">1,840</p>
+                          <p className="text-xs text-gray-400">kcal</p>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2 w-full">
+                        {[['💪','142g','Protein','bg-blue-50'],['🍚','195g','Karb','bg-yellow-50'],['🥑','68g','Yağ','bg-orange-50']].map(([e,v,l,cls]) => (
+                          <div key={l} className={`${cls} rounded-xl p-2 text-center`}>
+                            <p className="text-sm">{e}</p>
+                            <p className="font-black text-xs">{v}</p>
+                            <p className="text-xs text-gray-400">{l}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>,
+                <div className="w-[220px] h-[440px] bg-gray-900 rounded-[36px] border-4 border-gray-800 overflow-hidden shadow-2xl relative">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-gray-900 rounded-b-xl z-10" />
+                  <div className="absolute inset-0 bg-white flex flex-col">
+                    <div className="bg-gradient-to-r from-emerald-500 to-teal-500 px-3 pt-5 pb-3">
+                      <p className="text-white font-black text-xs mb-2">💧 Su Takibi</p>
+                      <div className="flex gap-1 flex-wrap">
+                        {Array.from({length:8}).map((_,i) => (
+                          <span key={i} className={`text-sm ${i<6?'opacity-100':'opacity-30'}`}>💧</span>
+                        ))}
+                      </div>
+                      <p className="text-emerald-100 text-xs mt-1">6 / 8 bardak</p>
+                    </div>
+                    <div className="flex-1 p-3 space-y-2">
+                      <p className="text-xs font-bold text-gray-700">🏃 Adım Sayacı</p>
+                      <div className="bg-gray-50 rounded-xl p-2">
+                        <p className="text-lg font-black text-emerald-600">6,820</p>
+                        <p className="text-xs text-gray-400">/ 10,000 adım</p>
+                        <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                          <div className="bg-emerald-500 h-1.5 rounded-full" style={{width:'68%'}}/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ]} />
+            </div>
+          </div>{/* closes w-full lg:w-auto wrapper */}
         </div>
       </section>
 
       {/* ── APP PREVIEW 2: AI Kamera ── */}
-      <section className="py-24 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row-reverse items-center gap-16">
+      <section className="py-12 lg:py-24 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col lg:flex-row-reverse items-center gap-8 lg:gap-16">
           {/* Text */}
           <div className="flex-1 text-center lg:text-left">
             <p className="text-amber-500 font-semibold mb-3">{t.preview2.label}</p>
@@ -600,7 +721,7 @@ export default function DesktopLandingPage() {
             </div>
           </div>
           {/* Phone mockup */}
-          <div className="flex-shrink-0 flex gap-4 items-center">
+          <div className="flex-shrink-0 flex gap-4 items-center mx-auto lg:mx-0">
             <div className="w-[220px] h-[440px] bg-gray-900 rounded-[36px] border-4 border-gray-800 overflow-hidden shadow-2xl relative">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-gray-900 rounded-b-xl z-10" />
               <div className="absolute inset-0 flex flex-col">
@@ -654,8 +775,8 @@ export default function DesktopLandingPage() {
       </section>
 
       {/* ── APP PREVIEW 3: Geçmiş & İstatistik ── */}
-      <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-16">
+      <section className="py-12 lg:py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
           {/* Text */}
           <div className="flex-1 text-center lg:text-left">
             <p className="text-purple-600 font-semibold mb-3">{t.preview3.label}</p>
@@ -671,7 +792,7 @@ export default function DesktopLandingPage() {
             </div>
           </div>
           {/* Phone mockup */}
-          <div className="flex-shrink-0 flex gap-4 items-end">
+          <div className="flex-shrink-0 flex gap-4 items-end mx-auto lg:mx-0">
             <div className="w-[220px] h-[440px] bg-gray-900 rounded-[36px] border-4 border-gray-800 overflow-hidden shadow-2xl relative">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-gray-900 rounded-b-xl z-10" />
               <div className="absolute inset-0 bg-white flex flex-col">
@@ -738,8 +859,8 @@ export default function DesktopLandingPage() {
       </section>
 
       {/* ── AI SPOTLIGHT ── */}
-      <section className="py-24">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col lg:flex-row items-center gap-16">
+      <section className="py-12 lg:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
           {/* Photo */}
           <div className="flex-shrink-0 w-full lg:w-[480px] h-[340px] rounded-3xl overflow-hidden shadow-xl relative">
             <img src={PHOTOS.ai} alt="AI Analiz" className="w-full h-full object-cover" />
@@ -775,7 +896,7 @@ export default function DesktopLandingPage() {
       </section>
 
       {/* ── WATER + STEPS ── */}
-      <section className="bg-gray-50 py-24">
+      <section className="bg-gray-50 py-12 lg:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <p className="text-center text-emerald-600 font-semibold mb-3">{t.healthSection.label}</p>
           <h2 className="text-4xl font-black text-center mb-14">{t.healthSection.title}</h2>
@@ -823,7 +944,7 @@ export default function DesktopLandingPage() {
       </section>
 
       {/* ── HOW IT WORKS ── */}
-      <section id="how-it-works" className="py-24">
+      <section id="how-it-works" className="py-12 lg:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <p className="text-center text-emerald-600 font-semibold mb-3">{t.howItWorks.label}</p>
           <h2 className="text-4xl font-black text-center mb-14">{t.howItWorks.title}</h2>
@@ -847,7 +968,7 @@ export default function DesktopLandingPage() {
       </section>
 
       {/* ── TESTIMONIALS ── */}
-      <section id="testimonials" className="bg-gray-50 py-24">
+      <section id="testimonials" className="bg-gray-50 py-12 lg:py-24">
         <div className="max-w-6xl mx-auto px-6">
           <p className="text-center text-emerald-600 font-semibold mb-3">{t.reviews.label}</p>
           <h2 className="text-4xl font-black text-center mb-14">{t.reviews.title}</h2>
@@ -876,7 +997,7 @@ export default function DesktopLandingPage() {
       </section>
 
       {/* ── ABOUT ── */}
-      <section id="about" className="py-24 bg-gray-50">
+      <section id="about" className="py-12 lg:py-24 bg-gray-50">
         <div className="max-w-6xl mx-auto px-6">
           <p className="text-emerald-600 font-semibold mb-3 text-center">{t.about.label}</p>
           <h2 className="text-4xl font-black text-center mb-4">{t.about.title}</h2>
@@ -914,7 +1035,7 @@ export default function DesktopLandingPage() {
       <PricingSection strings={t.pricing} dark={false} onCta={() => {}} />
 
       {/* ── INSTALL / QR ── */}
-      <section id="install" className="py-24">
+      <section id="install" className="py-12 lg:py-24">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <p className="text-emerald-600 font-semibold mb-3">{t.install.label}</p>
           <h2 className="text-4xl font-black mb-4">{t.install.title}</h2>
@@ -939,7 +1060,7 @@ export default function DesktopLandingPage() {
       </section>
 
       {/* ── CTA BOTTOM ── */}
-      <section className="bg-gradient-to-br from-emerald-500 to-teal-600 py-24">
+      <section className="bg-gradient-to-br from-emerald-500 to-teal-600 py-12 lg:py-24">
         <div className="max-w-2xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-black text-white mb-4">{t.cta.title}</h2>
           <p className="text-emerald-100 mb-10 text-lg">{t.cta.sub}</p>

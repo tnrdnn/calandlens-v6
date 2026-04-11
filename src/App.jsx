@@ -897,8 +897,10 @@ function Inner() {
 /* ─────────────────────────────────────────────────────────────
    ROOT
 ───────────────────────────────────────────────────────────── */
-const isMobileDevice = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-const forceWeb = new URLSearchParams(window.location.search).get('mode') === 'web';
+// PWA olarak kurulu mu? (ana ekrandan açılmış)
+const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+  || window.navigator.standalone === true;
+const forceApp = new URLSearchParams(window.location.search).get('mode') === 'app';
 const isAdmin = new URLSearchParams(window.location.search).get('admin') === 'calandlens2025';
 
 // Ziyareti kaydet (günde bir kez)
@@ -931,7 +933,7 @@ export default function App() {
   if (isAdmin) {
     return <AdminDashboard />;
   }
-  if (!isMobileDevice || forceWeb) {
+  if (!isStandalone && !forceApp) {
     return <DesktopLandingPage />;
   }
   return (
