@@ -66,6 +66,15 @@ function SetPasswordModal({ onClose }) {
     if (password !== confirm) return setError('Şifreler eşleşmiyor.');
     try {
       await updatePassword(password);
+      // localStorage'daki şifreyi de güncelle
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email) {
+        const users = getUsers();
+        const updated = users.map(u =>
+          u.email === user.email.toLowerCase() ? { ...u, password: btoa(password) } : u
+        );
+        saveUsers(updated);
+      }
       setDone(true);
       // URL hash'i temizle
       window.history.replaceState(null, '', window.location.pathname);
