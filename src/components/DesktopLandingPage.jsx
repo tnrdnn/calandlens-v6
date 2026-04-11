@@ -3,7 +3,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import T, { detectLang } from '../locales/landing';
 import OnboardingQuiz from './OnboardingQuiz';
 import PricingSection from './PricingSection';
-import { resetPassword } from '../services/supabase';
+import { resetPassword, updatePassword } from '../services/supabase';
 
 const SITE_URL = 'https://calandlens.com';
 const lang = detectLang();
@@ -51,6 +51,70 @@ function getCurrentUser() { try { return JSON.parse(localStorage.getItem('cal_cu
 function setCurrentUser(u) { u ? localStorage.setItem('cal_current_user', JSON.stringify(u)) : localStorage.removeItem('cal_current_user'); }
 
 // ── Text Modal (Privacy / Terms) ──────────────────────────────────────────────
+// ── Set New Password Modal (şifre sıfırlama linki ile gelindiğinde) ───────────
+function SetPasswordModal({ onClose }) {
+  const at = T[detectLang()].auth;
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
+  const [error, setError] = useState('');
+  const [done, setDone] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    if (password.length < 6) return setError(at.errShort);
+    if (password !== confirm) return setError('Şifreler eşleşmiyor.');
+    try {
+      await updatePassword(password);
+      setDone(true);
+      // URL hash'i temizle
+      window.history.replaceState(null, '', window.location.pathname);
+    } catch {
+      setError('Bir hata oluştu. Lütfen tekrar deneyin.');
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md p-8 text-center">
+        <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">🔑</div>
+        {done ? (
+          <>
+            <h3 className="text-xl font-black mb-2">Şifre güncellendi!</h3>
+            <p className="text-gray-500 text-sm mb-6">Yeni şifrenizle giriş yapabilirsiniz.</p>
+            <button onClick={onClose} className="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-xl transition-colors">
+              Tamam
+            </button>
+          </>
+        ) : (
+          <>
+            <h3 className="text-xl font-black mb-2">Yeni Şifre Belirle</h3>
+            <p className="text-gray-500 text-sm mb-6">En az 6 karakter olmalı.</p>
+            <form onSubmit={handleSubmit} className="space-y-4 text-left">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Yeni Şifre</label>
+                <input type="password" value={password} onChange={e => setPassword(e.target.value)} required
+                  placeholder="En az 6 karakter"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-400 outline-none text-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">Şifre Tekrar</label>
+                <input type="password" value={confirm} onChange={e => setConfirm(e.target.value)} required
+                  placeholder="Şifreyi tekrar girin"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-400 outline-none text-sm" />
+              </div>
+              {error && <p className="text-sm text-red-500 bg-red-50 rounded-xl px-4 py-2">{error}</p>}
+              <button type="submit" className="w-full py-3.5 bg-emerald-500 hover:bg-emerald-600 text-white font-black rounded-xl transition-colors">
+                Şifreyi Güncelle
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function TextModal({ title, content, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" onClick={onClose}>
@@ -342,6 +406,9 @@ export default function DesktopLandingPage() {
   const [showPrivacy, setShowPrivacy] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // Supabase şifre sıfırlama hash tespiti
+  const isRecovery = window.location.hash.includes('type=recovery');
+  const [showSetPassword, setShowSetPassword] = useState(isRecovery);
   const [user, setUser] = useState(() => getCurrentUser());
   const cameFromApp = new URLSearchParams(window.location.search).get('mode') === 'web';
   const openApp = () => setShowQR(true);
@@ -1111,6 +1178,9 @@ export default function DesktopLandingPage() {
       {/* ── PRIVACY / TERMS MODALS ── */}
       {showPrivacy && <TextModal title={t.privacy?.title} content={t.privacy?.content} onClose={() => setShowPrivacy(false)} />}
       {showTerms && <TextModal title={t.terms?.title} content={t.terms?.content} onClose={() => setShowTerms(false)} />}
+
+      {/* ── SET PASSWORD MODAL (şifre sıfırlama e-posta linki) ── */}
+      {showSetPassword && <SetPasswordModal onClose={() => setShowSetPassword(false)} />}
 
       {/* ── ONBOARDING QUIZ ── */}
       {showQuiz && <OnboardingQuiz onComplete={handleQuizComplete} />}
